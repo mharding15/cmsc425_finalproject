@@ -6,7 +6,7 @@ public class TileMap : MonoBehaviour
 {
     int[,] tiles;
     public TileTerrain[] tileTypes;
-    Random r = new Random();
+    //Random r = new Random();
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class TileMap : MonoBehaviour
         {
             for (int y = 0; y < Manager.Instance.mapSizeY; y++)
             {
-                int terrain = r.Next(0,3); //add randomization here!!
+                int terrain = 0; //r.Next(0, 3); //add randomization here!!
                 tiles[x, y] = terrain;
                 Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
             }
