@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NightshadeAnimations : MonoBehaviour
 {
+    public GameObject _energyExplosion;
+
     private Animator _animator;
     private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit;
     private int IDLE = 0, 
@@ -29,6 +31,7 @@ public class NightshadeAnimations : MonoBehaviour
             SetAnimBools(RUN);
         } else if (Input.GetKey(KeyCode.S)){
             SetAnimBools(ATTACK);
+            CreateExplosion(new Vector3(0f,1.5f,0f));
         // this will be if the character's HP goes to 0 in the actual game
         } else if (Input.GetKey(KeyCode.D)){
             SetAnimBools(DIE);
@@ -80,6 +83,11 @@ public class NightshadeAnimations : MonoBehaviour
         _isAttacking = false;
         _isDying = false;
         _isHit = false;
+    }
+
+    public void CreateExplosion(Vector3 pos)
+    {
+        Instantiate(_energyExplosion, pos, Quaternion.identity);
     }
 
 }

@@ -1402,6 +1402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a39e576132e920469b29dfd8b8c7eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flames: {fileID: 1901245927194888, guid: bb98861c48ad2024ca93498c7dd93a6c, type: 3}
 --- !u!114 &-1162474857099307339
 MonoBehaviour:
   m_ObjectHideFlags: 0

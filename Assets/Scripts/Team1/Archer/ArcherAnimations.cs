@@ -35,7 +35,6 @@ public class ArcherAnimations : MonoBehaviour
         } else if (Input.GetKey(KeyCode.D)){
             SetAnimBools(DIE);
         } else if (Input.GetKey(KeyCode.H)){
-            print("H is detected...");
             SetAnimBools(HIT);
         } else {
             SetAnimBools(IDLE);

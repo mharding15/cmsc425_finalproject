@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class VampireAnimations : MonoBehaviour
 {
+    public GameObject _poison;
+
     private Animator _animator;
     private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit;
     private int IDLE = 0, 
@@ -29,6 +31,7 @@ public class VampireAnimations : MonoBehaviour
             SetAnimBools(RUN);
         } else if (Input.GetKey(KeyCode.S)){
             SetAnimBools(ATTACK);
+            CreatePoison(new Vector3(0f,0f,0f));
         // this will be if the character's HP goes to 0 in the actual game
         } else if (Input.GetKey(KeyCode.D)){
             SetAnimBools(DIE);
@@ -80,6 +83,11 @@ public class VampireAnimations : MonoBehaviour
         _isAttacking = false;
         _isDying = false;
         _isHit = false;
+    }
+
+    public void CreatePoison(Vector3 pos)
+    {
+        Instantiate(_poison, pos, Quaternion.identity);
     }
 
 }

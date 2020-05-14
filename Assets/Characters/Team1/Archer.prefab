@@ -2662,7 +2662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e789726e6ad60294e83d33e56324aa8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrow_prefab: {fileID: -927199367670048503, guid: d7f445115701bc44d9d4d669cec616ff,
+  arrow_prefab: {fileID: 106028309533999602, guid: bd75825c658134d4e9979e5accca32a2,
     type: 3}
 --- !u!114 &6615272219871918237
 MonoBehaviour:
