@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3087787129227901098}
   - component: {fileID: 4569124444769948503}
   - component: {fileID: 1405600529066130249}
-  - component: {fileID: -4230151989294414098}
   m_Layer: 0
   m_Name: Grass Tile
   m_TagString: Untagged
@@ -94,15 +93,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-4230151989294414098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7912904767882774023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b836dd52685ada4c86bb35cb0a55b25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

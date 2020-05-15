@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7183719859808332411}
   - component: {fileID: 3500698695335781471}
   - component: {fileID: 1688569345302931707}
-  - component: {fileID: 4376736076194261906}
   m_Layer: 0
   m_Name: Water Tile
   m_TagString: Untagged
@@ -94,15 +93,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4376736076194261906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6097656629195269566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b836dd52685ada4c86bb35cb0a55b25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
