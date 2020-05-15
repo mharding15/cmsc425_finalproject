@@ -5,10 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class TileTerrain 
 {
-    public string terrain;
-    public int terrCode;
-    public int moveCost;
 
+    public enum material : short
+    {
+        GRASS, DIRT, WATER
+    };
+
+    public material terrType;
+    public int moveCost;
     public GameObject visualPrefab;
+    public bool occupied = false;
+
+
 
 }

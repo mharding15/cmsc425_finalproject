@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Manager : MonoBehaviour
 {
-
     //used for global variables and persistant behavior
-    
+
     public static Manager Instance { get; private set; }
 
     public int mapSizeX = 10;
     public int mapSizeY = 10;
 
+    public float camSpeed = 10.0f;
+    public float rotationSpeed = 100.0f;
+    public GameObject center;
+
+    //public inputMap controls;
 
 
     //makes sure there is only one Manager instance at any time 
@@ -27,4 +32,14 @@ public class Manager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void Update()
+    {
+        //controls.handleInputs();
+    }
+
+
+
 }
+
+
