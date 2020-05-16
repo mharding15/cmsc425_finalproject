@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1070635099447678234}
   - component: {fileID: 2635514513481364513}
   - component: {fileID: 6574914522250136468}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dirt Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

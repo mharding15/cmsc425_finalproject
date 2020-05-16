@@ -11,8 +11,11 @@ public class Manager : MonoBehaviour
 
     public int mapSizeX = 10;
     public int mapSizeY = 10;
+    public Camera mainCamera;
+    public GameObject tileSelectionIndicator;
+    public LayerMask tileMask;
 
-
+    private GameObject currentTile;
 
     //makes sure there is only one Manager instance at any time 
     private void Awake()
@@ -25,6 +28,20 @@ public class Manager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    void Update()
+    {
+
+        // Tile Selection
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 200, tileMask)) // If mouse is over a tile...
+        {
+            currentTile = hit.collider.gameObject;
+            // Move the tile indicator to our desired space
+            tileSelectionIndicator.transform.position = currentTile.transform.position;
         }
     }
 }
