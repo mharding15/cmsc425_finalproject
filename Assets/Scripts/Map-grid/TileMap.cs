@@ -5,11 +5,13 @@ using UnityEngine;
 public class TileMap : MonoBehaviour
 {
 
-    
+    public int mapSizeX = 10;
+    public int mapSizeY = 10;
     int[,] tiles;
     public TileTerrain[] tileTypes;
     //Random r = new Random();
     public GameObject selectedUnit;
+
 
     void Start()
     {
@@ -19,12 +21,12 @@ public class TileMap : MonoBehaviour
     void generateMap()
     {
         //allocate tiles
-        tiles = new int[Manager.Instance.mapSizeX, Manager.Instance.mapSizeX];
+        tiles = new int[mapSizeX, mapSizeY];
 
         //initialize tiles
-        for (int x = 0; x < Manager.Instance.mapSizeX; x++)
+        for (int x = 0; x < mapSizeX; x++)
         {
-            for (int y = 0; y < Manager.Instance.mapSizeY; y++)
+            for (int y = 0; y < mapSizeY; y++)
             {
                 int terrain = 0; //r.Next(0, 3); //TODO add randomization here!!
                 tiles[x, y] = terrain;
