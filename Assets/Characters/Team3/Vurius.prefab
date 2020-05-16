@@ -374,7 +374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75edb749e670c964681bc633ad6c819a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _poison: {fileID: 1547757601392324, guid: 6f672a31584a6a748912a49c1dce2f0c, type: 3}
+  spellEffect: {fileID: 1547757601392324, guid: 6f672a31584a6a748912a49c1dce2f0c,
+    type: 3}
 --- !u!1 &1576329687682682619
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ public class CombatLoop : MonoBehaviour
     // for testing
     private int count;
 
-    void Awake()
+    void Start()
     {
         characters = new List<Person>();
         objects = new List<GameObject>();
@@ -38,53 +38,59 @@ public class CombatLoop : MonoBehaviour
         if (obj.GetComponent<Bruno>()){
             print("This is Bruno");
             p.name = "Bruno";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Bruno.speed + Bruno.reaction; 
-            p.isEnemy = Bruno.isEnemy;
+            //p.initiative = UnityEngine.Random.Range(1, 20) + Bruno.speed + Bruno.reaction; 
+            p.initiative = obj.GetComponent<Bruno>().speed;
+            p.isEnemy = obj.GetComponent<Bruno>().isEnemy;
         } else if (obj.GetComponent<Erika>()){
-        	print("This is Erika");
+            print("This is Erika");
             p.name = "Erika";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Erika.speed + Erika.reaction;
-            p.isEnemy = Erika.isEnemy;
-       } else if (obj.GetComponent<Maria>()){
-        	print("This is Maria");
+            //p.initiative = UnityEngine.Random.Range(1, 20) + Erika.speed + Erika.reaction;
+            p.isEnemy = obj.GetComponent<Erika>().isEnemy;
+        } else if (obj.GetComponent<Maria>()){
+            print("This is Maria");
             p.name = "Maria";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Maria.speed + Maria.reaction; 
-            p.isEnemy = Maria.isEnemy;
-       } else if (obj.GetComponent<Panos>()){
-        	print("This is Panos");
+            //p.initiative = UnityEngine.Random.Range(1, 20) + Maria.speed + Maria.reaction; 
+            p.initiative = obj.GetComponent<Maria>().speed;
+            p.isEnemy = obj.GetComponent<Maria>().isEnemy;
+        } else if (obj.GetComponent<Panos>()){
+            print("This is Panos");
             p.name = "Panos";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Panos.speed + Panos.reaction;
-            p.isEnemy = Panos.isEnemy;
+            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Panos>().speed + obj.GetComponent<Panos>().reaction;
+            p.isEnemy = obj.GetComponent<Panos>().isEnemy;
         } else if (obj.GetComponent<Ganfaul>()){
-        	print("This is Ganfaul");
+            print("This is Ganfaul");
             p.name = "Ganfaul";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Ganfaul.speed + Ganfaul.reaction;
-            p.isEnemy = Ganfaul.isEnemy;
+            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Ganfaul>().speed + obj.GetComponent<Ganfaul>().reaction;
+            p.isEnemy = obj.GetComponent<Ganfaul>().isEnemy;
         } else if (obj.GetComponent<Nightshade>()){
-        	print("This is Nightshade");
+            print("This is Nightshade");
             p.name = "Nightshade";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Nightshade.speed + Nightshade.reaction;
-            p.isEnemy = Nightshade.isEnemy;
+            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Nightshade>().speed + obj.GetComponent<Nightshade>().reaction;
+            p.isEnemy = obj.GetComponent<Nightshade>().isEnemy;
         } else if (obj.GetComponent<Warrok>()){
-        	print("This is Warrok");
+            print("This is Warrok");
             p.name = "Warrok";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Warrok.speed + Warrok.reaction; 
-            p.isEnemy = Warrok.isEnemy;
+            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Warrok>().speed + obj.GetComponent<Warrok>().reaction; 
+            p.isEnemy = obj.GetComponent<Warrok>().isEnemy;
+
         } else if (obj.GetComponent<Mulok>()){
-        	print("This is Mulok");
+            print("This is Mulok");
             p.name = "Mulok";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Mulok.speed + Mulok.reaction; 
-            p.isEnemy = Mulok.isEnemy;
+            //p.initiative = UnityEngine.Random.Range(1, 20) + Mulok.speed + Mulok.reaction; 
+            p.initiative = obj.GetComponent<Mulok>().speed;
+            p.isEnemy = obj.GetComponent<Mulok>().isEnemy;
+
         } else if (obj.GetComponent<Vurius>()){
-            print("This is Virius");
-            p.name = "Virius";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Vurius.speed + Vurius.reaction; 
-            p.isEnemy = Vurius.isEnemy;
+            print("This is Vurius");
+            p.name = "Vurius";
+            //p.initiative = UnityEngine.Random.Range(1, 20) + Vurius.speed + Vurius.reaction; 
+            p.initiative = obj.GetComponent<Vurius>().speed;
+            p.isEnemy = obj.GetComponent<Vurius>().isEnemy;
         } else if (obj.GetComponent<Zontog>()){
             print("This is Zontog");
             p.name = "Zontog";
-            p.initiative = UnityEngine.Random.Range(1, 20) + Zontog.speed + Zontog.reaction; 
-            p.isEnemy = Zontog.isEnemy;
+            //p.initiative = UnityEngine.Random.Range(1, 20) + Zontog.speed + Zontog.reaction; 
+            p.isEnemy = obj.GetComponent<Zontog>().isEnemy;
         } else {
             print("It's none of them???");
         }
@@ -136,11 +142,10 @@ public class CombatLoop : MonoBehaviour
             print("In Walk and Mulok should be moving...");
             objects[current].GetComponent<Mulok>().Move();
             Next();
-        } else if (characters[current].name == "Virius"){
+        } else if (characters[current].name == "Vurius"){
             print("In Walk and Virius should be moving...");
             objects[current].GetComponent<Vurius>().Move();
-           Next();
-           // objects[current].GetComponent<VampireMovement>().MoveForward(5f);
+            Next();
         }
     }
 
