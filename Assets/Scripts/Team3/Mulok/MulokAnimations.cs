@@ -2,48 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NightshadeAnimations : MonoBehaviour
+public class MulokAnimations : MonoBehaviour
 {
-    public GameObject _energyExplosion;
-
     private Animator _animator;
-    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isMelee, _isHit;
+    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit;
     private int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
                 ATTACK = 3,
                 DIE = 4,
-                HIT = 5,
-                MELEE = 6;
+                HIT = 5;
 
     // Start is called before the first frame update
     void Start()
     {
         _animator = GetComponent<Animator>();
-        SetAnimBools(IDLE, new Vector3(0f,0f,0f));
+        SetAnimBools(IDLE);
     }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-    //     if (Input.GetKey(KeyCode.UpArrow)){
-    //         SetAnimBools(WALK);
-    //     } else if (Input.GetKey(KeyCode.W)){
-    //         SetAnimBools(RUN);
-    //     } else if (Input.GetKey(KeyCode.S)){
-    //         SetAnimBools(ATTACK);
-    //     // this will be if the character's HP goes to 0 in the actual game
-    //     } else if (Input.GetKey(KeyCode.D)){
-    //         SetAnimBools(DIE);
-    //     } else if (Input.GetKey(KeyCode.H)){
-    //         SetAnimBools(HIT);
-    //     } else {
-    //         SetAnimBools(IDLE);
-    //     }
-    // }
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.UpArrow)){
+            SetAnimBools(WALK);
+        } else if (Input.GetKey(KeyCode.W)){
+            SetAnimBools(RUN);
+        } else if (Input.GetKey(KeyCode.S)){
+            SetAnimBools(ATTACK);
+        // this will be if the character's HP goes to 0 in the actual game
+        } else if (Input.GetKey(KeyCode.D)){
+            SetAnimBools(DIE);
+        } else if (Input.GetKey(KeyCode.H)){
+            SetAnimBools(HIT);
+        } else {
+            SetAnimBools(IDLE);
+        }
+    }
 
     // this method can be called from outside of this script to set the animation for the character
-    public void SetAnimBools(int state, Vector3 pos)
+    public void SetAnimBools(int state)
     {
         SetAllToFalse();
 
@@ -59,16 +56,12 @@ public class NightshadeAnimations : MonoBehaviour
                 break;
             case 3:
                 _isAttacking = true;
-                CreateExplosion(pos);
                 break;
             case 4:
                 _isDying = true;
                 break;
             case 5:
                 _isHit = true;
-                break;
-            case 6:
-                _isMelee = true;
                 break;
         }
 
@@ -78,7 +71,6 @@ public class NightshadeAnimations : MonoBehaviour
         _animator.SetBool("isAttacking", _isAttacking);
         _animator.SetBool("isDying", _isDying);
         _animator.SetBool("isHit", _isHit);
-        _animator.SetBool("isMelee", _isMelee);
     }
 
     void SetAllToFalse()
@@ -89,12 +81,6 @@ public class NightshadeAnimations : MonoBehaviour
         _isAttacking = false;
         _isDying = false;
         _isHit = false;
-        _isMelee = false;
-    }
-
-    public void CreateExplosion(Vector3 pos)
-    {
-        Instantiate(_energyExplosion, pos, Quaternion.identity);
     }
 
 }

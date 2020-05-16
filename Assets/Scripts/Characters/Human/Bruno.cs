@@ -2,10 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarrokAnimations : MonoBehaviour
+public class Bruno : MonoBehaviour
 {
-    private Animator _animator;
-    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit;
+
+	// *** STATS *** //
+
+	// I'm assuming these stats will be modified based on what class the user pics for this character
+	public static int hp;
+	public static int ac;
+
+	public static int cunning;
+	public static int perception;
+	public static int reaction = 12;
+	public static int speed = 20;
+	public static int strength;
+	public static int will;
+
+	public static bool isEnemy = false;
+
+	// *** OTHER VARIABLES *** //
+
+	private string _name = "Bruno";
+	private Animator _animator;
+	private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit;
     private int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
@@ -23,22 +42,28 @@ public class WarrokAnimations : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.UpArrow)){
-            SetAnimBools(WALK);
-        } else if (Input.GetKey(KeyCode.W)){
-            SetAnimBools(RUN);
-        } else if (Input.GetKey(KeyCode.S)){
-            SetAnimBools(ATTACK);
-        // this will be if the character's HP goes to 0 in the actual game
-        } else if (Input.GetKey(KeyCode.D)){
-            SetAnimBools(DIE);
-        } else if (Input.GetKey(KeyCode.H)){
-            SetAnimBools(HIT);
-        } else {
-            SetAnimBools(IDLE);
-        }
+        
     }
 
+    // *** ACTIONS *** //
+
+    public void Move()
+    {
+    	// to be filled in with movement code
+    	print(_name + " is moving...");
+    }
+
+    public void MeleeAttack()
+    {
+    	// basically just call the attack animation
+    	SetAnimBools(ATTACK);
+    	// will probably need to set it back to IDLE here, but will test that later
+    		// might have to have a set delay time or something, although probably not since the animation has exit time
+    }
+
+    // *** ANIMATIONS *** //
+
+     // this method can be called from outside of this script to set the animation for the character
     public void SetAnimBools(int state)
     {
         SetAllToFalse();
@@ -81,5 +106,4 @@ public class WarrokAnimations : MonoBehaviour
         _isDying = false;
         _isHit = false;
     }
-
 }

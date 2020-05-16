@@ -1344,11 +1344,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8689535403065695030}
   - component: {fileID: -7003147100271634870}
-  - component: {fileID: 4234881930412541147}
-  - component: {fileID: -1162474857099307339}
+  - component: {fileID: 4815776870061211471}
   m_Layer: 0
-  m_Name: Paladin
-  m_TagString: Untagged
+  m_Name: Panos
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1390,7 +1389,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4234881930412541147
+--- !u!114 &4815776870061211471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1399,24 +1398,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5677974459756030245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a39e576132e920469b29dfd8b8c7eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f99f2dae43416d4994c0fc189e30908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   flames: {fileID: 1901245927194888, guid: bb98861c48ad2024ca93498c7dd93a6c, type: 3}
---- !u!114 &-1162474857099307339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5677974459756030245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cea018089a56434d84f1621bc8b0325, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
-  rotationSpeed: 0
 --- !u!1 &6079289667774085511
 GameObject:
   m_ObjectHideFlags: 0

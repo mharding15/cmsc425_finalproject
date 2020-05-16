@@ -39,7 +39,8 @@ public class GanfaulAnimations : MonoBehaviour
         }
     }
 
-    void SetAnimBools(int state)
+    // this method can be called from outside of this script to set the animation for the character
+    public void SetAnimBools(int state)
     {
         SetAllToFalse();
 

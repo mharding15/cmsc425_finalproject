@@ -1526,11 +1526,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8228294266328890702}
   - component: {fileID: -7130940118258223094}
-  - component: {fileID: -6925026753139102521}
-  - component: {fileID: 1274226402631358737}
+  - component: {fileID: -2412052795210215394}
   m_Layer: 0
-  m_Name: Brute
-  m_TagString: Untagged
+  m_Name: Bruno
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1570,7 +1569,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-6925026753139102521
+--- !u!114 &-2412052795210215394
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1579,23 +1578,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4930209945078222685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3c4c040ca37f7e449f223b7e3a86daa, type: 3}
+  m_Script: {fileID: 11500000, guid: b53fcda79adb2ed4d9670c4b14265bf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1274226402631358737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4930209945078222685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40f4243a55a9cba4d89fc92001952935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  rotationSpeed: 60
 --- !u!1 &5039838135591759013
 GameObject:
   m_ObjectHideFlags: 0

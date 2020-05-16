@@ -2,12 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NightshadeAnimations : MonoBehaviour
+public class Vurius : MonoBehaviour
 {
-    public GameObject _energyExplosion;
+	// *** STATS *** //
 
+	// I'm assuming these will be modified based on what class the user pics for this character
+	public static int hp;
+	public static int ac;
+
+	public static int cunning;
+	public static int perception;
+	public static int reaction = 20;
+	public static int speed = 25;
+	public static int strength;
+	public static int will;
+
+	// can be set to whatever later if the user chooses this character (just setting it here for testing)
+	public static bool isEnemy = true;
+
+	// *** OTHER VARIABLES *** //
+
+	public GameObject _poison;
+
+    private string _name = "Vurius";
     private Animator _animator;
-    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isMelee, _isHit;
+    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit, _isMelee;
     private int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
@@ -23,27 +42,36 @@ public class NightshadeAnimations : MonoBehaviour
         SetAnimBools(IDLE, new Vector3(0f,0f,0f));
     }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-    //     if (Input.GetKey(KeyCode.UpArrow)){
-    //         SetAnimBools(WALK);
-    //     } else if (Input.GetKey(KeyCode.W)){
-    //         SetAnimBools(RUN);
-    //     } else if (Input.GetKey(KeyCode.S)){
-    //         SetAnimBools(ATTACK);
-    //     // this will be if the character's HP goes to 0 in the actual game
-    //     } else if (Input.GetKey(KeyCode.D)){
-    //         SetAnimBools(DIE);
-    //     } else if (Input.GetKey(KeyCode.H)){
-    //         SetAnimBools(HIT);
-    //     } else {
-    //         SetAnimBools(IDLE);
-    //     }
-    // }
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 
-    // this method can be called from outside of this script to set the animation for the character
-    public void SetAnimBools(int state, Vector3 pos)
+    // *** ACTIONS *** //
+
+    public void Move()
+    {
+    	// to be filled in with movement code
+    	print(_name + " is moving...");
+    }
+
+    public void RangedAttack(Vector3 pos)
+    {
+    	SetAnimBools(ATTACK, pos);
+    }
+
+    public void MeleeAttack()
+    {
+    	// basically just call the attack animation
+    	SetAnimBools(MELEE, new Vector3(0f,0f,0f));
+    	// will probably need to set it back to IDLE here, but will test that later
+    		// might have to have a set delay time or something, although probably not since the animation has exit time
+    }
+
+    // *** ANIMATIONS *** //
+
+    void SetAnimBools(int state, Vector3 pos)
     {
         SetAllToFalse();
 
@@ -59,7 +87,7 @@ public class NightshadeAnimations : MonoBehaviour
                 break;
             case 3:
                 _isAttacking = true;
-                CreateExplosion(pos);
+                CreatePoison(pos);
                 break;
             case 4:
                 _isDying = true;
@@ -92,9 +120,8 @@ public class NightshadeAnimations : MonoBehaviour
         _isMelee = false;
     }
 
-    public void CreateExplosion(Vector3 pos)
+    public void CreatePoison(Vector3 pos)
     {
-        Instantiate(_energyExplosion, pos, Quaternion.identity);
+        Instantiate(_poison, pos, Quaternion.identity);
     }
-
 }

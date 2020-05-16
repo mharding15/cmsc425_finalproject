@@ -2606,11 +2606,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5544986868663156062}
   - component: {fileID: 2298546033414304751}
-  - component: {fileID: -2514909780989902722}
-  - component: {fileID: 6615272219871918237}
+  - component: {fileID: 6292775682130788728}
   m_Layer: 0
-  m_Name: Archer
-  m_TagString: Untagged
+  m_Name: Erika
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2650,7 +2649,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-2514909780989902722
+--- !u!114 &6292775682130788728
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2659,25 +2658,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8838483547355975501}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e789726e6ad60294e83d33e56324aa8b, type: 3}
+  m_Script: {fileID: 11500000, guid: 36872889e4f10de428ebf469e8aac699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   arrow_prefab: {fileID: 106028309533999602, guid: bd75825c658134d4e9979e5accca32a2,
     type: 3}
---- !u!114 &6615272219871918237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8838483547355975501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328fd7af555127e428ca18df0d95e1a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  rotationSpeed: 60
 --- !u!1 &8838782381070117989
 GameObject:
   m_ObjectHideFlags: 0

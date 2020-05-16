@@ -868,11 +868,10 @@ GameObject:
   m_Component:
   - component: {fileID: 145312873252853425}
   - component: {fileID: 725293337817510496}
-  - component: {fileID: -6417246171209786201}
-  - component: {fileID: -6057679751053891677}
+  - component: {fileID: 1442092744637422030}
   m_Layer: 0
-  m_Name: Zombie
-  m_TagString: Untagged
+  m_Name: Zontog
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -912,7 +911,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-6417246171209786201
+--- !u!114 &1442092744637422030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -921,23 +920,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3773762024347133090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 287d405b2f95bd6458ee08c54c21bf9a, type: 3}
+  m_Script: {fileID: 11500000, guid: 61c5407aa65fb4f459bcef291b64995e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6057679751053891677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3773762024347133090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8288aa7aff6eb37488e1b98253fb4d79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  rotationSpeed: 60
 --- !u!1 &3965843778406705507
 GameObject:
   m_ObjectHideFlags: 0

@@ -2008,11 +2008,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4928201783539115748}
   - component: {fileID: -8194393132472552943}
-  - component: {fileID: 4526018758290807504}
-  - component: {fileID: 9185170051174819985}
+  - component: {fileID: 1737395327181084503}
   m_Layer: 0
   m_Name: Maria
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2053,7 +2052,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4526018758290807504
+--- !u!114 &1737395327181084503
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2062,23 +2061,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8232338989686543607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eec6bdc8431c004da3bc29986a4fc55, type: 3}
+  m_Script: {fileID: 11500000, guid: c424dac7cd4698d4b8b5513021de3e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9185170051174819985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8232338989686543607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb778877f95f7dc4aa007e520ae3426f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  rotationSpeed: 60
 --- !u!1 &8630803364429984585
 GameObject:
   m_ObjectHideFlags: 0

@@ -319,11 +319,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4119290254994943050}
   - component: {fileID: -4334863637703415366}
-  - component: {fileID: 6671553812267007131}
-  - component: {fileID: 4564843674402090279}
+  - component: {fileID: -4791114462676318736}
   m_Layer: 0
-  m_Name: Vampire
-  m_TagString: Untagged
+  m_Name: Vurius
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -363,7 +362,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6671553812267007131
+--- !u!114 &-4791114462676318736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -372,24 +371,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1112936053123407449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6621480acb09b4d4493d8c7f88510b2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 75edb749e670c964681bc633ad6c819a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _poison: {fileID: 1547757601392324, guid: 6f672a31584a6a748912a49c1dce2f0c, type: 3}
---- !u!114 &4564843674402090279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112936053123407449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f46ef64b1044649458f19bb772411a77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  rotationSpeed: 60
 --- !u!1 &1576329687682682619
 GameObject:
   m_ObjectHideFlags: 0

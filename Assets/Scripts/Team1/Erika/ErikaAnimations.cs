@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarrokAnimations : MonoBehaviour
+public class ErikaAnimations : MonoBehaviour
 {
+    public GameObject arrow_prefab;
     private Animator _animator;
-    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit;
+    private bool _isIdle, _isWalking, _isRunning, _isShooting, _isDying, _isHit, _isMelee, _isDelaying;
     private int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
-                ATTACK = 3,
+                SHOOT = 3,
                 DIE = 4,
-                HIT = 5;
+                HIT = 5,
+                MELEE = 6;
 
     // Start is called before the first frame update
     void Start()
     {
         _animator = GetComponent<Animator>();
         SetAnimBools(IDLE);
+        _isDelaying = false;
     }
 
     // Update is called once per frame
@@ -28,7 +31,7 @@ public class WarrokAnimations : MonoBehaviour
         } else if (Input.GetKey(KeyCode.W)){
             SetAnimBools(RUN);
         } else if (Input.GetKey(KeyCode.S)){
-            SetAnimBools(ATTACK);
+            SetAnimBools(SHOOT);
         // this will be if the character's HP goes to 0 in the actual game
         } else if (Input.GetKey(KeyCode.D)){
             SetAnimBools(DIE);
@@ -39,6 +42,7 @@ public class WarrokAnimations : MonoBehaviour
         }
     }
 
+    // this method can be called from outside of this script to set the animation for the character
     public void SetAnimBools(int state)
     {
         SetAllToFalse();
@@ -54,7 +58,8 @@ public class WarrokAnimations : MonoBehaviour
                 _isRunning = true;
                 break;
             case 3:
-                _isAttacking = true;
+                _isShooting = true;
+                ShootArrow();
                 break;
             case 4:
                 _isDying = true;
@@ -62,14 +67,18 @@ public class WarrokAnimations : MonoBehaviour
             case 5:
                 _isHit = true;
                 break;
+            case 6:
+                _isMelee = true;
+                break;
         }
 
         _animator.SetBool("isIdle", _isIdle);
         _animator.SetBool("isWalking", _isWalking);
         _animator.SetBool("isRunning", _isRunning);
-        _animator.SetBool("isAttacking", _isAttacking);
+        _animator.SetBool("isShooting", _isShooting);
         _animator.SetBool("isDying", _isDying);
         _animator.SetBool("isHit", _isHit);
+        _animator.SetBool("isMelee", _isMelee);
     }
 
     void SetAllToFalse()
@@ -77,9 +86,29 @@ public class WarrokAnimations : MonoBehaviour
         _isIdle = false;
         _isWalking = false;
         _isRunning = false;
-        _isAttacking = false;
+        _isShooting = false;
         _isDying = false;
         _isHit = false;
+        _isMelee = false;
     }
 
+    void ShootArrow()
+    {
+        if (!_isDelaying){
+            StartCoroutine(Delay());
+        }
+    }
+
+    IEnumerator Delay()
+    {
+        _isDelaying = true;
+        //yield on a new YieldInstruction that waits for 2.5 seconds.
+        yield return new WaitForSeconds(2.5f);
+        GameObject arrow = Instantiate(arrow_prefab, new Vector3(transform.position.x + .25f, transform.position.y + 1.475f, transform.position.z), transform.rotation);
+        Rigidbody arrow_rb = arrow.GetComponent<Rigidbody>();
+        //yield again for .5 seconds because the archer pauses before actually shooting the arrow
+        yield return new WaitForSeconds(.5f);
+        arrow_rb.velocity = transform.forward * 10f;
+        _isDelaying = false;
+    }
 }

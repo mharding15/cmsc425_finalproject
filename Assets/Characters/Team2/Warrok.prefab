@@ -1460,11 +1460,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8938163569905419054}
   - component: {fileID: -944126310135940417}
-  - component: {fileID: -4079913989993395508}
-  - component: {fileID: 8001737154937895223}
+  - component: {fileID: -8503282927872717815}
   m_Layer: 0
   m_Name: Warrok
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1504,7 +1503,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-4079913989993395508
+--- !u!114 &-8503282927872717815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1513,23 +1512,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5355313984572109117}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19e645df5fa20614fb8c8fee08e5ff54, type: 3}
+  m_Script: {fileID: 11500000, guid: f402d57e34a74b74e9bf63c4bd171af5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8001737154937895223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5355313984572109117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e1aec5b326c7a4ba818fe272dabb05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  rotationSpeed: 60
 --- !u!1 &5739843148937369219
 GameObject:
   m_ObjectHideFlags: 0

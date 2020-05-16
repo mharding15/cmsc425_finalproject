@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NightshadeAnimations : MonoBehaviour
+public class PanosAnimations : MonoBehaviour
 {
-    public GameObject _energyExplosion;
+    public GameObject flames;
 
     private Animator _animator;
-    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isMelee, _isHit;
+    private bool _isIdle, _isWalking, _isRunning, _isAttacking, _isDying, _isHit, _isMelee;
     private int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
@@ -23,8 +23,8 @@ public class NightshadeAnimations : MonoBehaviour
         SetAnimBools(IDLE, new Vector3(0f,0f,0f));
     }
 
-    // // Update is called once per frame
-    // void Update()
+    // Update is called once per frame
+    // public void Update()
     // {
     //     if (Input.GetKey(KeyCode.UpArrow)){
     //         SetAnimBools(WALK);
@@ -59,7 +59,7 @@ public class NightshadeAnimations : MonoBehaviour
                 break;
             case 3:
                 _isAttacking = true;
-                CreateExplosion(pos);
+                CreateFlames(pos);
                 break;
             case 4:
                 _isDying = true;
@@ -92,9 +92,9 @@ public class NightshadeAnimations : MonoBehaviour
         _isMelee = false;
     }
 
-    public void CreateExplosion(Vector3 pos)
+    public void CreateFlames(Vector3 pos)
     {
-        Instantiate(_energyExplosion, pos, Quaternion.identity);
+        Instantiate(flames, pos, Quaternion.identity);
     }
 
 }
