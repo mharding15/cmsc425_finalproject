@@ -17,6 +17,8 @@ public class Manager : MonoBehaviour
 
     private GameObject currentTile;
 
+    private Vector3 garbagePosition = new Vector3(0, -100, 0);
+
     //makes sure there is only one Manager instance at any time 
     private void Awake()
     {
@@ -42,6 +44,11 @@ public class Manager : MonoBehaviour
             currentTile = hit.collider.gameObject;
             // Move the tile indicator to our desired space
             tileSelectionIndicator.transform.position = currentTile.transform.position;
+        } else
+        {
+            currentTile = null;
+            // Move the tile indicator to our desired space
+            tileSelectionIndicator.transform.position = garbagePosition;
         }
     }
 }
