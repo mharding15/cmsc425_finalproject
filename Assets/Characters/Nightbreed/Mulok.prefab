@@ -510,6 +510,7 @@ GameObject:
   - component: {fileID: 8463735748192943479}
   - component: {fileID: 3592812774148015675}
   - component: {fileID: 6042368513515093941}
+  - component: {fileID: 5389701258555881513}
   m_Layer: 0
   m_Name: Mulok
   m_TagString: Character
@@ -564,6 +565,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbea66a2c6e20f4698de053469112cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
+  healingPotionCount: 0
+--- !u!136 &5389701258555881513
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4840915540182978404}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.6
+  m_Height: 1.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &5156298533529488349
 GameObject:
   m_ObjectHideFlags: 0

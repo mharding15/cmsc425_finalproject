@@ -869,6 +869,7 @@ GameObject:
   - component: {fileID: 145312873252853425}
   - component: {fileID: 725293337817510496}
   - component: {fileID: 1442092744637422030}
+  - component: {fileID: 25262812888033224}
   m_Layer: 0
   m_Name: Zontog
   m_TagString: Character
@@ -923,6 +924,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c5407aa65fb4f459bcef291b64995e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
+  healingPotionCount: 0
+--- !u!136 &25262812888033224
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3773762024347133090}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1 &3965843778406705507
 GameObject:
   m_ObjectHideFlags: 0

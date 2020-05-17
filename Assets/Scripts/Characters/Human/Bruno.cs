@@ -17,13 +17,8 @@ public class Bruno : Unit
     void SetStats()
     {
         print("setting speeed to 20 for Bruno");
-        speed = 20;
+        speed = 6;
         reaction = 18;
     }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }

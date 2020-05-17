@@ -1345,6 +1345,7 @@ GameObject:
   - component: {fileID: 8689535403065695030}
   - component: {fileID: -7003147100271634870}
   - component: {fileID: 4815776870061211471}
+  - component: {fileID: 3890875760026105310}
   m_Layer: 0
   m_Name: Panos
   m_TagString: Character
@@ -1401,7 +1402,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f99f2dae43416d4994c0fc189e30908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flames: {fileID: 1901245927194888, guid: bb98861c48ad2024ca93498c7dd93a6c, type: 3}
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
+  healingPotionCount: 0
+  spellEffect: {fileID: 0}
+--- !u!136 &3890875760026105310
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677974459756030245}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &6079289667774085511
 GameObject:
   m_ObjectHideFlags: 0

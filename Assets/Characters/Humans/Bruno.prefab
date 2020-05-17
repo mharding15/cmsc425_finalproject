@@ -1527,6 +1527,7 @@ GameObject:
   - component: {fileID: 8228294266328890702}
   - component: {fileID: -7130940118258223094}
   - component: {fileID: -2412052795210215394}
+  - component: {fileID: -5145482722197083465}
   m_Layer: 0
   m_Name: Bruno
   m_TagString: Character
@@ -1581,6 +1582,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b53fcda79adb2ed4d9670c4b14265bf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
+  healingPotionCount: 0
+--- !u!136 &-5145482722197083465
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4930209945078222685}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5039838135591759013
 GameObject:
   m_ObjectHideFlags: 0

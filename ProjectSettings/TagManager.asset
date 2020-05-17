@@ -6,6 +6,7 @@ TagManager:
   - Character
   - Unit
   - Tile
+  - Manager
   layers:
   - Default
   - TransparentFX

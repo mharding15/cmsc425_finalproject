@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 2509437709691056372}
   - component: {fileID: 8992952620502572253}
   - component: {fileID: -4246900330302229134}
+  - component: {fileID: 7449162611378491083}
   m_Layer: 0
   m_Name: Ganfaul
   m_TagString: Character
@@ -278,6 +279,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f481f5595aee1344e87ce3b1fd2c568d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
+  healingPotionCount: 0
+--- !u!136 &7449162611378491083
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479443016493826791}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1719971414095826726
 GameObject:
   m_ObjectHideFlags: 0
