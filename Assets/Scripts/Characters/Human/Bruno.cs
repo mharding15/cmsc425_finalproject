@@ -16,9 +16,19 @@ public class Bruno : Unit
 
     void SetStats()
     {
-        print("setting speeed to 20 for Bruno");
         speed = 6;
         reaction = 18;
+        hp = 25;
+        ac = 3;
+
+        meleeDamage = 5;
+
+        // cunning;
+        // perception;
+        // reaction;
+        // speed;
+        // strength;
+        // will;
     }
    
 }

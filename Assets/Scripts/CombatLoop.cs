@@ -9,6 +9,7 @@ public class CombatLoop : MonoBehaviour
     // this list contains the actual GameObjects associated with the characters, so can use it to call their methods and stuff
     private List<GameObject> objects;
     // this int keeps track of whose turn it is (the index of the character in the above lists)
+    private List<Unit> units;
 	private int current;
 
     // for testing
@@ -18,6 +19,7 @@ public class CombatLoop : MonoBehaviour
     {
         characters = new List<Person>();
         objects = new List<GameObject>();
+        units = new List<Unit>();
     	current = -1;
         count = 0;
 
@@ -109,6 +111,7 @@ public class CombatLoop : MonoBehaviour
         }
         characters.Insert(i, p);
         objects.Insert(i, o);
+        units.Insert(i, GetUnit(o));
     }
 
     // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
@@ -127,6 +130,12 @@ public class CombatLoop : MonoBehaviour
         print("Setting current to true for number: " + current);
         // now set the current object
         SetCurrent(current, true);
+
+        // if the current character is down (but not dead, or they would be deleted from the lists)
+        if (units[current].hp <= 0){
+            // 5 is the death animation
+            units[current].SetAnimBools(5);
+        }
 
         //count++;
         // if (count < 10){
@@ -221,6 +230,35 @@ public class CombatLoop : MonoBehaviour
 
     // }
 
+    Unit GetUnit(GameObject obj)
+    {
+        Unit unit = null;
+
+        if (obj.name == "Bruno"){
+            unit = obj.GetComponent<Bruno>();
+        } else if (obj.name == "Erika"){
+            unit = obj.GetComponent<Erika>();
+        } else if (obj.name == "Maria"){
+            unit = obj.GetComponent<Maria>();
+        }else if (obj.name == "Panos") {
+            unit = obj.GetComponent<Panos>();
+        } else if (obj.name == "Ganfaul"){
+            unit = obj.GetComponent<Ganfaul>();
+        } else if (obj.name == "Nightshade"){
+            unit = obj.GetComponent<Nightshade>();
+        } else if (obj.name == "Warrok"){
+            unit = obj.GetComponent<Warrok>();
+        } else if (obj.name == "Mulok"){
+            unit = obj.GetComponent<Mulok>();
+        } else if (obj.name == "Vurius"){
+            unit = obj.GetComponent<Vurius>();
+        } else if (obj.name == "Zontog"){
+            unit = obj.GetComponent<Zontog>();
+        }
+
+        return unit;
+    }
+
     void SetCurrent(int idx, bool value)
     {
         string name = characters[idx].name;
@@ -276,6 +314,15 @@ public class CombatLoop : MonoBehaviour
         return characters[current].name;
     }
 
+    public void SetDying(string name)
+    {
+        for (int i = 0; i < characters.Count; i++){
+            if (name.Equals(characters[i].name)){
+                characters[i].isDying = true;
+            }
+        }
+    }
+
     void PrintList()
     {
         foreach (Person p in characters){
@@ -288,5 +335,6 @@ public class CombatLoop : MonoBehaviour
         public int initiative {set; get;}
         public string name {set; get;}
         public bool isEnemy {set; get;}
+        public bool isDying {set; get;}
     }
 }
