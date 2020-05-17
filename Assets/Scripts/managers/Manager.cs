@@ -9,8 +9,7 @@ public class Manager : MonoBehaviour
 
     public static Manager Instance { get; private set; }
 
-    public int mapSizeX = 10;
-    public int mapSizeY = 10;
+    
 
     public float camSpeed = 10.0f;
     public float rotationSpeed = 100.0f;
