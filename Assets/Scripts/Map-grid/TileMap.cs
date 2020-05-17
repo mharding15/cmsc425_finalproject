@@ -46,7 +46,7 @@ public class TileMap : MonoBehaviour
                 clickPos.tileX = x;
                 clickPos.tileY = y;
                 clickPos.map = this;
-                clickPos.cost = tileTypes[material].moveCost;
+                clickPos.cost = tileTypes[terrain].moveCost;
             }
         }
     }
