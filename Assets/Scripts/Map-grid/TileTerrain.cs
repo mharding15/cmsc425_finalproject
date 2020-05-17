@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class TileTerrain 
+public class TileTerrain
 {
 
     public enum material : short
@@ -16,6 +16,9 @@ public class TileTerrain
     public GameObject visualPrefab;
     public bool occupied = false;
 
-
+    public int cost()
+    {
+        return moveCost;
+    }
 
 }

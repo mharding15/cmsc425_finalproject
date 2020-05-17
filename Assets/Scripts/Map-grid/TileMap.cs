@@ -7,7 +7,7 @@ public class TileMap : MonoBehaviour
 
     public int mapSizeX = 10;
     public int mapSizeY = 10;
-    int[,] tiles;
+    public int[,] tiles;
 
     public TileTerrain[] tileTypes;
     public Unit selectedUnit;
