@@ -8,6 +8,7 @@ public class TileMap : MonoBehaviour
     public int mapSizeX = 10;
     public int mapSizeY = 10;
     int[,] tiles;
+
     public TileTerrain[] tileTypes;
     public Unit selectedUnit;
 
@@ -45,6 +46,7 @@ public class TileMap : MonoBehaviour
                 clickPos.tileX = x;
                 clickPos.tileY = y;
                 clickPos.map = this;
+                clickPos.cost = tileTypes[material].moveCost;
             }
         }
     }

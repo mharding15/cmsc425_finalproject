@@ -8,6 +8,7 @@ public class TileClickable : MonoBehaviour
     public int tileX;
     public int tileY;
     public TileMap map;
+    public int cost;
 
 
     void OnMouseDown(){

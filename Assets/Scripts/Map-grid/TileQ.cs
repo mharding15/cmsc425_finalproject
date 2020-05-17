@@ -100,4 +100,13 @@ class TQNode
         this.last = nodeIn;
     }
 
+
+    public int hCost(TQNode target)
+    {
+        int xDist = Mathf.Abs(this.x - target.x);
+        int yDist = Mathf.Abs(this.y - target.y);
+        int diff = Mathf.Abs(xDist - yDist);
+        return 
+    }
+
 }
