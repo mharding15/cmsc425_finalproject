@@ -9,7 +9,7 @@ public class TileMap : MonoBehaviour
     public int mapSizeY = 10;
     int[,] tiles;
     public TileTerrain[] tileTypes;
-    public GameObject selectedUnit;
+    public Unit selectedUnit;
 
 
     void Start()
@@ -49,9 +49,4 @@ public class TileMap : MonoBehaviour
         }
     }
 
-    public void moveUnitTo(int x, int y)
-    {
-        //this will likely not remain, id like movement to be more fluid obviously
-        selectedUnit.transform.position = new Vector3(x, 0, y);
-    }
 }

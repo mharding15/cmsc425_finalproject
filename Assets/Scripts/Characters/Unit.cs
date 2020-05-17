@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour
 {
     // *** STATS *** //
 
-	// I'm assuming these stats will be modified based on what class the user pics for this character
+	// These stats will be modified based on what class the user pics for this character
 	public int hp;
 	public int ac;
 
@@ -50,6 +50,13 @@ public class Unit : MonoBehaviour
     	// to be filled in with movement code
     	print(_name + " is moving...");
     	transform.Translate(new Vector3(1f, 0f, 2f));
+    }
+    
+    //wasnt sure I wanted to mess with your use in Combat Loop
+    public void MoveTo(int x, int y)
+    {
+    	print(_name + " is moving...");
+    	transform.position = new Vector3(x, 0, y);
     }
 
     public void MeleeAttack()

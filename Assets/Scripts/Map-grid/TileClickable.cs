@@ -18,7 +18,7 @@ public class TileClickable : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            map.moveUnitTo(tileX, tileY);
+            map.selectedUnit.MoveTo(tileX, tileY);
         }
     }
    

@@ -180,6 +180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 498082975}
+  - component: {fileID: 498082976}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Unit
@@ -202,6 +203,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &498082976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498082974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d9637222a8a36043abc54a8199d623e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
 --- !u!1 &977037408
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,7 +472,7 @@ MonoBehaviour:
     visualPrefab: {fileID: 6097656629195269566, guid: a946e3c45ef32fb4fa4b07544b51a2ea,
       type: 3}
     occupied: 0
-  selectedUnit: {fileID: 498082974}
+  selectedUnit: {fileID: 498082976}
 --- !u!4 &1503379233
 Transform:
   m_ObjectHideFlags: 0
