@@ -276,6 +276,15 @@ public class CombatLoop : MonoBehaviour
         return characters[current].name;
     }
 
+    public void SetDying(string name)
+    {
+        for (int i = 0; i < characters.Count; i++){
+            if (name.Equals(characters[i].name)){
+                characters[i].isDying = true;
+            }
+        }
+    }
+
     void PrintList()
     {
         foreach (Person p in characters){
@@ -288,5 +297,6 @@ public class CombatLoop : MonoBehaviour
         public int initiative {set; get;}
         public string name {set; get;}
         public bool isEnemy {set; get;}
+        public bool isDying {set; get;}
     }
 }
