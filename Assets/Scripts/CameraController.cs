@@ -10,12 +10,12 @@ public class CameraController : MonoBehaviour
     public Vector3 offset;
     public float zoomSpeed = 4f;
     public float minZoom = 1f;
-    public float maxZoom = 5f;
+    public float maxZoom = 7f;
 
     public GameObject map;
     private TileMap tileMap;
 
-    public float pitch = 1;
+    public float pitch = 0.2f;
 
     public float yawSpeed = 100f;
     public float moveSpeed = 10f;

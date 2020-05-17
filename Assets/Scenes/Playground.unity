@@ -420,9 +420,9 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: -1}
   zoomSpeed: 4
   minZoom: 1
-  maxZoom: 5
+  maxZoom: 7
   map: {fileID: 1503379231}
-  pitch: 0.1
+  pitch: 0.2
   yawSpeed: 100
   moveSpeed: 10
 --- !u!1 &1503379231
