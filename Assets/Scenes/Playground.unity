@@ -224,6 +224,8 @@ MonoBehaviour:
   strength: 0
   will: 0
   isEnemy: 0
+  healingPotionCount: 0
+  meleeDamage: 0
 --- !u!1 &977037408
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,17 +464,17 @@ MonoBehaviour:
     visualPrefab: {fileID: 7912904767882774023, guid: 8c84dbbc92010534e963da2598a40ec6,
       type: 3}
     occupied: 0
-  - terrType: 1
+  - terrType: 0
     moveCost: 1
     visualPrefab: {fileID: 6278830040039307117, guid: ce5c9a4c7018c66418601380cd17ac3c,
       type: 3}
     occupied: 0
-  - terrType: 2
+  - terrType: 0
     moveCost: 2
     visualPrefab: {fileID: 6097656629195269566, guid: a946e3c45ef32fb4fa4b07544b51a2ea,
       type: 3}
     occupied: 0
-  selectedUnit: {fileID: 498082976}
+  selectedUnit: {fileID: 0}
 --- !u!4 &1503379233
 Transform:
   m_ObjectHideFlags: 0
