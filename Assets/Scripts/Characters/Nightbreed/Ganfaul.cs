@@ -17,14 +17,14 @@ public class Ganfaul : Unit
     void SetStats()
     {
         print("setting speeed to 20 for Bruno");
-        speed = 20;
+        speed = 5;
         reaction = 18;
     }
     
     // Update is called once per frame
-    void Update()
-    {
+    // void Update()
+    // {
         
-    }
+    // }
 
 }

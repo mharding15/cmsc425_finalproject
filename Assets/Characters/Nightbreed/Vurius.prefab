@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 4119290254994943050}
   - component: {fileID: -4334863637703415366}
   - component: {fileID: -4791114462676318736}
+  - component: {fileID: -2745183790644632787}
   m_Layer: 0
   m_Name: Vurius
   m_TagString: Character
@@ -374,8 +375,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75edb749e670c964681bc633ad6c819a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
+  ac: 0
+  cunning: 0
+  perception: 0
+  reaction: 0
+  speed: 0
+  strength: 0
+  will: 0
+  isEnemy: 0
+  healingPotionCount: 0
   spellEffect: {fileID: 1547757601392324, guid: 6f672a31584a6a748912a49c1dce2f0c,
     type: 3}
+--- !u!136 &-2745183790644632787
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112936053123407449}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &1576329687682682619
 GameObject:
   m_ObjectHideFlags: 0

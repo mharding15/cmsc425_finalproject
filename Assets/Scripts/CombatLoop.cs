@@ -60,7 +60,8 @@ public class CombatLoop : MonoBehaviour
         } else if (obj.GetComponent<Ganfaul>()){
             print("This is Ganfaul");
             p.name = "Ganfaul";
-            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Ganfaul>().speed + obj.GetComponent<Ganfaul>().reaction;
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Ganfaul>().speed + obj.GetComponent<Ganfaul>().reaction;
+            p.initiative = obj.GetComponent<Ganfaul>().speed;
             p.isEnemy = obj.GetComponent<Ganfaul>().isEnemy;
         } else if (obj.GetComponent<Nightshade>()){
             print("This is Nightshade");
@@ -113,40 +114,53 @@ public class CombatLoop : MonoBehaviour
     // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
     public void Next()
     {
-        current = (current + 1) % characters.Count;
-        count++;
-        if (count < 10){
-            print("In Next...and current is: " + current);
+        int previous = current;
 
-            if (characters[current].isEnemy){
-                print("In Next...and current was an enemy");
-                Walk();
-            } else {
-                print("In Next...and current was a friend");
-                if (characters[current].name == "Bruno"){
-                    print("Bruno should be moving...");
-                    objects[current].GetComponent<Bruno>().Move();
-                    Next();
-                } else if (characters[current].name == "Maria"){
-                    print("Maria should be moving...");
-                    objects[current].GetComponent<Maria>().Move();
-                    Next();
-                }
-            }
+        current = (current + 1) % characters.Count;
+
+        // need to unset the character who was current last time in their GameObject's script
+        if (previous > -1){
+            print("Setting current to false for number: " + previous);
+            SetCurrent(previous, false);
         }
+
+        print("Setting current to true for number: " + current);
+        // now set the current object
+        SetCurrent(current, true);
+
+        //count++;
+        // if (count < 10){
+        //     print("In Next...and current is: " + current);
+
+        //     if (characters[current].isEnemy){
+        //         print("In Next...and current was an enemy");
+        //         Walk();
+        //     } else {
+        //         print("In Next...and current was a friend");
+        //         if (characters[current].name == "Bruno"){
+        //             print("Bruno should be moving...");
+        //             objects[current].GetComponent<Bruno>().Move();
+        //             Next();
+        //         } else if (characters[current].name == "Maria"){
+        //             print("Maria should be moving...");
+        //             objects[current].GetComponent<Maria>().Move();
+        //             Next();
+        //         }
+        //     }
+        // }
     }
 
     void Walk(){
-        print("In Walk and name is: " + characters[current].name);
-        if (characters[current].name == "Mulok"){
-            print("In Walk and Mulok should be moving...");
-            objects[current].GetComponent<Mulok>().Move();
-            Next();
-        } else if (characters[current].name == "Vurius"){
-            print("In Walk and Virius should be moving...");
-            objects[current].GetComponent<Vurius>().Move();
-            Next();
-        }
+        // print("In Walk and name is: " + characters[current].name);
+        // if (characters[current].name == "Mulok"){
+        //     print("In Walk and Mulok should be moving...");
+        //     objects[current].GetComponent<Mulok>().Move();
+        //     Next();
+        // } else if (characters[current].name == "Vurius"){
+        //     print("In Walk and Virius should be moving...");
+        //     objects[current].GetComponent<Vurius>().Move();
+        //     Next();
+        // }
     }
 
     // private void MakeDecision()
@@ -206,6 +220,61 @@ public class CombatLoop : MonoBehaviour
     // {
 
     // }
+
+    void SetCurrent(int idx, bool value)
+    {
+        string name = characters[idx].name;
+        GameObject obj = objects[idx];
+
+        if (name == "Bruno"){
+            obj.GetComponent<Bruno>().isCurrent = value;
+        } else if (name == "Erika"){
+            obj.GetComponent<Erika>().isCurrent = value;
+        } else if (name == "Maria"){
+            obj.GetComponent<Maria>().isCurrent = value;
+        }else if (name == "Panos") {
+            obj.GetComponent<Panos>().isCurrent = value;
+        } else if (name == "Ganfaul"){
+            obj.GetComponent<Ganfaul>().isCurrent = value;
+        } else if (name == "Nightshade"){
+            obj.GetComponent<Nightshade>().isCurrent = value;
+        } else if (name == "Warrok"){
+            obj.GetComponent<Warrok>().isCurrent = value;
+        } else if (name == "Mulok"){
+            obj.GetComponent<Mulok>().isCurrent = value;
+        } else if (name == "Vurius"){
+            obj.GetComponent<Vurius>().isCurrent = value;
+        } else if (name == "Zontog"){
+            obj.GetComponent<Zontog>().isCurrent = value;
+        } else {
+            print("Whattt, none of these characters was clicking???");
+        }
+    }
+
+    public GameObject GetCurrentObject()
+    {
+        return objects[current];
+    }
+
+    public GameObject GetObjectByName(string name)
+    {
+        int i;
+        for (i = 0; i < characters.Count; i++){
+            if (name.Equals(characters[i].name)){
+                break;
+            }
+        }
+        if (i == characters.Count){
+            print("The name was not found???");
+            return null;
+        }
+        return objects[i];
+    }
+
+    public string GetCurrentName()
+    {
+        return characters[current].name;
+    }
 
     void PrintList()
     {
