@@ -345,7 +345,7 @@ MonoBehaviour:
   zoomSpeed: 4
   minZoom: 1
   maxZoom: 5
-  manager: {fileID: 1778196662}
+  tileMap: {fileID: 0}
   pitch: 0.1
   yawSpeed: 100
   moveSpeed: 10
@@ -378,22 +378,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c88c03c2460ce4ca6e649b26fbea96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapSizeX: 10
+  mapSizeY: 10
   tileTypes:
-  - terrain: Grass
-    terrCode: 0
+  - terrType: 0
     moveCost: 1
     visualPrefab: {fileID: 7912904767882774023, guid: 8c84dbbc92010534e963da2598a40ec6,
       type: 3}
-  - terrain: Dirt
-    terrCode: 1
+    occupied: 0
+  - terrType: 0
     moveCost: 1
     visualPrefab: {fileID: 6278830040039307117, guid: ce5c9a4c7018c66418601380cd17ac3c,
       type: 3}
-  - terrain: Water
-    terrCode: 2
+    occupied: 0
+  - terrType: 0
     moveCost: 2
     visualPrefab: {fileID: 6097656629195269566, guid: a946e3c45ef32fb4fa4b07544b51a2ea,
       type: 3}
+    occupied: 0
+  selectedUnit: {fileID: 0}
 --- !u!4 &1503379233
 Transform:
   m_ObjectHideFlags: 0
@@ -595,16 +598,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1778196661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 081b31b79ceda8a4fb923d73e90d74e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 4deb4f55f864a3347a87694433bce18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mapSizeX: 10
   mapSizeY: 10
-  mainCamera: {fileID: 1404804903}
-  tileSelectionIndicator: {fileID: 1981784302}
+  mainCamera: {fileID: 0}
+  tileSelectionIndicator: {fileID: 0}
   tileMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
 --- !u!4 &1778196663
 Transform:
   m_ObjectHideFlags: 0
@@ -619,9 +622,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1981784302 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5747219813320297795, guid: 1e1a4e53e67e3a746ac96f178799c42c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1704059398}
-  m_PrefabAsset: {fileID: 0}
