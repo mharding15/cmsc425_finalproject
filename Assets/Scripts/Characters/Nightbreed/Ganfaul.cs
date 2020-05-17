@@ -11,7 +11,7 @@ public class Ganfaul : Unit
         _name = "Ganfaul";
         SetAnimBools(IDLE);
         SetStats();
-        isEnemy = false;
+        isEnemy = true;
     }
 
     void SetStats()
@@ -22,6 +22,7 @@ public class Ganfaul : Unit
         ac = 2;
 
         meleeDamage = 4;
+
         // cunning;
         // perception;
         // reaction;

@@ -30,7 +30,6 @@ public class CombatLoop : MonoBehaviour
     	
         // can add some kind of delay here if we want so it doesn't just immediately start combat, could be kind of confusing
         Next();
-
     }
 
     // I wasn't sure how to differentiate between the characters after getting them by the "Character" tag, so I do it by seeing what script is attached
@@ -114,121 +113,164 @@ public class CombatLoop : MonoBehaviour
         units.Insert(i, GetUnit(o));
     }
 
-    // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
     public void Next()
     {
-        int previous = current;
+        StartCoroutine(Delay(2f));
+    }
 
-        current = (current + 1) % characters.Count;
+    // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
+    public void NextContinued()
+    {
 
-        // need to unset the character who was current last time in their GameObject's script
-        if (previous > -1){
-            print("Setting current to false for number: " + previous);
-            SetCurrent(previous, false);
+        if (!GameOverCheck()){
+
+            // TODO: check to see if the actions are used up for this character.
+
+            int previous = current;
+            current = (current + 1) % characters.Count;
+
+            // need to unset the character who was current last time in their GameObject's script
+            if (previous > -1){
+                print("Setting current to false for number: " + previous);
+                // TO_DELETE: SetCurrent(previous, false);
+                units[previous].isCurrent = false;
+            }
+            // TODO: replace this with setting a text element in the UI
+            print("Setting current to true for number: " + current);
+            units[current].isCurrent = true;
         }
-
-        print("Setting current to true for number: " + current);
-        // now set the current object
-        SetCurrent(current, true);
+        
 
         // if the current character is down (but not dead, or they would be deleted from the lists)
         if (units[current].hp <= 0){
-            // 5 is the death animation
-            units[current].SetAnimBools(5);
+            // TODO: will need to do a will check to see if the character lives
+            // would also need an animation for getting up, which I can get later
+                // if the character doesn't get revived, just call Next() from here 
+        } 
+
+
+        count++;
+        if (count < 20){
+            // this is an AI character, need to make it's decisions for it
+            if (characters[current].isEnemy){
+                print("In Next...and current was an enemy");
+                MakeDecision();
+            } 
+            // I guess I don't really have to do anything else if it's a human controlled character
+        }
+    }
+
+    // *** The Decision "Tree" (not like any tree I've seen before, but close enough) *** //
+
+    void MakeDecision()
+    {
+        // if this character is about to die and has healing potions, then take one
+        if (units[current].hp <= 5 && units[current].healingPotionCount > 0){
+            print("The character: " + objects[current].name + " decides to take a healing potion");
+            units[current].TakePotion();
+        } else {
+            AttackingDecisions();
+        }
+    }
+
+    void AttackingDecisions()
+    {
+        FindClosestOpponent();
+        int closestOpponentIdx = characters[current].closestEnemy; 
+        float closestEnemyDist = characters[current].closestEnemyDist;
+
+        print("&&& For character: " + objects[current].name + ", the closest enemy is: " + objects[closestOpponentIdx].name + " and is " + closestEnemyDist + " away.");
+
+        if (closestEnemyDist < units[current].meleeRange){
+            print("&&& so gonna hit them with a Melee attack");
+            units[current].target = objects[closestOpponentIdx];
+            units[current].targetUnit = units[closestOpponentIdx];
+            units[current].EnterAttackMode();
+        } else if (closestEnemyDist < units[current].longRange){
+            print("&&& so gonna hit them with a long range");
+            // TODO: Write code for long range attacking characters
+        } else {
+            print("&&& so gonna hit move closer to that enemy");
+            // move towards the closest character
+            units[current].target = objects[closestOpponentIdx];
+            units[current].targetUnit = units[closestOpponentIdx];
+            units[current].EnterMoveMode();
+        }
+    }
+
+    // *** Decision Making Helpers *** //
+
+    void FindClosestOpponent()
+    {
+        // should be virually infinite
+        float minDist = 10000f;
+        int minIdx = -1;
+        Unit currentUnit = units[current];
+        for (int i = 0; i < characters.Count; i++){
+            if (i != current && units[current].isEnemy != units[i].isEnemy){
+                float dist = Distance(objects[current].transform.position, objects[i].transform.position);
+                if (dist < minDist){
+                    minDist = dist;
+                    minIdx = i;
+                }
+            }
+        }
+        characters[current].closestEnemy = minIdx;
+        characters[current].closestEnemyDist = minDist;
+    }
+
+    void FindClosestAlly()
+    {
+        float minDist = 10000f;
+        int minIdx = -1;
+        Unit currentUnit = units[current];
+        for (int i = 0; i < characters.Count; i++){
+            if (i != current && units[current].isEnemy == units[i].isEnemy){
+                float dist = Distance(objects[current].transform.position, objects[i].transform.position);
+                if (dist < minDist){
+                    minDist = dist;
+                    minIdx = i;
+                }
+            }
+        }
+        characters[current].closestFriend = minIdx;
+    }
+
+    float Distance(Vector3 p1, Vector3 p2)
+    {
+        float x_diff = p1.x - p2.x;
+        float z_diff = p1.z - p2.z;
+        float d_sq = x_diff * x_diff + z_diff * z_diff;
+        return Mathf.Sqrt(d_sq);
+    }
+
+    // *** Utility functions *** //
+
+    bool GameOverCheck(){
+
+        int friendsRemaining = 0, enemiesRemaining = 0;
+        for (int i = 0; i < units.Count; i++){
+            if (units[i].hp > 0){
+                if (units[i].isEnemy){
+                    enemiesRemaining++;
+                } else {
+                    friendsRemaining++;
+                }
+            }
+        }
+        if (friendsRemaining == 0){
+            // TODO: you have lost (should probably make a Text component to display this)
+            print("*** In GameOverCheck and friendsRemaining was 0???");
+            return true;
+        } else if (enemiesRemaining == 0){
+            // TODO: you have won 
+            print("*** In GameOverCheck and enemiesRemaining was 0???");
+            return true;
         }
 
-        //count++;
-        // if (count < 10){
-        //     print("In Next...and current is: " + current);
-
-        //     if (characters[current].isEnemy){
-        //         print("In Next...and current was an enemy");
-        //         Walk();
-        //     } else {
-        //         print("In Next...and current was a friend");
-        //         if (characters[current].name == "Bruno"){
-        //             print("Bruno should be moving...");
-        //             objects[current].GetComponent<Bruno>().Move();
-        //             Next();
-        //         } else if (characters[current].name == "Maria"){
-        //             print("Maria should be moving...");
-        //             objects[current].GetComponent<Maria>().Move();
-        //             Next();
-        //         }
-        //     }
-        // }
+        print("*** In GameOverCheck and returning false.");
+        return false;
     }
-
-    void Walk(){
-        // print("In Walk and name is: " + characters[current].name);
-        // if (characters[current].name == "Mulok"){
-        //     print("In Walk and Mulok should be moving...");
-        //     objects[current].GetComponent<Mulok>().Move();
-        //     Next();
-        // } else if (characters[current].name == "Vurius"){
-        //     print("In Walk and Virius should be moving...");
-        //     objects[current].GetComponent<Vurius>().Move();
-        //     Next();
-        // }
-    }
-
-    // private void MakeDecision()
-    // {
-    // 	int closestEnemy = FindClosestOpponent(current);
-    // 	int weakestEnemy = FindWeakestOpponent(current);
-
-    // 	if (characters[current].health < 5){
-    // 		LowHealth();
-    // 	} else {
-    // 		HighHealth();
-    // 	}
-    // }
-
-    // private void LowHealth()
-    // {
-    // 	if (characters[current].isEngaged){
-    // 		// try to disengage
-    // 	} else {
-    // 		// take potion
-    // 	}
-    // }
-
-    // private void HighHealth()
-    // {
-    // 	if (distance(characters[current], characters[closestEnemy]) < meleeAttackDist){
-    // 		// melee attack that character
-    // 	} else {
-    // 		CheckRangedAttack();
-    // 	}
-    // }
-
-    // private void CheckRangedAttack()
-    // {
-    // 	if (distance(characters[current], characters[closestEnemy]) < meleeAttackDist){
-    // 		// do ranged attack
-    // 	} else {
-    // 		MakeMove();
-    // 	}
-    // }
-
-    // private void MakeMove()
-    // {
-    // 	// with 1/2 probability
-    // 		// move toward closestEnemy
-    // 	// with 1/2 probablity
-    // 		// move toward weakestEnemy
-    // }
-    
-    // // *** Helpers (not part of the tree) *** //
-    // private int FindClosestEnemy()
-    // {
-
-    // }
-
-    // private int FindWeakestEnemy()
-    // {
-
-    // }
 
     Unit GetUnit(GameObject obj)
     {
@@ -259,6 +301,7 @@ public class CombatLoop : MonoBehaviour
         return unit;
     }
 
+    // pretty sure I can change this to just work with the units list
     void SetCurrent(int idx, bool value)
     {
         string name = characters[idx].name;
@@ -336,5 +379,14 @@ public class CombatLoop : MonoBehaviour
         public string name {set; get;}
         public bool isEnemy {set; get;}
         public bool isDying {set; get;}
+        public int closestEnemy {set; get;}
+        public float closestEnemyDist {set; get;}
+        public int closestFriend {set; get;}
+    }
+
+    IEnumerator Delay(float time)
+    {
+        yield return new WaitForSeconds(time);
+        NextContinued();
     }
 }

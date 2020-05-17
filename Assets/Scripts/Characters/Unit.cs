@@ -17,10 +17,13 @@ public class Unit : MonoBehaviour
 	public int strength;
 	public int will;
 
+    // this should be isEnemy from YOUR perspective, not any of the characters' perspective. For your teammates this will be false.
 	public bool isEnemy;
 
     public int healingPotionCount;
     public int meleeDamage;
+    public float meleeRange;
+    public float longRange;
 
 	// *** OTHER VARIABLES *** //
 
@@ -49,6 +52,8 @@ public class Unit : MonoBehaviour
     protected void Start()
     {
     	_animator = GetComponent<Animator>();
+        meleeRange = 2f;
+        longRange = 0f;
         healingPotionCount = 2;
         sumRotationTime = 0f;
         isCurrent = false;
@@ -138,6 +143,7 @@ public class Unit : MonoBehaviour
 
     // *** ACTIONS *** //
 
+    // this method is for the character who is doing the attacking
     public void MeleeAttack()
     {
         print("$$$ Name: " + gameObject.name + " is in MeleeAttack.");
@@ -154,18 +160,27 @@ public class Unit : MonoBehaviour
         print("Opponent's ac is: " + targetUnit.ac);
         if (roll >= 0){ //opponentUnit.ac + 10){
             print("$$$ Attack hit!");
-            targetUnit.GetHit(meleeDamage + damageBonus);
             SetAnimBools(MELEE);
+            StartOpponentGettingHit(meleeDamage + damageBonus);
         } else {
             print("$$$ Attack missed...");
         }
 
         // delay while the animation is going and then call Next()
-        StartCoroutine(DelayForAnimation(3f));
-
+        StartCoroutine(DelayForAnimation(2f));
     }
 
-    // this method is called when someone is doing damage to this character
+    // need to delay a bit because some characters an a big wind up on their melee attacks
+    void StartOpponentGettingHit(int damage)
+    {
+        float delay = .5f;
+        if (gameObject.name == "Bruno"){
+            delay = 1f;
+        }
+        StartCoroutine(DelayOpponentGettingHit(delay, damage));
+    }
+
+    // this method is called when someone is doing damage to this character (so not when it's this character's turn)
     public void GetHit(int damage)
     {
         print("### In " + gameObject.name + " and damage is being taken. Starting hp is " + hp);
@@ -181,40 +196,9 @@ public class Unit : MonoBehaviour
             SetAnimBools(DIE);
         } else {
             // may have to add a delay here, probably will actually
-            //SetAnimBools(IDLE);
+            StartCoroutine(DelayBackToIdle(.5f));
         }
     }
-
-
-    // this returns the instance of the Unit class that is associated with the particular character
-    // Unit GetOpponentUnit()
-    // {
-    //     Unit unit = null;
-
-    //     if (target.name == "Bruno"){
-    //         unit = target.GetComponent<Bruno>();
-    //     } else if (target.name == "Erika"){
-    //         unit = target.GetComponent<Erika>();
-    //     } else if (target.name == "Maria"){
-    //         unit = target.GetComponent<Maria>();
-    //     }else if (target.name == "Panos") {
-    //         unit = target.GetComponent<Panos>();
-    //     } else if (target.name == "Ganfaul"){
-    //         unit = target.GetComponent<Ganfaul>();
-    //     } else if (target.name == "Nightshade"){
-    //         unit = target.GetComponent<Nightshade>();
-    //     } else if (target.name == "Warrok"){
-    //         unit = target.GetComponent<Warrok>();
-    //     } else if (target.name == "Mulok"){
-    //         unit = target.GetComponent<Mulok>();
-    //     } else if (target.name == "Vurius"){
-    //         unit = target.GetComponent<Vurius>();
-    //     } else if (target.name == "Zontog"){
-    //         unit = target.GetComponent<Zontog>();
-    //     }
-
-    //     return unit;
-    // }
 
     public void TakePotion()
     {
@@ -222,8 +206,9 @@ public class Unit : MonoBehaviour
             healingPotionCount--;
             hp += 5;
         }
+        // just go to the next character (or the same character if there are any more actions left)
+        ResetValuesAndNext();
     }
-
 
     // *** ACTION HELPERS *** ///
 
@@ -293,6 +278,7 @@ public class Unit : MonoBehaviour
         switch(state){
             case 0:
                 _isIdle = true;
+                print("%%% Setting the IDLE animation for: " + gameObject.name);
                 break;
             case 1:
                 _isWalking = true;
@@ -302,6 +288,7 @@ public class Unit : MonoBehaviour
                 break;
             case 3:
                 _isMelee = true;
+                print("%%% Setting the MELEE animation for: " + gameObject.name);
                 break;
             case 4:
                 _isDying = true;
@@ -376,16 +363,9 @@ public class Unit : MonoBehaviour
         }
     }
 
-    // need to delay so that the Next() character won't get called until the animation is done
-    IEnumerator DelayForAnimation(float time)
-    {
-        //yield on a new YieldInstruction that waits for 2.5 seconds.
-        yield return new WaitForSeconds(time);
-        ResetValuesAndNext();
-    }
-
     void ResetValuesAndNext()
     {
+        print("$$$ In resetValues and Next");
         _moving = false;
         _moveMode = false;
         _attackMode = false;
@@ -394,4 +374,25 @@ public class Unit : MonoBehaviour
         cl.Next();
     }
 
+    // need to delay so that the Next() character won't get called until the animation is done
+    IEnumerator DelayForAnimation(float time)
+    {
+        //yield on a new YieldInstruction that waits for 2.5 seconds.
+        yield return new WaitForSeconds(time);
+        ResetValuesAndNext();
+    }
+
+    IEnumerator DelayBackToIdle(float time)
+    {
+        //yield on a new YieldInstruction that waits for 2.5 seconds.
+        yield return new WaitForSeconds(time);
+        print("^^^ Delay over, going back to IDEL now: " + gameObject.name);
+        SetAnimBools(IDLE);
+    }
+
+    IEnumerator DelayOpponentGettingHit(float time, int damage)
+    {
+        yield return new WaitForSeconds(time);
+        targetUnit.GetHit(damage);
+    }
 }

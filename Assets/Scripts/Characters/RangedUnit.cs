@@ -12,6 +12,8 @@ public class RangedUnit : Unit
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
+        longRange = 12f;
         SetAnimBools(IDLE, new Vector3(0f,0f,0f));
     }
 
