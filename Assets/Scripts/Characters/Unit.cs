@@ -24,9 +24,10 @@ public class Unit : MonoBehaviour
 
 	// *** OTHER VARIABLES *** //
 
-    public bool isCurrent {set; get;}
     public GameObject target {set; get;}
-    public string targetName {set; get;}
+    public Unit targetUnit {set; get;}
+
+    public bool isCurrent {set; get;}
     // whenever you press a certain button ('M' for moving, 'A' for attacking) this script will enter that mode
     protected bool _moveMode, _attackMode;
     protected bool _moving, _rotating, _gotPhi;
@@ -61,7 +62,7 @@ public class Unit : MonoBehaviour
     {
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
-            print("In Update and name is: " + _name);
+            print("In Update and name is: " + gameObject.name);
             // if M is pressed then the character should start moving (or at least we know that moving is what the character wants to do)
                 // maybe there should be a message that says you are in walk mode, and if you click M again it removes it.
             if(Input.GetKey(KeyCode.M)){
@@ -133,10 +134,9 @@ public class Unit : MonoBehaviour
     public void MeleeAttack()
     {
         print("$$$ Name: " + gameObject.name + " is in MeleeAttack.");
-        Unit opponentUnit = GetOpponentUnit();
+        //Unit opponentUnit = GetOpponentUnit();
         int damageBonus = 0;
         // need to check if this attack hits or not
-        // roll a d20
         int roll = UnityEngine.Random.Range(1, 20);
         print("$$$ and the attack roll was: " + roll);
         // critical hit
@@ -144,10 +144,10 @@ public class Unit : MonoBehaviour
             damageBonus = 2;
         } 
 
-        print("Opponent's ac is: " + opponentUnit.ac);
-        if (roll >= opponentUnit.ac + 10){
+        print("Opponent's ac is: " + targetUnit.ac);
+        if (roll >= 0){ //opponentUnit.ac + 10){
             print("$$$ Attack hit!");
-            opponentUnit.GetHit(meleeDamage + damageBonus);
+            targetUnit.GetHit(meleeDamage + damageBonus);
             SetAnimBools(MELEE);
         } else {
             print("$$$ Attack missed...");
@@ -158,6 +158,7 @@ public class Unit : MonoBehaviour
 
     }
 
+    // this method is called when someone is doing damage to this character
     public void GetHit(int damage)
     {
         print("### In " + gameObject.name + " and damage is being taken. Starting hp is " + hp);
@@ -173,40 +174,40 @@ public class Unit : MonoBehaviour
             SetAnimBools(DIE);
         } else {
             // may have to add a delay here, probably will actually
-            SetAnimBools(IDLE);
+            //SetAnimBools(IDLE);
         }
     }
 
 
     // this returns the instance of the Unit class that is associated with the particular character
-    Unit GetOpponentUnit()
-    {
-        Unit unit = null;
+    // Unit GetOpponentUnit()
+    // {
+    //     Unit unit = null;
 
-        if (target.name == "Bruno"){
-            unit = target.GetComponent<Bruno>();
-        } else if (target.name == "Erika"){
-            unit = target.GetComponent<Erika>();
-        } else if (target.name == "Maria"){
-            unit = target.GetComponent<Maria>();
-        }else if (target.name == "Panos") {
-            unit = target.GetComponent<Panos>();
-        } else if (target.name == "Ganfaul"){
-            unit = target.GetComponent<Ganfaul>();
-        } else if (target.name == "Nightshade"){
-            unit = target.GetComponent<Nightshade>();
-        } else if (target.name == "Warrok"){
-            unit = target.GetComponent<Warrok>();
-        } else if (target.name == "Mulok"){
-            unit = target.GetComponent<Mulok>();
-        } else if (target.name == "Mulok"){
-            unit = target.GetComponent<Mulok>();
-        } else if (target.name == "Zontog"){
-            unit = target.GetComponent<Zontog>();
-        }
+    //     if (target.name == "Bruno"){
+    //         unit = target.GetComponent<Bruno>();
+    //     } else if (target.name == "Erika"){
+    //         unit = target.GetComponent<Erika>();
+    //     } else if (target.name == "Maria"){
+    //         unit = target.GetComponent<Maria>();
+    //     }else if (target.name == "Panos") {
+    //         unit = target.GetComponent<Panos>();
+    //     } else if (target.name == "Ganfaul"){
+    //         unit = target.GetComponent<Ganfaul>();
+    //     } else if (target.name == "Nightshade"){
+    //         unit = target.GetComponent<Nightshade>();
+    //     } else if (target.name == "Warrok"){
+    //         unit = target.GetComponent<Warrok>();
+    //     } else if (target.name == "Mulok"){
+    //         unit = target.GetComponent<Mulok>();
+    //     } else if (target.name == "Vurius"){
+    //         unit = target.GetComponent<Vurius>();
+    //     } else if (target.name == "Zontog"){
+    //         unit = target.GetComponent<Zontog>();
+    //     }
 
-        return unit;
-    }
+    //     return unit;
+    // }
 
     public void TakePotion()
     {
@@ -326,7 +327,7 @@ public class Unit : MonoBehaviour
     // So when this character is clicked, this GameObject will be passed to that script so the "target" can be set to this object. 
     void OnMouseUp()
     {
-        print("Click detected on: " + _name);
+        print("Click detected on: " + gameObject.name);
 
         GameObject clickingObject = cl.GetCurrentObject();
         string clickingName = cl.GetCurrentName();
@@ -335,34 +336,34 @@ public class Unit : MonoBehaviour
 
         if (clickingName == "Bruno"){
             clickingObject.GetComponent<Bruno>().target = gameObject;
-            clickingObject.GetComponent<Bruno>().targetName = _name;
+            clickingObject.GetComponent<Bruno>().targetUnit = this;
         } else if (clickingName == "Erika"){
             clickingObject.GetComponent<Erika>().target = gameObject;
-            clickingObject.GetComponent<Erika>().targetName = _name;
+            clickingObject.GetComponent<Erika>().targetUnit = this;
         } else if (clickingName == "Maria"){
             clickingObject.GetComponent<Maria>().target = gameObject;
-            clickingObject.GetComponent<Maria>().targetName = _name;
+            clickingObject.GetComponent<Maria>().targetUnit = this;
         }else if (clickingName == "Panos") {
             clickingObject.GetComponent<Panos>().target = gameObject;
-            clickingObject.GetComponent<Panos>().targetName = _name;
+            clickingObject.GetComponent<Panos>().targetUnit = this;
         } else if (clickingName == "Ganfaul"){
             clickingObject.GetComponent<Ganfaul>().target = gameObject;
-            clickingObject.GetComponent<Ganfaul>().targetName = _name;
+            clickingObject.GetComponent<Ganfaul>().targetUnit = this;
         } else if (clickingName == "Nightshade"){
             clickingObject.GetComponent<Nightshade>().target = gameObject;
-            clickingObject.GetComponent<Nightshade>().targetName = _name;
+            clickingObject.GetComponent<Nightshade>().targetUnit = this;
         } else if (clickingName == "Warrok"){
             clickingObject.GetComponent<Warrok>().target = gameObject;
-            clickingObject.GetComponent<Warrok>().targetName = _name;
+            clickingObject.GetComponent<Warrok>().targetUnit = this;
         } else if (clickingName == "Mulok"){
             clickingObject.GetComponent<Mulok>().target = gameObject;
-            clickingObject.GetComponent<Mulok>().targetName = _name;
+            clickingObject.GetComponent<Mulok>().targetUnit = this;
         } else if (clickingName == "Vurius"){
             clickingObject.GetComponent<Vurius>().target = gameObject;
-            clickingObject.GetComponent<Vurius>().targetName = _name;
+            clickingObject.GetComponent<Vurius>().targetUnit = this;
         } else if (clickingName == "Zontog"){
             clickingObject.GetComponent<Zontog>().target = gameObject;
-            clickingObject.GetComponent<Zontog>().targetName = _name;
+            clickingObject.GetComponent<Zontog>().targetUnit = this;
         } else {
             print("Whattt, none of these characters was clicking???");
         }
