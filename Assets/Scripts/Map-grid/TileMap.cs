@@ -9,7 +9,6 @@ public class TileMap : MonoBehaviour
     public int mapSizeY = 10;
     int[,] tiles;
     public TileTerrain[] tileTypes;
-    //Random r = new Random();
     public GameObject selectedUnit;
 
 
@@ -28,10 +27,20 @@ public class TileMap : MonoBehaviour
         {
             for (int y = 0; y < mapSizeY; y++)
             {
-                int terrain = 0; //r.Next(0, 3); //TODO add randomization here!!
+                //hard codng map tiles
+                int terrain = 0; 
+
+                if ( (x == 7) && ( y > 2 && y < 6) ) {
+                    terrain = 1;
+                } else if( y == 2){
+                    terrain = 2;
+                }
+
+                //let the map know your type
                 tiles[x, y] = terrain;
                 GameObject thisTile = (GameObject) Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
 
+                //gnothi seaton
                 TileClickable clickPos = thisTile.GetComponent<TileClickable>();
                 clickPos.tileX = x;
                 clickPos.tileY = y;
