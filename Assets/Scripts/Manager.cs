@@ -17,7 +17,7 @@ public class Manager : MonoBehaviour
 
     private GameObject currentTile;
 
-    private Vector3 garbagePosition = new Vector3(0, -100, 0);
+    private Vector3 garbagePosition = new Vector3(0, 100, 0);
 
     //makes sure there is only one Manager instance at any time 
     private void Awake()
