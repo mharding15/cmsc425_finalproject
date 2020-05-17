@@ -16,15 +16,18 @@ public class Ganfaul : Unit
 
     void SetStats()
     {
-        print("setting speeed to 20 for Bruno");
-        speed = 5;
+        speed = 8;
         reaction = 18;
+        hp = 22;
+        ac = 2;
+
+        meleeDamage = 4;
+        // cunning;
+        // perception;
+        // reaction;
+        // speed;
+        // strength;
+        // will;
     }
-    
-    // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
 
 }

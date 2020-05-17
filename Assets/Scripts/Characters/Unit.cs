@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour
 {
     // *** STATS *** //
 
-	// I'm assuming these stats will be modified based on what class the user pics for this character
+	// These stats will be modified based on what class the user pics for this character
 	public int hp;
 	public int ac;
 
@@ -20,11 +20,16 @@ public class Unit : MonoBehaviour
 	public bool isEnemy;
 
     public int healingPotionCount;
+    public int meleeDamage;
 
 	// *** OTHER VARIABLES *** //
 
-    public bool isCurrent {set; get;}
     public GameObject target {set; get;}
+    public Unit targetUnit {set; get;}
+
+    public bool isCurrent {set; get;}
+    // whenever you press a certain button ('M' for moving, 'A' for attacking) this script will enter that mode
+    protected bool _moveMode, _attackMode;
     protected bool _moving, _rotating, _gotPhi;
     protected float sumRotationTime, phi;
 
@@ -57,29 +62,38 @@ public class Unit : MonoBehaviour
     {
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
-            print("In Update and name is: " + _name);
+            print("In Update and name is: " + gameObject.name);
             // if M is pressed then the character should start moving (or at least we know that moving is what the character wants to do)
                 // maybe there should be a message that says you are in walk mode, and if you click M again it removes it.
             if(Input.GetKey(KeyCode.M)){
                 print("*** And M was pressed");
-                _rotating = true;
-                _gotPhi = false;
-            } 
+                EnterMoveMode();
+            } else if (Input.GetKey(KeyCode.A)){
+                print("*** AND A was pressed");
+                EnterAttackMode();
+            }
 
             // rotate towards the goal (if there is a goal)
             if (_rotating && target != null){
-                print("*((*(( target name is: " + target.name);
                 // if have not gotten the rotation angle, get it
                 if (!_gotPhi){
                     GetRotationAngle(target.transform.position);
                 } else {
+                    // rotate a little bit towards the target
                     transform.Rotate(new Vector3(0f, phi, 0f) * Time.deltaTime);
                     sumRotationTime += Time.deltaTime;
+                    // finished rotating, now can either move or attack or whatever
                     if(sumRotationTime >= 1f){
+                        print("@@@ Done rotating");
                         _rotating = false;
-                        _moving = true;
+                        if (_moveMode){
+                            _moving = true;
+                            SetAnimBools(WALK);
+                        } else if (_attackMode){
+                            print("@@@ and calling MeleeAttack");
+                            MeleeAttack();
+                        }
                         sumRotationTime = 0f;
-                        SetAnimBools(WALK);
                     }
                 }
             }
@@ -91,24 +105,116 @@ public class Unit : MonoBehaviour
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
                 if (Distance(transform.position, target.transform.position) < 2f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
-                    _moving = false;
-                    target = null;
-                    SetAnimBools(IDLE);
-                    cl.Next();
+                    // Maybe I should have a Reset() method that does all of this.
+                    ResetValuesAndNext();
                 }
             }
         }
+    }
+    
+    //wasnt sure I wanted to mess with your use in Combat Loop
+    public void MoveTo(int x, int y)
+    {
+    	print(_name + " is moving...");
+    	transform.position = new Vector3(x, 0, y);
+    }
+
+    // if the target destination is already selected, then the character will start moving, if not then once a target is selected they will move.
+    public void EnterMoveMode()
+    {
+        print("!!! entering MOVE mode");
+        _moveMode = true;
+        _rotating = true;
+        _gotPhi = false;
+    }
+
+    public void EnterAttackMode()
+    {
+        print("!!! entering Attack mode");
+        _attackMode = true;
+        _rotating = true;
+        _gotPhi = false;
     }
 
     // *** ACTIONS *** //
 
     public void MeleeAttack()
     {
-    	// basically just call the attack animation
-    	SetAnimBools(MELEE);
-    	// will probably need to set it back to IDLE here, but will test that later
-    		// might have to have a set delay time or something, although probably not since the animation has exit time
+        print("$$$ Name: " + gameObject.name + " is in MeleeAttack.");
+        //Unit opponentUnit = GetOpponentUnit();
+        int damageBonus = 0;
+        // need to check if this attack hits or not
+        int roll = UnityEngine.Random.Range(1, 20);
+        print("$$$ and the attack roll was: " + roll);
+        // critical hit
+        if (roll == 20){
+            damageBonus = 2;
+        } 
+
+        print("Opponent's ac is: " + targetUnit.ac);
+        if (roll >= 0){ //opponentUnit.ac + 10){
+            print("$$$ Attack hit!");
+            targetUnit.GetHit(meleeDamage + damageBonus);
+            SetAnimBools(MELEE);
+        } else {
+            print("$$$ Attack missed...");
+        }
+
+        // delay while the animation is going and then call Next()
+        StartCoroutine(DelayForAnimation(3f));
+
     }
+
+    // this method is called when someone is doing damage to this character
+    public void GetHit(int damage)
+    {
+        print("### In " + gameObject.name + " and damage is being taken. Starting hp is " + hp);
+        SetAnimBools(HIT);
+        hp -= damage;
+        print("### In " + gameObject.name + " and new hp is: " + hp);
+        // if the character is killed by this attack
+        if (hp <= 0){
+            hp = 0;
+            // when the character's hp is 0 or below need to tell the combat loop that the character is dying.
+            cl.SetDying(gameObject.name);
+            // if the character is able to get back up, I guess I should add an animation for getting up.
+            SetAnimBools(DIE);
+        } else {
+            // may have to add a delay here, probably will actually
+            //SetAnimBools(IDLE);
+        }
+    }
+
+
+    // this returns the instance of the Unit class that is associated with the particular character
+    // Unit GetOpponentUnit()
+    // {
+    //     Unit unit = null;
+
+    //     if (target.name == "Bruno"){
+    //         unit = target.GetComponent<Bruno>();
+    //     } else if (target.name == "Erika"){
+    //         unit = target.GetComponent<Erika>();
+    //     } else if (target.name == "Maria"){
+    //         unit = target.GetComponent<Maria>();
+    //     }else if (target.name == "Panos") {
+    //         unit = target.GetComponent<Panos>();
+    //     } else if (target.name == "Ganfaul"){
+    //         unit = target.GetComponent<Ganfaul>();
+    //     } else if (target.name == "Nightshade"){
+    //         unit = target.GetComponent<Nightshade>();
+    //     } else if (target.name == "Warrok"){
+    //         unit = target.GetComponent<Warrok>();
+    //     } else if (target.name == "Mulok"){
+    //         unit = target.GetComponent<Mulok>();
+    //     } else if (target.name == "Vurius"){
+    //         unit = target.GetComponent<Vurius>();
+    //     } else if (target.name == "Zontog"){
+    //         unit = target.GetComponent<Zontog>();
+    //     }
+
+    //     return unit;
+    // }
 
     public void TakePotion()
     {
@@ -228,7 +334,7 @@ public class Unit : MonoBehaviour
     // So when this character is clicked, this GameObject will be passed to that script so the "target" can be set to this object. 
     void OnMouseUp()
     {
-        print("Click detected on: " + _name);
+        print("Click detected on: " + gameObject.name);
 
         GameObject clickingObject = cl.GetCurrentObject();
         string clickingName = cl.GetCurrentName();
@@ -237,27 +343,55 @@ public class Unit : MonoBehaviour
 
         if (clickingName == "Bruno"){
             clickingObject.GetComponent<Bruno>().target = gameObject;
+            clickingObject.GetComponent<Bruno>().targetUnit = this;
         } else if (clickingName == "Erika"){
             clickingObject.GetComponent<Erika>().target = gameObject;
+            clickingObject.GetComponent<Erika>().targetUnit = this;
         } else if (clickingName == "Maria"){
             clickingObject.GetComponent<Maria>().target = gameObject;
+            clickingObject.GetComponent<Maria>().targetUnit = this;
         }else if (clickingName == "Panos") {
             clickingObject.GetComponent<Panos>().target = gameObject;
+            clickingObject.GetComponent<Panos>().targetUnit = this;
         } else if (clickingName == "Ganfaul"){
             clickingObject.GetComponent<Ganfaul>().target = gameObject;
+            clickingObject.GetComponent<Ganfaul>().targetUnit = this;
         } else if (clickingName == "Nightshade"){
             clickingObject.GetComponent<Nightshade>().target = gameObject;
+            clickingObject.GetComponent<Nightshade>().targetUnit = this;
         } else if (clickingName == "Warrok"){
             clickingObject.GetComponent<Warrok>().target = gameObject;
+            clickingObject.GetComponent<Warrok>().targetUnit = this;
         } else if (clickingName == "Mulok"){
             clickingObject.GetComponent<Mulok>().target = gameObject;
+            clickingObject.GetComponent<Mulok>().targetUnit = this;
         } else if (clickingName == "Vurius"){
             clickingObject.GetComponent<Vurius>().target = gameObject;
+            clickingObject.GetComponent<Vurius>().targetUnit = this;
         } else if (clickingName == "Zontog"){
             clickingObject.GetComponent<Zontog>().target = gameObject;
+            clickingObject.GetComponent<Zontog>().targetUnit = this;
         } else {
             print("Whattt, none of these characters was clicking???");
         }
+    }
+
+    // need to delay so that the Next() character won't get called until the animation is done
+    IEnumerator DelayForAnimation(float time)
+    {
+        //yield on a new YieldInstruction that waits for 2.5 seconds.
+        yield return new WaitForSeconds(time);
+        ResetValuesAndNext();
+    }
+
+    void ResetValuesAndNext()
+    {
+        _moving = false;
+        _moveMode = false;
+        _attackMode = false;
+        target = null;
+        SetAnimBools(IDLE);
+        cl.Next();
     }
 
 }

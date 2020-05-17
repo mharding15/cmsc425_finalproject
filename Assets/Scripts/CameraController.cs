@@ -6,13 +6,16 @@ public class CameraController : MonoBehaviour
 {
 
     public Transform target;
+    public Vector3 zoomVector;
     public Vector3 offset;
     public float zoomSpeed = 4f;
     public float minZoom = 1f;
-    public float maxZoom = 5f;
-    public Manager manager;
+    public float maxZoom = 7f;
 
-    public float pitch = 1;
+    public GameObject map;
+    private TileMap tileMap;
+
+    public float pitch = 0.2f;
 
     public float yawSpeed = 100f;
     public float moveSpeed = 10f;
@@ -23,6 +26,10 @@ public class CameraController : MonoBehaviour
     private float deltaVertical = 0f;
     private float deltaHorizontal = 0f;
 
+    private void Start()
+    {
+        tileMap = map.GetComponent<TileMap>();
+    }
 
     void Update()
     {
@@ -54,12 +61,12 @@ public class CameraController : MonoBehaviour
         Vector3 targetPos = target.transform.position;
         
         // Make sure we're in the Map Area
-        target.transform.position = new Vector3(Mathf.Clamp(targetPos.x, 0, manager.mapSizeX - 1),
+        target.transform.position = new Vector3(Mathf.Clamp(targetPos.x, 0, tileMap.mapSizeX - 1),
             targetPos.y,
-            Mathf.Clamp(targetPos.z, 0, manager.mapSizeY - 1)
+            Mathf.Clamp(targetPos.z, 0, tileMap.mapSizeY - 1)
             );
 
-        transform.position = target.position - offset * currentZoom;
+        transform.position = target.position - zoomVector * currentZoom + offset;
         transform.LookAt(target.position + Vector3.up * pitch);
         transform.RotateAround(target.position, Vector3.up, currentYaw);
 

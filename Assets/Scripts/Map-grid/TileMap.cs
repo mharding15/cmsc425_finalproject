@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class TileMap : MonoBehaviour
 {
+
+    public int mapSizeX = 10;
+    public int mapSizeY = 10;
     int[,] tiles;
+
     public TileTerrain[] tileTypes;
-    //Random r = new Random();
+    public Unit selectedUnit;
+
 
     void Start()
     {
@@ -16,17 +21,34 @@ public class TileMap : MonoBehaviour
     void generateMap()
     {
         //allocate tiles
-        tiles = new int[Manager.Instance.mapSizeX, Manager.Instance.mapSizeX];
+        tiles = new int[mapSizeX, mapSizeY];
 
         //initialize tiles
-        for (int x = 0; x < Manager.Instance.mapSizeX; x++)
+        for (int x = 0; x < mapSizeX; x++)
         {
-            for (int y = 0; y < Manager.Instance.mapSizeY; y++)
+            for (int y = 0; y < mapSizeY; y++)
             {
-                int terrain = 0; //r.Next(0, 3); //add randomization here!!
+                //hard codng map tiles
+                int terrain = 0; 
+
+                if ( (x == 7) && ( y > 2 && y < 6) ) {
+                    terrain = 1;
+                } else if( y == 2){
+                    terrain = 2;
+                }
+
+                //let the map know your type
                 tiles[x, y] = terrain;
-                Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
+                GameObject thisTile = (GameObject) Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
+
+                //gnothi seaton
+                TileClickable clickPos = thisTile.GetComponent<TileClickable>();
+                clickPos.tileX = x;
+                clickPos.tileY = y;
+                clickPos.map = this;
+                clickPos.cost = tileTypes[terrain].moveCost;
             }
         }
     }
+
 }
