@@ -30,8 +30,19 @@ public class TileMap : MonoBehaviour
             {
                 int terrain = 0; //r.Next(0, 3); //TODO add randomization here!!
                 tiles[x, y] = terrain;
-                Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
+                GameObject thisTile = (GameObject) Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
+
+                TileClickable clickPos = thisTile.GetComponent<TileClickable>();
+                clickPos.tileX = x;
+                clickPos.tileY = y;
+                clickPos.map = this;
             }
         }
+    }
+
+    public void moveUnitTo(int x, int y)
+    {
+        //this will likely not remain, id like movement to be more fluid obviously
+        selectedUnit.transform.position = new Vector3(x, 0, y);
     }
 }
