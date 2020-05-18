@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class pathFinder : MonoBehaviour
+public class pathFinder
 {
     TileMap map;
     public TileClickable target;
@@ -163,13 +163,18 @@ public class pathFinder : MonoBehaviour
             {   //adds to open list if not visited already
                 Node neighbor;
                 neighbor = new Node(this.map, pos, targetPos, currNode.getGCost(), diag);
-                if (openList[neighbor.cost()] == null) 
+
+                try
+                {
+                    List<Node> lst = openList[neighbor.cost()];
+                } catch (KeyNotFoundException e)
                 {
                     openList.Add(neighbor.cost(), new List<Node>());
                 }
+
                 openList[neighbor.cost()].Add(neighbor);
                 closedList.Add(neighbor.pos);
-                
+
             }
         }
     }
