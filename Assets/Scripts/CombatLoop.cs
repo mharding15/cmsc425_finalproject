@@ -123,7 +123,9 @@ public class CombatLoop : MonoBehaviour
     public void NextContinued()
     {
 
-        if (!GameOverCheck()){
+        // for testing with a single character (otherwise it would think the game was over)
+        // if (!GameOverCheck()){
+        if (true){
 
             // TODO: check to see if the actions are used up for this character.
 
@@ -375,7 +377,7 @@ public class CombatLoop : MonoBehaviour
         return objects[i];
     }
 
-    public GameObject GetCurrentUnit()
+    public Unit GetCurrentUnit()
     {
         return units[current];
     }

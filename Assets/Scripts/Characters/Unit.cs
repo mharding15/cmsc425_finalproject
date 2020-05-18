@@ -6,28 +6,31 @@ public class Unit : MonoBehaviour
 {
     // *** STATS *** //
 
-	// These stats will be modified based on what class the user pics for this character
-	public int hp;
-	public int ac;
+    // These stats will be modified based on what class the user pics for this character
+    public int hp;
+    public int ac;
 
-	public int cunning;
-	public int perception;
-	public int reaction;
-	public int speed;
-	public int strength;
-	public int will;
+    public int cunning;
+    public int perception;
+    public int reaction;
+    public int speed;
+    public int strength;
+    public int will;
 
     // this should be isEnemy from YOUR perspective, not any of the characters' perspective. For your teammates this will be false.
-	public bool isEnemy;
+    public bool isEnemy;
 
     public int healingPotionCount;
     public int meleeDamage;
     public float meleeRange;
     public float longRange;
 
-	// *** OTHER VARIABLES *** //
+    // *** OTHER VARIABLES *** //
 
     public List<Vector3> path {set; get;}
+    protected int pathIdx;
+    protected Vector3 goal;
+    protected bool _goalSet;
 
     public GameObject target {set; get;}
     public Unit targetUnit {set; get;}
@@ -40,9 +43,9 @@ public class Unit : MonoBehaviour
 
     protected CombatLoop cl;
 
-	protected string _name;
-	protected Animator _animator;
-	protected bool _isIdle, _isWalking, _isRunning, _isMelee, _isDying, _isHit;
+    protected string _name;
+    protected Animator _animator;
+    protected bool _isIdle, _isWalking, _isRunning, _isMelee, _isDying, _isHit;
     protected int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
@@ -53,7 +56,7 @@ public class Unit : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
-    	_animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         meleeRange = 2f;
         longRange = 0f;
         healingPotionCount = 2;
@@ -62,6 +65,14 @@ public class Unit : MonoBehaviour
         _rotating = false;
         _gotPhi = false;
         cl = GameObject.FindWithTag("Manager").GetComponent<CombatLoop>();
+        pathIdx = 0;
+        _goalSet = false;
+        goal = new Vector3(0f,0f,0f);
+
+        path = new List<Vector3>();
+        // for testing
+        path.Add(new Vector3(3f, 0, 3f));
+        path.Add(new Vector3(5f, 0, 10f));
     }
 
     // Update is called once per frame
@@ -83,11 +94,22 @@ public class Unit : MonoBehaviour
                 EnterMeleeMode();
             }
 
+            // if in melee mode, then need to make the goal equal to the target's position
+            if (_attackModeMelee && target != null){
+                goal = target.transform.position;
+            }
+
+            // if getting the first part of the path
+            if (!_goalSet && path.Count != 0){
+                goal = path[0];
+                _goalSet = true;
+            }
+
             // rotate towards the goal (if there is a goal)
-            if (_rotating && target != null){
+            if (_rotating && _goalSet){
                 // if have not gotten the rotation angle, get it
                 if (!_gotPhi){
-                    GetRotationAngle(target.transform.position);
+                    GetRotationAngle(goal);
                 } else {
                     // rotate a little bit towards the target
                     transform.Rotate(new Vector3(0f, phi, 0f) * Time.deltaTime);
@@ -109,14 +131,23 @@ public class Unit : MonoBehaviour
             }
 
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
-            if (!_rotating && _moving && target != null){
+            if (!_rotating && _moving && goal != null){
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                if (Distance(transform.position, target.transform.position) < 2f){
+                if (Distance(transform.position, goal) < 1f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     // Maybe I should have a Reset() method that does all of this.
-                    ResetValuesAndNext();
+                    pathIdx++;
+                    if (pathIdx < path.Count){
+                        goal = path[pathIdx];
+                        _moving = false;
+                        _rotating = true;
+                        _gotPhi = false;
+                        sumRotationTime = 0f;
+                    } else {
+                        ResetValuesAndNext();
+                    }
                 }
             }
         }
@@ -125,8 +156,8 @@ public class Unit : MonoBehaviour
     //wasnt sure I wanted to mess with your use in Combat Loop
     public void MoveTo(int x, int y)
     {
-    	print(_name + " is moving...");
-    	transform.position = new Vector3(x, 0, y);
+        print(_name + " is moving...");
+        transform.position = new Vector3(x, 0, y);
     }
 
     // if the target destination is already selected, then the character will start moving, if not then once a target is selected they will move.
