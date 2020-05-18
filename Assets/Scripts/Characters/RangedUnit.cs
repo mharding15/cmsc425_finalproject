@@ -19,10 +19,11 @@ public class RangedUnit : Unit
         SetAnimBools(IDLE, new Vector3(0f,0f,0f));
     }
 
-    new void Update()
+    void Update()
     {
-        print("((((((( In RangedUnit Update().......");
-        _animator.SetBool("isRanged", false);
+        if (!_moving){
+            SetAnimBools(IDLE);
+        }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
             print("In Update and name is: " + gameObject.name);
@@ -34,16 +35,28 @@ public class RangedUnit : Unit
             } else if (Input.GetKey(KeyCode.A)){
                 print("*** AND A was pressed");
                 EnterMeleeMode();
-            } else if(Input.GetKey(KeyCode.R)){
+            }else if(Input.GetKey(KeyCode.R)){
                 print("*** AND R was pressed");
                 EnterRangedMode();
+                cl.SetModeText("Mode: Ranged Attack");
+            }
+
+            // if in melee mode, then need to make the goal equal to the target's position
+            if (_attackModeMelee && target != null){
+                goal = target.transform.position;
+            }
+
+            // if getting the first part of the path
+            if (!_goalSet && path.Count != 0){
+                goal = path[0];
+                _goalSet = true;
             }
 
             // rotate towards the goal (if there is a goal)
-            if (_rotating && target != null){
+            if (_rotating && _goalSet){
                 // if have not gotten the rotation angle, get it
                 if (!_gotPhi){
-                    GetRotationAngle(target.transform.position);
+                    GetRotationAngle(goal);
                 } else {
                     // rotate a little bit towards the target
                     transform.Rotate(new Vector3(0f, phi, 0f) * Time.deltaTime);
@@ -68,14 +81,23 @@ public class RangedUnit : Unit
             }
 
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
-            if (!_rotating && _moving && target != null){
+            if (!_rotating && _moving && goal != null){
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                if (Distance(transform.position, target.transform.position) < 2f){
+                if (Distance(transform.position, goal) < 1f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     // Maybe I should have a Reset() method that does all of this.
-                    ResetValuesAndNext();
+                    pathIdx++;
+                    if (pathIdx < path.Count){
+                        goal = path[pathIdx];
+                        _moving = false;
+                        _rotating = true;
+                        _gotPhi = false;
+                        sumRotationTime = 0f;
+                    } else {
+                        ResetValuesAndNext();
+                    }
                 }
             }
         }

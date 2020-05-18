@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class Unit : MonoBehaviour
     public float longRange;
 
     // *** OTHER VARIABLES *** //
+
+    public Text modeText;
 
     public List<Vector3> path {set; get;}
     protected int pathIdx;
@@ -89,9 +92,11 @@ public class Unit : MonoBehaviour
             if(Input.GetKey(KeyCode.M)){
                 print("*** And M was pressed");
                 EnterMoveMode();
-            } else if (Input.GetKey(KeyCode.A)){
+                cl.SetModeText("Mode: Move");
+            } else if (Input.GetKey(KeyCode.Z)){
                 print("*** AND A was pressed");
                 EnterMeleeMode();
+                cl.SetModeText("Mode: Melee Attack");
             }
 
             // if in melee mode, then need to make the goal equal to the target's position

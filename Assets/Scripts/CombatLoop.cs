@@ -1,9 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatLoop : MonoBehaviour
 {
+    public Text turnText;
+    public Text hpText; 
+    public Text modeText;
+    public Text aiTurnText;
+    public Text aiHPText;
+
+    public GameObject HumanPanel;
+    public GameObject AIPanel;
+
     // this list contains instances of the inner class "Person" I made below to keep track of things for that character
 	private List<Person> characters;
     // this list contains the actual GameObjects associated with the characters, so can use it to call their methods and stuff
@@ -157,8 +167,19 @@ public class CombatLoop : MonoBehaviour
             // this is an AI character, need to make it's decisions for it
             if (characters[current].isEnemy){
                 print("In Next...and current was an enemy, character: " + objects[current].name);
+                aiTurnText.text = characters[current].name + "'s Turn";
+                aiHPText.text = "HP: " + units[current].hp;
+                AIPanel.gameObject.SetActive(true);
+                HumanPanel.gameObject.SetActive(false);
                 MakeDecision();
-            } 
+            } else {
+                turnText.text = characters[current].name + "'s Turn";
+                hpText.text = "HP: " + units[current].hp;
+                modeText.text = "Mode: None";
+
+                AIPanel.gameObject.SetActive(false);
+                HumanPanel.gameObject.SetActive(true);
+            }
             // I guess I don't really have to do anything else if it's a human controlled character
         }
     }
@@ -182,7 +203,7 @@ public class CombatLoop : MonoBehaviour
         int closestOpponentIdx = characters[current].closestEnemy; 
         float closestEnemyDist = characters[current].closestEnemyDist;
 
-        print("&&& For character: " + objects[current].name + ", the closest enemy is: " + objects[closestOpponentIdx].name + " and is " + closestEnemyDist + " away.");
+        //print("&&& For character: " + objects[current].name + ", the closest enemy is: " + objects[closestOpponentIdx].name + " and is " + closestEnemyDist + " away.");
 
         if (closestEnemyDist < units[current].meleeRange){
             print("&&& so gonna hit them with a Melee attack");
@@ -418,5 +439,10 @@ public class CombatLoop : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         NextContinued();
+    }
+
+    public void SetModeText(string text)
+    {
+        modeText.text = text;
     }
 }
