@@ -116,7 +116,7 @@ public class Unit : MonoBehaviour
     public void MoveTo(int x, int y)
     {
     	print(_name + " is moving...");
-    	transform.position = new Vector3(x, 0, y);
+    	transform.position += new Vector3(x, 0, y);
     }
 
     // if the target destination is already selected, then the character will start moving, if not then once a target is selected they will move.
