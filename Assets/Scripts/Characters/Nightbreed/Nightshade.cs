@@ -16,7 +16,12 @@ public class Nightshade : RangedUnit
 
     void SetStats()
     {
-        speed = 22;
-        reaction = 21;
+        speed = 12;
+        reaction = 22;
+        hp = 14;
+        ac = 2;
+
+        meleeDamage = 1;
+        rangedDamage = 4;
     }
 }

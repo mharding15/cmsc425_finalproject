@@ -6,38 +6,46 @@ public class Unit : MonoBehaviour
 {
     // *** STATS *** //
 
-	// These stats will be modified based on what class the user pics for this character
-	public int hp;
-	public int ac;
+    // These stats will be modified based on what class the user pics for this character
+    public int hp;
+    public int ac;
 
-	public int cunning;
-	public int perception;
-	public int reaction;
-	public int speed;
-	public int strength;
-	public int will;
+    public int cunning;
+    public int perception;
+    public int reaction;
+    public int speed;
+    public int strength;
+    public int will;
 
-	public bool isEnemy;
+    // this should be isEnemy from YOUR perspective, not any of the characters' perspective. For your teammates this will be false.
+    public bool isEnemy;
 
     public int healingPotionCount;
     public int meleeDamage;
+    public float meleeRange;
+    public float longRange;
 
-	// *** OTHER VARIABLES *** //
+    // *** OTHER VARIABLES *** //
+
+    public List<Vector3> path {set; get;}
+    protected int pathIdx;
+    protected Vector3 goal;
+    protected bool _goalSet;
 
     public GameObject target {set; get;}
     public Unit targetUnit {set; get;}
 
     public bool isCurrent {set; get;}
     // whenever you press a certain button ('M' for moving, 'A' for attacking) this script will enter that mode
-    protected bool _moveMode, _attackMode;
+    protected bool _moveMode, _attackModeMelee;
     protected bool _moving, _rotating, _gotPhi;
     protected float sumRotationTime, phi;
 
     protected CombatLoop cl;
 
-	protected string _name;
-	protected Animator _animator;
-	protected bool _isIdle, _isWalking, _isRunning, _isMelee, _isDying, _isHit;
+    protected string _name;
+    protected Animator _animator;
+    protected bool _isIdle, _isWalking, _isRunning, _isMelee, _isDying, _isHit;
     protected int IDLE = 0, 
                 WALK = 1,
                 RUN = 2, 
@@ -48,18 +56,31 @@ public class Unit : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
-    	_animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
+        meleeRange = 2f;
+        longRange = 0f;
         healingPotionCount = 2;
         sumRotationTime = 0f;
         isCurrent = false;
         _rotating = false;
         _gotPhi = false;
         cl = GameObject.FindWithTag("Manager").GetComponent<CombatLoop>();
+        pathIdx = 0;
+        _goalSet = false;
+        goal = new Vector3(0f,0f,0f);
+
+        path = new List<Vector3>();
+        // for testing
+        path.Add(new Vector3(3f, 0, 3f));
+        path.Add(new Vector3(5f, 0, 10f));
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!_moving){
+            SetAnimBools(IDLE);
+        }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
             print("In Update and name is: " + gameObject.name);
@@ -70,14 +91,25 @@ public class Unit : MonoBehaviour
                 EnterMoveMode();
             } else if (Input.GetKey(KeyCode.A)){
                 print("*** AND A was pressed");
-                EnterAttackMode();
+                EnterMeleeMode();
+            }
+
+            // if in melee mode, then need to make the goal equal to the target's position
+            if (_attackModeMelee && target != null){
+                goal = target.transform.position;
+            }
+
+            // if getting the first part of the path
+            if (!_goalSet && path.Count != 0){
+                goal = path[0];
+                _goalSet = true;
             }
 
             // rotate towards the goal (if there is a goal)
-            if (_rotating && target != null){
+            if (_rotating && _goalSet){
                 // if have not gotten the rotation angle, get it
                 if (!_gotPhi){
-                    GetRotationAngle(target.transform.position);
+                    GetRotationAngle(goal);
                 } else {
                     // rotate a little bit towards the target
                     transform.Rotate(new Vector3(0f, phi, 0f) * Time.deltaTime);
@@ -89,24 +121,33 @@ public class Unit : MonoBehaviour
                         if (_moveMode){
                             _moving = true;
                             SetAnimBools(WALK);
-                        } else if (_attackMode){
+                        } else if (_attackModeMelee){
                             print("@@@ and calling MeleeAttack");
                             MeleeAttack();
-                        }
+                        } 
                         sumRotationTime = 0f;
                     }
                 }
             }
 
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
-            if (!_rotating && _moving && target != null){
+            if (!_rotating && _moving && goal != null){
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                if (Distance(transform.position, target.transform.position) < 2f){
+                if (Distance(transform.position, goal) < 1f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     // Maybe I should have a Reset() method that does all of this.
-                    ResetValuesAndNext();
+                    pathIdx++;
+                    if (pathIdx < path.Count){
+                        goal = path[pathIdx];
+                        _moving = false;
+                        _rotating = true;
+                        _gotPhi = false;
+                        sumRotationTime = 0f;
+                    } else {
+                        ResetValuesAndNext();
+                    }
                 }
             }
         }
@@ -128,16 +169,22 @@ public class Unit : MonoBehaviour
         _gotPhi = false;
     }
 
-    public void EnterAttackMode()
+    public void EnterMeleeMode()
     {
-        print("!!! entering Attack mode");
-        _attackMode = true;
+        print("!!! entering Melee Attack mode");
+        _attackModeMelee = true;
         _rotating = true;
         _gotPhi = false;
     }
 
+    public void EnterRangedMode()
+    {
+        print("Ah, fuck, so we are entering this ranged mode????");
+    }
+
     // *** ACTIONS *** //
 
+    // this method is for the character who is doing the attacking
     public void MeleeAttack()
     {
         print("$$$ Name: " + gameObject.name + " is in MeleeAttack.");
@@ -154,18 +201,33 @@ public class Unit : MonoBehaviour
         print("Opponent's ac is: " + targetUnit.ac);
         if (roll >= 0){ //opponentUnit.ac + 10){
             print("$$$ Attack hit!");
-            targetUnit.GetHit(meleeDamage + damageBonus);
-            SetAnimBools(MELEE);
+            SetMeleeBool();
+            StartOpponentGettingHit(meleeDamage + damageBonus);
         } else {
             print("$$$ Attack missed...");
         }
 
         // delay while the animation is going and then call Next()
-        StartCoroutine(DelayForAnimation(3f));
-
+        StartCoroutine(DelayForAnimation(2f));
     }
 
-    // this method is called when someone is doing damage to this character
+    // this is necessary because in the RangedUnit class, this needs to have a "pos" with it.
+    protected void SetMeleeBool()
+    {
+        SetAnimBools(MELEE);
+    }
+
+    // need to delay a bit because some characters an a big wind up on their melee attacks
+    protected void StartOpponentGettingHit(int damage)
+    {
+        float delay = .5f;
+        if (gameObject.name == "Bruno"){
+            delay = 1f;
+        }
+        StartCoroutine(DelayOpponentGettingHit(delay, damage));
+    }
+
+    // this method is called when someone is doing damage to this character (so not when it's this character's turn)
     public void GetHit(int damage)
     {
         print("### In " + gameObject.name + " and damage is being taken. Starting hp is " + hp);
@@ -181,40 +243,9 @@ public class Unit : MonoBehaviour
             SetAnimBools(DIE);
         } else {
             // may have to add a delay here, probably will actually
-            //SetAnimBools(IDLE);
+            StartCoroutine(DelayBackToIdle(.5f));
         }
     }
-
-
-    // this returns the instance of the Unit class that is associated with the particular character
-    // Unit GetOpponentUnit()
-    // {
-    //     Unit unit = null;
-
-    //     if (target.name == "Bruno"){
-    //         unit = target.GetComponent<Bruno>();
-    //     } else if (target.name == "Erika"){
-    //         unit = target.GetComponent<Erika>();
-    //     } else if (target.name == "Maria"){
-    //         unit = target.GetComponent<Maria>();
-    //     }else if (target.name == "Panos") {
-    //         unit = target.GetComponent<Panos>();
-    //     } else if (target.name == "Ganfaul"){
-    //         unit = target.GetComponent<Ganfaul>();
-    //     } else if (target.name == "Nightshade"){
-    //         unit = target.GetComponent<Nightshade>();
-    //     } else if (target.name == "Warrok"){
-    //         unit = target.GetComponent<Warrok>();
-    //     } else if (target.name == "Mulok"){
-    //         unit = target.GetComponent<Mulok>();
-    //     } else if (target.name == "Vurius"){
-    //         unit = target.GetComponent<Vurius>();
-    //     } else if (target.name == "Zontog"){
-    //         unit = target.GetComponent<Zontog>();
-    //     }
-
-    //     return unit;
-    // }
 
     public void TakePotion()
     {
@@ -222,12 +253,13 @@ public class Unit : MonoBehaviour
             healingPotionCount--;
             hp += 5;
         }
+        // just go to the next character (or the same character if there are any more actions left)
+        ResetValuesAndNext();
     }
-
 
     // *** ACTION HELPERS *** ///
 
-    float Distance(Vector3 p1, Vector3 p2)
+    protected float Distance(Vector3 p1, Vector3 p2)
     {
         float x_diff = p1.x - p2.x;
         float z_diff = p1.z - p2.z;
@@ -235,7 +267,7 @@ public class Unit : MonoBehaviour
         return Mathf.Sqrt(d_sq);
     }
 
-    void GetRotationAngle(Vector3 point)
+    protected void GetRotationAngle(Vector3 point)
     {
         Vector3 newPoint = new Vector3(point.x - transform.position.x, 0f, point.z - transform.position.z);
 
@@ -259,7 +291,7 @@ public class Unit : MonoBehaviour
         _gotPhi = true;
     }
 
-    Vector3 RotatePoint(float theta, float x, float z)
+    protected Vector3 RotatePoint(float theta, float x, float z)
     {
         float[] rotationMatrix = new float[4];
         rotationMatrix[0] = Mathf.Cos(DegsToRads(theta));
@@ -273,12 +305,12 @@ public class Unit : MonoBehaviour
         return new Vector3(rotated_x, 0f, rotated_z);
     }
 
-    float DegsToRads(float theta)
+    protected float DegsToRads(float theta)
     {
         return (theta * Mathf.PI)/180f;
     }
 
-    float RadsToDegs(float theta)
+    protected float RadsToDegs(float theta)
     {
         return (theta * 180f)/Mathf.PI;
     }
@@ -293,6 +325,7 @@ public class Unit : MonoBehaviour
         switch(state){
             case 0:
                 _isIdle = true;
+                print("%%% Setting the IDLE animation for: " + gameObject.name);
                 break;
             case 1:
                 _isWalking = true;
@@ -302,6 +335,7 @@ public class Unit : MonoBehaviour
                 break;
             case 3:
                 _isMelee = true;
+                print("%%% Setting the MELEE animation for: " + gameObject.name);
                 break;
             case 4:
                 _isDying = true;
@@ -332,7 +366,7 @@ public class Unit : MonoBehaviour
     // testing clicking on the characters
 
     // So when this character is clicked, this GameObject will be passed to that script so the "target" can be set to this object. 
-    void OnMouseUp()
+    protected void OnMouseUp()
     {
         print("Click detected on: " + gameObject.name);
 
@@ -376,22 +410,48 @@ public class Unit : MonoBehaviour
         }
     }
 
+    protected void ResetValuesAndNext()
+    {
+        print("$$$ In resetValues and Next");
+        _moving = false;
+        _moveMode = false;
+        _attackModeMelee = false;
+        target = null;
+        SetAnimBools(IDLE);
+        cl.Next();
+    }
+
     // need to delay so that the Next() character won't get called until the animation is done
-    IEnumerator DelayForAnimation(float time)
+    protected IEnumerator DelayForAnimation(float time)
     {
         //yield on a new YieldInstruction that waits for 2.5 seconds.
         yield return new WaitForSeconds(time);
         ResetValuesAndNext();
     }
 
-    void ResetValuesAndNext()
+    protected IEnumerator DelayBackToIdle(float time)
     {
-        _moving = false;
-        _moveMode = false;
-        _attackMode = false;
-        target = null;
+        //yield on a new YieldInstruction that waits for 2.5 seconds.
+        yield return new WaitForSeconds(time);
+        print("^^^ Delay over, going back to IDEL now: " + gameObject.name);
         SetAnimBools(IDLE);
-        cl.Next();
     }
 
+    protected IEnumerator DelayOpponentGettingHit(float time, int damage)
+    {
+        yield return new WaitForSeconds(time);
+        targetUnit.GetHit(damage);
+    }
+
+    // *** When the arrow hits this player *** //
+
+    void OnTriggerEnter(Collider other)
+    {
+        print("))))(((( In the OnTrigger, so should be doing damage now.");
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            GetHit(3);
+            Destroy(other.gameObject);
+        }
+    }
 }
