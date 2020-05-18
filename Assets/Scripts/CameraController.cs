@@ -23,15 +23,19 @@ public class CameraController : MonoBehaviour
     public LayerMask tileMask;
 
     private float currentZoom = 2.5f;
+    private float lastZoom;
     private float currentYaw = 0f;
 
     private float deltaVertical = 0f;
     private float deltaHorizontal = 0f;
     private float lerpStartTime = 0f;
+    private float zoomLerpStartTime = 0f;
+    private float startLerpZoom;
 
     private Vector3 startLerpPos;
 
     private float cameraLerpTime = 0.7f;
+    private float zoomLerpTime = 0.3f;
 
     private bool freeCam = true;
 
@@ -41,7 +45,8 @@ public class CameraController : MonoBehaviour
     {
         tileMap = map.GetComponent<TileMap>();
         startLerpPos = target.transform.position;
-
+        lastZoom = currentZoom;
+        startLerpZoom = currentZoom;
     }
 
     public void EnableFreeCam()
@@ -125,9 +130,16 @@ public class CameraController : MonoBehaviour
         
         
         
-        
+        if (currentZoom != lastZoom)
+        {
+            startLerpZoom = Mathf.Lerp(startLerpZoom, lastZoom, Mathf.Pow(Time.time - zoomLerpStartTime, 0.5f) / zoomLerpTime);
+            lastZoom = currentZoom;
+            zoomLerpStartTime = Time.time;
+        }
 
-        transform.position = focus.position - zoomVector * currentZoom + offset;
+
+        transform.position = focus.position - zoomVector * Mathf.Lerp(startLerpZoom, currentZoom,
+            Mathf.Pow(Time.time - zoomLerpStartTime, 0.5f) / zoomLerpTime) + offset;
         transform.LookAt(focus.position + Vector3.up * pitch);
         transform.RotateAround(focus.position, Vector3.up, currentYaw);
 
