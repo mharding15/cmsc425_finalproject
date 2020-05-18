@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour
 {
 
     public Transform target;
+    public Transform focus;
     public Vector3 zoomVector;
     public Vector3 offset;
     public float zoomSpeed = 4f;
@@ -19,23 +20,71 @@ public class CameraController : MonoBehaviour
 
     public float yawSpeed = 100f;
     public float moveSpeed = 10f;
+    public LayerMask tileMask;
 
     private float currentZoom = 2.5f;
     private float currentYaw = 0f;
 
     private float deltaVertical = 0f;
     private float deltaHorizontal = 0f;
+    private float lerpStartTime = 0f;
+
+    private Vector3 startLerpPos;
+
+    private float cameraLerpTime = 0.7f;
+
+    private bool freeCam = true;
+
+    private Transform lockTarget = null;
 
     private void Start()
     {
         tileMap = map.GetComponent<TileMap>();
+        startLerpPos = target.transform.position;
+
     }
 
+    public void EnableFreeCam()
+    {
+        freeCam = true;
+    }
+
+    // LERPs to a transform. Camera follows that transform until freecam is enabled
+    public void LerpToTransformAndLock(Transform transf)
+    {
+        startLerpPos = focus.position;
+        target.position = transf.position;
+        lockTarget = transf;
+        lerpStartTime = Time.time;
+        freeCam = false;
+    }
+
+    public void LerpToObjectAndLock(GameObject obj)
+    {
+        LerpToTransformAndLock(obj.transform);
+    }
+
+    // LERP to a position. Freecam will be enabled
+    public void LerpToPos(Vector3 pos)
+    {
+        startLerpPos = focus.position;
+        target.position = pos;
+        lerpStartTime = Time.time;
+        freeCam = true;
+    }
     void Update()
     {
-        
+        focus.transform.position = Vector3.Lerp(startLerpPos, target.position, 
+            Mathf.Pow(Time.time - lerpStartTime, 0.4f)/ cameraLerpTime );
 
-        currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+
+        // Emergency Enable free cam
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            EnableFreeCam();
+        }
+
+            currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
 
 
@@ -45,8 +94,11 @@ public class CameraController : MonoBehaviour
         if (Input.GetKey(KeyCode.E))
             currentYaw += yawSpeed * Time.deltaTime;
 
+        
         deltaHorizontal = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         deltaVertical = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+
+        
     }
 
     void LateUpdate()
@@ -55,20 +107,29 @@ public class CameraController : MonoBehaviour
         Quaternion camDir = Quaternion.Euler(0, currentYaw, 0);
         
         Debug.DrawRay(target.position, camDir * Vector3.forward);
-        //target.transform.Translate(Vector3.forward * deltaVertical + Vector3.right * deltaHorizontal);
-        target.transform.Translate(camDir * Vector3.forward * deltaVertical + camDir * Vector3.right * deltaHorizontal);
-        
-        Vector3 targetPos = target.transform.position;
-        
-        // Make sure we're in the Map Area
-        target.transform.position = new Vector3(Mathf.Clamp(targetPos.x, 0, tileMap.mapSizeX - 1),
+
+        if (freeCam)
+        {
+            target.Translate(camDir * Vector3.forward * deltaVertical + camDir * Vector3.right * deltaHorizontal);
+            Vector3 targetPos = target.transform.position;
+            // Make sure we're in the Map Area
+            target.transform.position = new Vector3(Mathf.Clamp(targetPos.x, 0, tileMap.mapSizeX - 1),
             targetPos.y,
             Mathf.Clamp(targetPos.z, 0, tileMap.mapSizeY - 1)
             );
+        }
+        else
+        {
+            target.position = lockTarget.position;
+        }
+        
+        
+        
+        
 
-        transform.position = target.position - zoomVector * currentZoom + offset;
-        transform.LookAt(target.position + Vector3.up * pitch);
-        transform.RotateAround(target.position, Vector3.up, currentYaw);
+        transform.position = focus.position - zoomVector * currentZoom + offset;
+        transform.LookAt(focus.position + Vector3.up * pitch);
+        transform.RotateAround(focus.position, Vector3.up, currentYaw);
 
     }
 }
