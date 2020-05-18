@@ -192,8 +192,14 @@ public class pathFinder : MonoBehaviour
             target = end;
             pos = currPos;
             costToEnter = map.tileTypes[map.tiles[ (int)currPos.x, (int)currPos.y]].cost();
+            
+            if (costToEnter < 0) {
+                hCost = hCostCalc(target);
+            } else
+            {
+                hCost = int.MaxValue;
+            }
 
-            hCost = hCostCalc(target);
             int scale = (wasDiag) ? diagScale : horizScale;
             gCost = gCostAcc + (costToEnter * scale);
             fCost = hCost + gCost;
