@@ -46,6 +46,7 @@ public class CombatLoop : MonoBehaviour
             print("This is Erika");
             p.name = "Erika";
             //p.initiative = UnityEngine.Random.Range(1, 20) + Erika.speed + Erika.reaction;
+            p.initiative = obj.GetComponent<Erika>().speed;
             p.isEnemy = obj.GetComponent<Erika>().isEnemy;
         } else if (obj.GetComponent<Maria>()){
             print("This is Maria");
@@ -153,7 +154,7 @@ public class CombatLoop : MonoBehaviour
         if (count < 20){
             // this is an AI character, need to make it's decisions for it
             if (characters[current].isEnemy){
-                print("In Next...and current was an enemy");
+                print("In Next...and current was an enemy, character: " + objects[current].name);
                 MakeDecision();
             } 
             // I guess I don't really have to do anything else if it's a human controlled character
@@ -185,10 +186,17 @@ public class CombatLoop : MonoBehaviour
             print("&&& so gonna hit them with a Melee attack");
             units[current].target = objects[closestOpponentIdx];
             units[current].targetUnit = units[closestOpponentIdx];
-            units[current].EnterAttackMode();
-        } else if (closestEnemyDist < units[current].longRange){
+            units[current].EnterMeleeMode();
+        } else if (units[current].longRange > 0f && closestEnemyDist < units[current].longRange){
             print("&&& so gonna hit them with a long range");
-            // TODO: Write code for long range attacking characters
+            units[current].target = objects[closestOpponentIdx];
+            units[current].targetUnit = units[closestOpponentIdx];
+            if (!objects[current].name.Equals("Erika")){
+                RangedUnit runit = GetRangedUnit(objects[current]);
+                runit.EnterRangedMode();
+            } else {
+                objects[current].GetComponent<Erika>().EnterRangedMode();
+            }
         } else {
             print("&&& so gonna hit move closer to that enemy");
             // move towards the closest character
@@ -301,6 +309,21 @@ public class CombatLoop : MonoBehaviour
         return unit;
     }
 
+    RangedUnit GetRangedUnit(GameObject obj)
+    {
+        RangedUnit runit = null;
+
+        if (obj.name == "Panos") {
+            runit = obj.GetComponent<Panos>();
+        }  else if (obj.name == "Nightshade"){
+            runit = obj.GetComponent<Nightshade>();
+        }  else if (obj.name == "Vurius"){
+            runit = obj.GetComponent<Vurius>();
+        } 
+
+        return runit;
+    }
+
     // pretty sure I can change this to just work with the units list
     void SetCurrent(int idx, bool value)
     {
@@ -350,6 +373,11 @@ public class CombatLoop : MonoBehaviour
             return null;
         }
         return objects[i];
+    }
+
+    public GameObject GetCurrentUnit()
+    {
+        return units[current];
     }
 
     public string GetCurrentName()

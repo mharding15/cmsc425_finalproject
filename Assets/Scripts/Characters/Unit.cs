@@ -27,12 +27,14 @@ public class Unit : MonoBehaviour
 
 	// *** OTHER VARIABLES *** //
 
+    public List<Vector3> path {set; get;}
+
     public GameObject target {set; get;}
     public Unit targetUnit {set; get;}
 
     public bool isCurrent {set; get;}
     // whenever you press a certain button ('M' for moving, 'A' for attacking) this script will enter that mode
-    protected bool _moveMode, _attackMode;
+    protected bool _moveMode, _attackModeMelee;
     protected bool _moving, _rotating, _gotPhi;
     protected float sumRotationTime, phi;
 
@@ -65,6 +67,9 @@ public class Unit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_moving){
+            SetAnimBools(IDLE);
+        }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
             print("In Update and name is: " + gameObject.name);
@@ -75,7 +80,7 @@ public class Unit : MonoBehaviour
                 EnterMoveMode();
             } else if (Input.GetKey(KeyCode.A)){
                 print("*** AND A was pressed");
-                EnterAttackMode();
+                EnterMeleeMode();
             }
 
             // rotate towards the goal (if there is a goal)
@@ -94,10 +99,10 @@ public class Unit : MonoBehaviour
                         if (_moveMode){
                             _moving = true;
                             SetAnimBools(WALK);
-                        } else if (_attackMode){
+                        } else if (_attackModeMelee){
                             print("@@@ and calling MeleeAttack");
                             MeleeAttack();
-                        }
+                        } 
                         sumRotationTime = 0f;
                     }
                 }
@@ -133,12 +138,17 @@ public class Unit : MonoBehaviour
         _gotPhi = false;
     }
 
-    public void EnterAttackMode()
+    public void EnterMeleeMode()
     {
-        print("!!! entering Attack mode");
-        _attackMode = true;
+        print("!!! entering Melee Attack mode");
+        _attackModeMelee = true;
         _rotating = true;
         _gotPhi = false;
+    }
+
+    public void EnterRangedMode()
+    {
+        print("Ah, fuck, so we are entering this ranged mode????");
     }
 
     // *** ACTIONS *** //
@@ -160,7 +170,7 @@ public class Unit : MonoBehaviour
         print("Opponent's ac is: " + targetUnit.ac);
         if (roll >= 0){ //opponentUnit.ac + 10){
             print("$$$ Attack hit!");
-            SetAnimBools(MELEE);
+            SetMeleeBool();
             StartOpponentGettingHit(meleeDamage + damageBonus);
         } else {
             print("$$$ Attack missed...");
@@ -170,8 +180,14 @@ public class Unit : MonoBehaviour
         StartCoroutine(DelayForAnimation(2f));
     }
 
+    // this is necessary because in the RangedUnit class, this needs to have a "pos" with it.
+    protected void SetMeleeBool()
+    {
+        SetAnimBools(MELEE);
+    }
+
     // need to delay a bit because some characters an a big wind up on their melee attacks
-    void StartOpponentGettingHit(int damage)
+    protected void StartOpponentGettingHit(int damage)
     {
         float delay = .5f;
         if (gameObject.name == "Bruno"){
@@ -212,7 +228,7 @@ public class Unit : MonoBehaviour
 
     // *** ACTION HELPERS *** ///
 
-    float Distance(Vector3 p1, Vector3 p2)
+    protected float Distance(Vector3 p1, Vector3 p2)
     {
         float x_diff = p1.x - p2.x;
         float z_diff = p1.z - p2.z;
@@ -220,7 +236,7 @@ public class Unit : MonoBehaviour
         return Mathf.Sqrt(d_sq);
     }
 
-    void GetRotationAngle(Vector3 point)
+    protected void GetRotationAngle(Vector3 point)
     {
         Vector3 newPoint = new Vector3(point.x - transform.position.x, 0f, point.z - transform.position.z);
 
@@ -244,7 +260,7 @@ public class Unit : MonoBehaviour
         _gotPhi = true;
     }
 
-    Vector3 RotatePoint(float theta, float x, float z)
+    protected Vector3 RotatePoint(float theta, float x, float z)
     {
         float[] rotationMatrix = new float[4];
         rotationMatrix[0] = Mathf.Cos(DegsToRads(theta));
@@ -258,12 +274,12 @@ public class Unit : MonoBehaviour
         return new Vector3(rotated_x, 0f, rotated_z);
     }
 
-    float DegsToRads(float theta)
+    protected float DegsToRads(float theta)
     {
         return (theta * Mathf.PI)/180f;
     }
 
-    float RadsToDegs(float theta)
+    protected float RadsToDegs(float theta)
     {
         return (theta * 180f)/Mathf.PI;
     }
@@ -319,7 +335,7 @@ public class Unit : MonoBehaviour
     // testing clicking on the characters
 
     // So when this character is clicked, this GameObject will be passed to that script so the "target" can be set to this object. 
-    void OnMouseUp()
+    protected void OnMouseUp()
     {
         print("Click detected on: " + gameObject.name);
 
@@ -363,26 +379,26 @@ public class Unit : MonoBehaviour
         }
     }
 
-    void ResetValuesAndNext()
+    protected void ResetValuesAndNext()
     {
         print("$$$ In resetValues and Next");
         _moving = false;
         _moveMode = false;
-        _attackMode = false;
+        _attackModeMelee = false;
         target = null;
         SetAnimBools(IDLE);
         cl.Next();
     }
 
     // need to delay so that the Next() character won't get called until the animation is done
-    IEnumerator DelayForAnimation(float time)
+    protected IEnumerator DelayForAnimation(float time)
     {
         //yield on a new YieldInstruction that waits for 2.5 seconds.
         yield return new WaitForSeconds(time);
         ResetValuesAndNext();
     }
 
-    IEnumerator DelayBackToIdle(float time)
+    protected IEnumerator DelayBackToIdle(float time)
     {
         //yield on a new YieldInstruction that waits for 2.5 seconds.
         yield return new WaitForSeconds(time);
@@ -390,9 +406,21 @@ public class Unit : MonoBehaviour
         SetAnimBools(IDLE);
     }
 
-    IEnumerator DelayOpponentGettingHit(float time, int damage)
+    protected IEnumerator DelayOpponentGettingHit(float time, int damage)
     {
         yield return new WaitForSeconds(time);
         targetUnit.GetHit(damage);
+    }
+
+    // *** When the arrow hits this player *** //
+
+    void OnTriggerEnter(Collider other)
+    {
+        print("))))(((( In the OnTrigger, so should be doing damage now.");
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            GetHit(3);
+            Destroy(other.gameObject);
+        }
     }
 }

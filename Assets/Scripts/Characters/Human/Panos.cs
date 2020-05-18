@@ -11,12 +11,17 @@ public class Panos : RangedUnit
         _name = "Vurius";
         SetAnimBools(IDLE);
         SetStats();
-        isEnemy = true;
+        isEnemy = false;
     }
 
     void SetStats()
     {
-        speed = 22;
+        speed = 10;
         reaction = 21;
+        hp = 18;
+        ac = 3;
+
+        meleeDamage = 3;
+        rangedDamage = 2;
     }
 }

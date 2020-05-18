@@ -1412,7 +1412,12 @@ MonoBehaviour:
   will: 0
   isEnemy: 0
   healingPotionCount: 0
-  spellEffect: {fileID: 0}
+  meleeDamage: 0
+  meleeRange: 0
+  longRange: 0
+  rangedDamage: 0
+  spellEffect: {fileID: 1901245927194888, guid: bb98861c48ad2024ca93498c7dd93a6c,
+    type: 3}
 --- !u!136 &3890875760026105310
 CapsuleCollider:
   m_ObjectHideFlags: 0

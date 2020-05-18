@@ -3,10 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  - Character
-  - Unit
-  - Tile
+  tags:
   - Manager
+  - Character
+  - Arrow
   layers:
   - Default
   - TransparentFX
