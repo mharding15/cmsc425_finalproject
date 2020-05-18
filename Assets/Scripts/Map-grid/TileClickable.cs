@@ -19,7 +19,8 @@ public class TileClickable : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            map.selectedUnit.MoveTo(tileX, tileY);
+            CombatLoop cl = GameObject.FindWithTag("Manager").GetComponent<CombatLoop>();
+            cl.GetCurrentUnit.path = new pathFinder(map, tileX, tileY, new Vector3(tileX, tileY));
         }
     }
    
