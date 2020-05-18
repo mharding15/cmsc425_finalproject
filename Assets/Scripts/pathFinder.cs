@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class pathFinder : MonoBehaviour
 {
-    //variables
     TileMap map;
     public TileClickable target;
+
+    Vector3 initPos, targetPos;
+    Node start;
 
     public pathFinder(TileMap mapIn, int startX, int startY, TileClickable target)
     {
         this.target = target;
         this.map = mapIn;
 
-        Vector3 initPos = new Vector3(startX, 0, startY);
-        Vector3 targetPos = new Vector3(target.tileX, 0 , target.tileY);
-        Node start = new Node(this.map, initPos, targetPos, 0, false);
+        initPos = new Vector3(startX, 0, startY);
+        targetPos = new Vector3(target.tileX, 0 , target.tileY);
+        start = new Node(this.map, initPos, targetPos, 0, false);
        
+    }
+
+    public List<Vector3> solve()
+    {
+        return new trailBlazer(start).solve();
     }
 
     class trailBlazer
@@ -53,7 +60,7 @@ public class pathFinder : MonoBehaviour
             Vector3 currPos = currNode.pos;
             Vector3 shift;
 
-            if (currPos == targetPos)                                 //  | a | b | c |
+            if (currPos == targetPos)                                       //  | a | b | c |
             {//target found                                                 //  | d | - | e |
                 return new List<Vector3>(retVal);                           //  | f | g | h |
             } 
@@ -167,7 +174,6 @@ public class pathFinder : MonoBehaviour
     {
         public Vector3 pos, target;
         int costToEnter;
-        Node last;
 
         protected int hCost { get; private set; }
         protected int gCost { get; private set; }
