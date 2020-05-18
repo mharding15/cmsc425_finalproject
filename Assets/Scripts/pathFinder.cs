@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class pathFinder : MonoBehaviour
+public class pathFinder
 {
     TileMap map;
     public TileClickable target;
@@ -28,7 +28,7 @@ public class pathFinder : MonoBehaviour
 
     class trailBlazer
     {
-        SortedList<int, Node> openList;
+        SortedList<int, List<Node>> openList;
         List<Vector3> closedList;
         Node StartPoint;
         Vector3 targetPos;
@@ -37,7 +37,7 @@ public class pathFinder : MonoBehaviour
         public trailBlazer(Node curr)
         {
             StartPoint = curr;
-            openList = new SortedList<int, Node>();
+            openList = new SortedList<int, List<Node>>();
             closedList = new List<Vector3>();
             map = curr.map;
             
@@ -45,7 +45,8 @@ public class pathFinder : MonoBehaviour
 
         public List<Vector3> solve()
         {
-            openList.Add(StartPoint.cost(), StartPoint);
+            openList.Add(StartPoint.cost(), new List<Node>());
+            openList[StartPoint.cost()].Add(StartPoint);
             return solveAux(StartPoint, 0, new Queue<Vector3>());
         }
 
@@ -147,22 +148,33 @@ public class pathFinder : MonoBehaviour
 
                 //Recurse
                 int firstKey = openList.Keys[0];
-                Node nextSmallest = openList[firstKey];
+                List<Node> nextSmallest = openList[firstKey];
                 Queue<Vector3> retValBranch = new Queue<Vector3>(retVal);
-                retValBranch.Enqueue(nextSmallest.pos);
-                openList.Remove(firstKey);
-                return solveAux(nextSmallest, gAcc, retVal); 
+                retValBranch.Enqueue(nextSmallest[0].pos);
+                Node temp = nextSmallest[0];
+                nextSmallest.Remove(temp);
+                if (nextSmallest.Count == 0) openList.Remove(firstKey);
+                return solveAux(temp, gAcc, retVal); 
             }
 
 
             //helper
             void peep(Vector3 pos, bool diag)
             {   //adds to open list if not visited already
-                    Node neighbor;
-                    neighbor = new Node(this.map, pos, targetPos, currNode.getGCost(), diag);
-                    openList.Add(neighbor.cost(), neighbor);
-                    closedList.Add(neighbor.pos);
-                
+                Node neighbor;
+                neighbor = new Node(this.map, pos, targetPos, currNode.getGCost(), diag);
+
+                try
+                {
+                    List<Node> lst = openList[neighbor.cost()];
+                } catch (KeyNotFoundException e)
+                {
+                    openList.Add(neighbor.cost(), new List<Node>());
+                }
+
+                openList[neighbor.cost()].Add(neighbor);
+                closedList.Add(neighbor.pos);
+
             }
         }
     }
