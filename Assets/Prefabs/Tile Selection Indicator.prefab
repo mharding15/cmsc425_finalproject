@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1742170658714501255}
   - component: {fileID: 3584219053054854752}
   - component: {fileID: 7902807985602810295}
-  - component: {fileID: 2970563110827309736}
   m_Layer: 0
   m_Name: Tile Selection Border (3)
   m_TagString: Untagged
@@ -80,19 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &2970563110827309736
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4529400330287147849}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5279549858352743772
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +90,6 @@ GameObject:
   - component: {fileID: 8408485151347768218}
   - component: {fileID: 2145463160208080673}
   - component: {fileID: 8441401790949564705}
-  - component: {fileID: 9166057838873006970}
   m_Layer: 0
   m_Name: Tile Selection Border (2)
   m_TagString: Untagged
@@ -173,19 +158,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &9166057838873006970
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5279549858352743772}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5747219813320297795
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +203,6 @@ GameObject:
   - component: {fileID: 1504944059595899353}
   - component: {fileID: 6151531665438823619}
   - component: {fileID: 2232151637325363865}
-  - component: {fileID: 6044086435944268900}
   m_Layer: 0
   m_Name: Tile Selection Border
   m_TagString: Untagged
@@ -300,19 +271,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6044086435944268900
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5819012616057726826}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7030938387474138863
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +282,6 @@ GameObject:
   - component: {fileID: 7781434872823744758}
   - component: {fileID: 851907342356774941}
   - component: {fileID: 6370401039519432381}
-  - component: {fileID: 4769851884126778039}
   m_Layer: 0
   m_Name: Tile Selection Border (1)
   m_TagString: Untagged
@@ -393,16 +350,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &4769851884126778039
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7030938387474138863}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
