@@ -50,12 +50,12 @@ public class TileMap : MonoBehaviour
         {
             for (int x = 0; x < mapSizeX; x++)
             {
-                triangles[0] = vertCount + 0;
-                triangles[1] = vertCount + mapSizeX + 1;
-                triangles[2] = vertCount + 1;
-                triangles[3] = vertCount + 1;
-                triangles[4] = vertCount + mapSizeX + 1;
-                triangles[5] = vertCount + mapSizeX + 2;
+                triangles[triCount + 0] = vertCount + 0;
+                triangles[triCount + 1] = vertCount + mapSizeX + 1;
+                triangles[triCount + 2] = vertCount + 1;
+                triangles[triCount + 3] = vertCount + 1;
+                triangles[triCount + 4] = vertCount + mapSizeX + 1;
+                triangles[triCount + 5] = vertCount + mapSizeX + 2;
 
                 vertCount++;
                 triCount += 6;
@@ -75,5 +75,5 @@ public class TileMap : MonoBehaviour
 
         grid.RecalculateNormals();
     }
-       
+
 }
