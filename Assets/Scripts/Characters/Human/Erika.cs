@@ -23,7 +23,7 @@ public class Erika : Unit
 
     void SetStats()
     {
-        speed = 10;
+        speed = 21;
         reaction = 29;
         hp = 14;
         ac = 10;
@@ -100,7 +100,7 @@ public class Erika : Unit
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
             if (!_rotating && _moving && goal != null){
                 // move a little bit towards the target
-                transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
+                transform.Translate(Vector3.forward * speed * .25f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
                 float distTraveled = Distance(startPos, transform.position);
                 float distToGoal = Distance(transform.position, goal);

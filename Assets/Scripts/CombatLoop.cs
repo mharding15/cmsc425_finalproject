@@ -144,7 +144,7 @@ public class CombatLoop : MonoBehaviour
 
     public void Next()
     {
-        StartCoroutine(Delay(2f));
+        StartCoroutine(Delay(5f));
     }
 
     // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
@@ -158,7 +158,8 @@ public class CombatLoop : MonoBehaviour
             SetTargetText("None");
 
             int previous = current;
-            current = (current + 1) % characters.Count;
+            current = (current + 1) % units.Count;
+            print("1111 current is: " + current);
 
             // need to unset the character who was current last time in their GameObject's script
             if (previous > -1){
@@ -171,6 +172,10 @@ public class CombatLoop : MonoBehaviour
         if (units[current].hp <= 0){
             Next();
         } 
+
+         // switch cameras
+        objects[current].transform.Find("Camera").gameObject.SetActive(true);
+        DeactivateCameras();
 
         count++;
         // just don't want to get caught in an infinte loop or something.
@@ -191,6 +196,18 @@ public class CombatLoop : MonoBehaviour
 
                 aiPanel.SetActive(false);
                 humanPanel.SetActive(true);
+            }
+        }
+    }
+
+    void DeactivateCameras()
+    {
+        for (int i = 0; i < objects.Count; i++){
+            if (objects[i].transform.Find("Camera") != null){
+                GameObject cam = objects[i].transform.Find("Camera").gameObject;
+                if (cam != null && i != current){
+                    cam.SetActive(false);
+                }
             }
         }
     }

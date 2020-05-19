@@ -16,7 +16,7 @@ public class Bruno : Unit
 
     void SetStats()
     {
-        speed = 9;
+        speed = 15;
         reaction = 18;
         hp = 25;
         ac = 8;

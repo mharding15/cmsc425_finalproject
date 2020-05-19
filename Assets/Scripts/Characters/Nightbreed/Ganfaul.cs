@@ -16,7 +16,7 @@ public class Ganfaul : Unit
 
     void SetStats()
     {
-        speed = 8;
+        speed = 18;
         reaction = 18;
         hp = 22;
         ac = 12;

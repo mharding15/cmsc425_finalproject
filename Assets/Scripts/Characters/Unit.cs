@@ -141,13 +141,12 @@ public class Unit : MonoBehaviour
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
             if (!_rotating && _moving && goal != null){
                 // move a little bit towards the target
-                transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
+                transform.Translate(Vector3.forward * speed * .25f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
                 float distTraveled = Distance(startPos, transform.position);
                 float distToGoal = Distance(transform.position, goal);
                 if (distTraveled >= (float)speed || distToGoal < 1.5f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
-                    // Maybe I should have a Reset() method that does all of this.
                     pathIdx++;
                     if (pathIdx < path.Count){
                         goal = path[pathIdx];
@@ -165,19 +164,11 @@ public class Unit : MonoBehaviour
 
     protected void CheckCameraMovement()
     {
-        print("666 checking camera movement...");
         if (Input.GetKey(KeyCode.RightArrow)){
-            print("666 and right arrow was pressed...");
             transform.Rotate(new Vector3(0f, 30f * Time.deltaTime, 0f));
-            // if (GetComponent<Camera>() != null){
-            //     GetComponent<Camera>().transform.Rotate(new Vector3(0f, 30f * Time.deltaTime, 0f));
-            // }
         } else if (Input.GetKey(KeyCode.LeftArrow)){
             print("666 and left arrow was pressed...");
             transform.Rotate(new Vector3(0f, -30f * Time.deltaTime, 0f));
-            // if (GetComponent<Camera>() != null){
-            //     GetComponent<Camera>().transform.Rotate(new Vector3(0f, -30f * Time.deltaTime, 0f));
-            // }
         }
     }
     
@@ -195,7 +186,7 @@ public class Unit : MonoBehaviour
         _moveMode = true;
         _rotating = true;
         _gotPhi = false;
-
+        _goalSet = false;
     }
 
     public void EnterMeleeMode()

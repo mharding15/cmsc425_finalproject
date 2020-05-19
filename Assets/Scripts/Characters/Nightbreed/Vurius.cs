@@ -16,10 +16,10 @@ public class Vurius : RangedUnit
 
     void SetStats()
     {
-        speed = 9;
+        speed = 15;
         reaction = 20;
         hp = 17;
-        ac = 2;
+        ac = 8;
 
         meleeDamage = 2;
         rangedDamage = 3;

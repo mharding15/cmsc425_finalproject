@@ -16,11 +16,11 @@ public class Mulok : Unit
 
     void SetStats()
     {
-        speed = 6;
+        speed = 14;
         reaction = 18;
 
         hp = 25;
-        ac = 3;
+        ac = 15;
 
         meleeDamage = 6;
     }

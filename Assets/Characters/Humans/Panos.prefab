@@ -1362,7 +1362,7 @@ Transform:
   m_GameObject: {fileID: 5677974459756030245}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 8120258394936483221}
   - {fileID: 1691577095598916987}
@@ -1415,6 +1415,7 @@ MonoBehaviour:
   meleeDamage: 0
   meleeRange: 0
   longRange: 0
+  modeText: {fileID: 0}
   rangedDamage: 0
   spellEffect: {fileID: 1901245927194888, guid: bb98861c48ad2024ca93498c7dd93a6c,
     type: 3}
