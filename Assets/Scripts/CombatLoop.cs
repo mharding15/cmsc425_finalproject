@@ -268,7 +268,8 @@ public class CombatLoop : MonoBehaviour
         int minIdx = -1;
         Unit currentUnit = units[current];
         for (int i = 0; i < characters.Count; i++){
-            if (i != current && units[current].isEnemy != units[i].isEnemy){
+            // need to make sure the enemy is not already dead
+            if (i != current && units[i].hp > 0 && (units[current].isEnemy != units[i].isEnemy)){
                 float dist = Distance(objects[current].transform.position, objects[i].transform.position);
                 if (dist < minDist){
                     minDist = dist;
@@ -286,7 +287,7 @@ public class CombatLoop : MonoBehaviour
         int minIdx = -1;
         Unit currentUnit = units[current];
         for (int i = 0; i < characters.Count; i++){
-            if (i != current && units[current].isEnemy == units[i].isEnemy){
+            if (i != current && units[i].hp > 0 && units[current].isEnemy == units[i].isEnemy){
                 float dist = Distance(objects[current].transform.position, objects[i].transform.position);
                 if (dist < minDist){
                     minDist = dist;

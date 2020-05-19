@@ -245,6 +245,14 @@ public class Unit : MonoBehaviour
         float delay = .5f;
         if (gameObject.name == "Bruno"){
             delay = 1f;
+        } else if (gameObject.name == "Maria"){
+            delay = 1f;
+        } else if (gameObject.name == "Panos"){
+            delay = .5f;
+        } else if (gameObject.name == "Nightshade"){
+            delay = 1f;
+        } else if (gameObject.name == "Mulok"){
+            delay = 1f;
         }
         StartCoroutine(DelayOpponentGettingHit(delay, damage));
     }
