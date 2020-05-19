@@ -470,6 +470,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nightshade
       objectReference: {fileID: 0}
+    - target: {fileID: 621969091587355164, guid: b7888e5c220b98b4b8f8708ae065f0d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4538208194714976271, guid: b7888e5c220b98b4b8f8708ae065f0d7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -539,10 +544,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mulok
       objectReference: {fileID: 0}
+    - target: {fileID: 4840915540182978404, guid: f57abd19fbf88374fb83432c865ad338,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.3
+      value: 26.914038
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
@@ -552,27 +562,27 @@ PrefabInstance:
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.6
+      value: 16.60955
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.9999908
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.0042909984
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
@@ -587,7 +597,7 @@ PrefabInstance:
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -179.50801
       objectReference: {fileID: 0}
     - target: {fileID: 8463735748192943479, guid: f57abd19fbf88374fb83432c865ad338,
         type: 3}
@@ -883,7 +893,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 585044292}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4deb4f55f864a3347a87694433bce18d, type: 3}
   m_Name: 
@@ -940,7 +950,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 585044292}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41c88c03c2460ce4ca6e649b26fbea96, type: 3}
   m_Name: 
@@ -1066,6 +1076,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panos
       objectReference: {fileID: 0}
+    - target: {fileID: 5677974459756030245, guid: 1541223d83edf154eaaba43c21cd5eda,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8689535403065695030, guid: 1541223d83edf154eaaba43c21cd5eda,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1189,6 +1204,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Maria
+      objectReference: {fileID: 0}
+    - target: {fileID: 8232338989686543607, guid: d7410afba8b2f644daba429588b9bbf3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7410afba8b2f644daba429588b9bbf3, type: 3}
@@ -1461,6 +1481,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Bruno
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930209945078222685, guid: df8b93b88049db74fabc1f281d942a69,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8228294266328890702, guid: df8b93b88049db74fabc1f281d942a69,
         type: 3}
@@ -1787,6 +1812,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ganfaul
       objectReference: {fileID: 0}
+    - target: {fileID: 1479443016493826791, guid: e45485b9e38c77842ac41e3fe52b044b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2509437709691056372, guid: e45485b9e38c77842ac41e3fe52b044b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1888,6 +1918,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Vurius
+      objectReference: {fileID: 0}
+    - target: {fileID: 1112936053123407449, guid: 129b95a6476d20147ab0a410ed538c56,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4119290254994943050, guid: 129b95a6476d20147ab0a410ed538c56,
         type: 3}
