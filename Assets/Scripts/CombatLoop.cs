@@ -26,7 +26,7 @@ public class CombatLoop : MonoBehaviour
     private List<GameObject> objects;
     // this int keeps track of whose turn it is (the index of the character in the above lists)
     private List<Unit> units;
-	private int current;
+	private int current, countdown;
 
     // for testing
     private int count;
@@ -38,6 +38,7 @@ public class CombatLoop : MonoBehaviour
         units = new List<Unit>();
     	current = -1;
         count = 0;
+        countdown = 3;
 
     	GameObject[] chars = GameObject.FindGameObjectsWithTag("Character");
         foreach (GameObject obj in chars){
@@ -46,7 +47,7 @@ public class CombatLoop : MonoBehaviour
 
         DeactivatePanels();
     	
-        Next();
+        Countdown();
     }
 
     void DeactivatePanels()
@@ -142,9 +143,28 @@ public class CombatLoop : MonoBehaviour
         units.Insert(i, GetUnit(o));
     }
 
+    void Countdown()
+    {
+        print("999 In countdown and value is: " + countdown);
+        if (countdown == 0){
+            gameResultText.text = "";
+            Next(.25f);
+        } else {
+            gameResultText.text = "" + countdown;
+            countdown--;
+            StartCoroutine(DelayCountdown(1f));
+        }
+    }
+
     public void Next()
     {
-        StartCoroutine(Delay(5f));
+        StartCoroutine(Delay(4f));
+    }
+
+    public void Next(float delay)
+    {
+        print("888 should be called when character is dead");
+        StartCoroutine(Delay(delay));
     }
 
     // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
@@ -166,38 +186,40 @@ public class CombatLoop : MonoBehaviour
                 units[previous].isCurrent = false;
             }
             units[current].isCurrent = true;
-        }
-        
-        // if the current character is down (but not dead, or they would be deleted from the lists)
-        if (units[current].hp <= 0){
-            Next();
-        } 
 
-         // switch cameras
-        objects[current].transform.Find("Camera").gameObject.SetActive(true);
-        DeactivateCameras();
+            // if the current character is down (but not dead, or they would be deleted from the lists)
+            if (units[current].hp <= 0){
+                Next(.01f);
+            } 
 
-        count++;
-        // just don't want to get caught in an infinte loop or something.
-        if (count < 200){
-            // this is an AI character, need to make it's decisions for it
-            if (characters[current].isEnemy){
-                print("444 In Next...and current was an enemy, character: " + objects[current].name);
-                aiTurnText.text = characters[current].name + "'s Turn";
-                aiHPText.text = "HP: " + units[current].hp;
-                print("555 WHY is it now setting this panel to active???");
-                aiPanel.SetActive(true);
-                humanPanel.SetActive(false);
-                MakeDecision();
-            } else {
-                humanTurnText.text = characters[current].name + "'s Turn";
-                humanHPText.text = "HP: " + units[current].hp;
-                humanModeText.text = "Mode: None";
+             // switch cameras
+            objects[current].transform.Find("Camera").gameObject.SetActive(true);
+            DeactivateCameras();
 
-                aiPanel.SetActive(false);
-                humanPanel.SetActive(true);
+            count++;
+            // just don't want to get caught in an infinte loop or something.
+            if (count < 200){
+                // this is an AI character, need to make it's decisions for it
+                print("101010101 Combat Loop line 203 :: The current # is : " + current);
+                if (characters[current].isEnemy){
+                    print("444 In Next...and current was an enemy, character: " + objects[current].name);
+                    aiTurnText.text = characters[current].name + "'s Turn";
+                    aiHPText.text = "HP: " + units[current].hp;
+                    print("555 WHY is it now setting this panel to active???");
+                    aiPanel.SetActive(true);
+                    humanPanel.SetActive(false);
+                    AttackingDecisions();
+                } else {
+                    humanTurnText.text = characters[current].name + "'s Turn";
+                    humanHPText.text = "HP: " + units[current].hp;
+                    humanModeText.text = "Mode: None";
+
+                    aiPanel.SetActive(false);
+                    humanPanel.SetActive(true);
+                }
             }
-        }
+        } 
+        
     }
 
     void DeactivateCameras()
@@ -214,16 +236,16 @@ public class CombatLoop : MonoBehaviour
 
     // *** The Decision "Tree" (not like any tree I've seen before, but close enough) *** //
 
-    void MakeDecision()
-    {
-        // if this character is about to die and has healing potions, then take one
-        if (units[current].hp <= 5 && units[current].healingPotionCount > 0){
-            print("The character: " + objects[current].name + " decides to take a healing potion");
-            units[current].TakePotion();
-        } else {
-            AttackingDecisions();
-        }
-    }
+    // void MakeDecision()
+    // {
+    //     // if this character is about to die and has healing potions, then take one
+    //     if (units[current].hp <= 5 && units[current].healingPotionCount > 0){
+    //         print("The character: " + objects[current].name + " decides to take a healing potion");
+    //         units[current].TakePotion();
+    //     } else {
+    //         AttackingDecisions();
+    //     }
+    // }
 
     void AttackingDecisions()
     {
@@ -466,5 +488,11 @@ public class CombatLoop : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         turnResultPanel.SetActive(false);
+    }
+
+    IEnumerator DelayCountdown(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Countdown();
     }
 }

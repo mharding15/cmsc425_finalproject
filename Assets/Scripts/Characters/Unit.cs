@@ -145,7 +145,7 @@ public class Unit : MonoBehaviour
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
                 float distTraveled = Distance(startPos, transform.position);
                 float distToGoal = Distance(transform.position, goal);
-                if (distTraveled >= (float)speed || distToGoal < 1.5f){
+                if (distTraveled >= (float)speed || distToGoal < 2f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     pathIdx++;
                     if (pathIdx < path.Count){
@@ -246,15 +246,20 @@ public class Unit : MonoBehaviour
         if (gameObject.name == "Bruno"){
             delay = 1f;
         } else if (gameObject.name == "Maria"){
-            delay = 1f;
+            delay = .5f;
         } else if (gameObject.name == "Panos"){
             delay = .5f;
         } else if (gameObject.name == "Nightshade"){
             delay = 1f;
         } else if (gameObject.name == "Mulok"){
             delay = 1f;
-        }
+        } 
         StartCoroutine(DelayOpponentGettingHit(delay, damage));
+    }
+
+    protected void StartOpponentGettingHit(int damage, float time) 
+    {
+        StartCoroutine(DelayOpponentGettingHit(time, damage));
     }
 
     // this method is called when someone is doing damage to this character (so not when it's this character's turn)
@@ -272,7 +277,6 @@ public class Unit : MonoBehaviour
             // if the character is able to get back up, I guess I should add an animation for getting up.
             SetAnimBools(DIE);
         } else {
-            // may have to add a delay here, probably will actually
             StartCoroutine(DelayBackToIdle(.5f));
         }
     }
@@ -448,13 +452,13 @@ public class Unit : MonoBehaviour
 
     // *** When the arrow hits this player *** //
 
-    void OnTriggerEnter(Collider other)
-    {
-        print("))))(((( In the OnTrigger, so should be doing damage now.");
-        if (other.gameObject.CompareTag("Arrow"))
-        {
-            GetHit(3);
-            Destroy(other.gameObject);
-        }
-    }
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     print("))))(((( In the OnTrigger, so should be doing damage now.");
+    //     if (other.gameObject.CompareTag("Arrow"))
+    //     {
+    //         GetHit(3);
+    //         Destroy(other.gameObject);
+    //     }
+    // }
 }

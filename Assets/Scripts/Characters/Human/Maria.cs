@@ -20,7 +20,7 @@ public class Maria : Unit
         reaction = 18;
 
         hp = 15;
-        ac = 8;
+        ac = 6;
 
         meleeDamage = 7;
     }

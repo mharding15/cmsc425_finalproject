@@ -16,10 +16,10 @@ public class Ganfaul : Unit
 
     void SetStats()
     {
-        speed = 18;
+        speed = 22;
         reaction = 18;
-        hp = 22;
-        ac = 12;
+        hp = 18;
+        ac = 7;
 
         meleeDamage = 5;
     }
