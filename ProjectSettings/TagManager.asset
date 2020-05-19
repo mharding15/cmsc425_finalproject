@@ -9,7 +9,7 @@ TagManager:
   - Arrow
   - HumanPanel
   - AIPanel
-  - Canvas
+  - Terrain
   layers:
   - Default
   - TransparentFX

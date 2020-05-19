@@ -399,7 +399,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &301616503
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -929,8 +929,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4deb4f55f864a3347a87694433bce18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSizeX: 5
-  mapSizeY: 10
+  mapSizeX: 25
+  mapSizeY: 25
   mainCamera: {fileID: 963194227}
   tileSelectionIndicator: {fileID: 5747219813320297795, guid: 1e1a4e53e67e3a746ac96f178799c42c,
     type: 3}
@@ -997,7 +997,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 585044292}
-  m_Mesh: {fileID: 4300002, guid: 681e41ee1260343b395ca58745c94870, type: 3}
+  m_Mesh: {fileID: 0}
 --- !u!4 &588339650 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4538208194714976271, guid: b7888e5c220b98b4b8f8708ae065f0d7,

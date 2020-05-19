@@ -20,34 +20,38 @@ public class TileMap : MonoBehaviour
     {
         grid = new Mesh();
         GetComponent<MeshFilter>().mesh = grid;
-        offset = new Vector3(2, 2, 2); //(GameObject.FindWithTag("Canvas").transform.position/5); //I meant terrain, not canvas; its on the terrain.
-
+        offset = new Vector3(2, 2, 2); //(GameObject.FindWithTag("Terrain").transform.position/5); 
         generateMap();
+    }
+
+    void Update()
+    {
         UpdateMap();
     }
 
     void generateMap()
     {
-        verts = new Vector3[mapSizeX + 1 * mapSizeY + 1];
+        verts = new Vector3[(mapSizeX + 1) * (mapSizeY + 1)];
         for (int i =0, y = 0; y <= mapSizeY; y++)
         {
-            for (int x = 0; x <= mapSizeY; x++)
+            for (int x = 0; x <= mapSizeX; x++)
             {
                 verts[i] = new Vector3(x, 0, y) + offset;
                 i++;
             }
         }
 
+        triangles = new int[mapSizeX * mapSizeY * 6];
+
         int vertCount = 0;
         int triCount = 0;
 
-        for (int y = 0; y <= mapSizeY; y++)
+        for (int y = 0; y < mapSizeY; y++)
         {
-            for (int x = 0; x <= mapSizeY; x++)
+            for (int x = 0; x < mapSizeX; x++)
             {
-                triangles = new int[6];
                 triangles[0] = vertCount + 0;
-                triangles[1] = vertCount + + 1;
+                triangles[1] = vertCount + mapSizeX + 1;
                 triangles[2] = vertCount + 1;
                 triangles[3] = vertCount + 1;
                 triangles[4] = vertCount + mapSizeX + 1;
