@@ -16,8 +16,13 @@ public class Maria : Unit
 
     void SetStats()
     {
-        speed = 25;
+        speed = 10;
         reaction = 18;
+
+        hp = 15;
+        ac = 2;
+
+        meleeDamage = 7;
     }
     
 }

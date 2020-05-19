@@ -28,12 +28,15 @@ public class Unit : MonoBehaviour
 
     // *** OTHER VARIABLES *** //
 
+    public Camera camera;
+
     public Text modeText;
 
     public List<Vector3> path {set; get;}
     protected int pathIdx;
     protected Vector3 goal;
     protected bool _goalSet;
+    protected Vector3 startPos;
 
     public GameObject target {set; get;}
     public Unit targetUnit {set; get;}
@@ -73,9 +76,6 @@ public class Unit : MonoBehaviour
         goal = new Vector3(0f,0f,0f);
 
         path = new List<Vector3>();
-        // for testing
-        path.Add(new Vector3(3f, 0, 3f));
-        path.Add(new Vector3(5f, 0, 10f));
     }
 
     // Update is called once per frame
@@ -86,17 +86,19 @@ public class Unit : MonoBehaviour
         }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
+            CheckCameraMovement();
+
             print("In Update and name is: " + gameObject.name);
             // if M is pressed then the character should start moving (or at least we know that moving is what the character wants to do)
                 // maybe there should be a message that says you are in walk mode, and if you click M again it removes it.
             if(Input.GetKey(KeyCode.M)){
                 print("*** And M was pressed");
                 EnterMoveMode();
-                cl.SetModeText("Mode: Move");
+                cl.SetModeText("Move");
             } else if (Input.GetKey(KeyCode.Z)){
                 print("*** AND A was pressed");
                 EnterMeleeMode();
-                cl.SetModeText("Mode: Melee Attack");
+                cl.SetModeText("Melee Attack");
             }
 
             // if in melee mode, then need to make the goal equal to the target's position
@@ -125,6 +127,7 @@ public class Unit : MonoBehaviour
                         _rotating = false;
                         if (_moveMode){
                             _moving = true;
+                            startPos = transform.position;
                             SetAnimBools(WALK);
                         } else if (_attackModeMelee){
                             print("@@@ and calling MeleeAttack");
@@ -140,7 +143,9 @@ public class Unit : MonoBehaviour
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                if (Distance(transform.position, goal) < 1f){
+                float distTraveled = Distance(startPos, transform.position);
+                float distToGoal = Distance(transform.position, goal);
+                if (distTraveled >= (float)speed || distToGoal < 1.5f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     // Maybe I should have a Reset() method that does all of this.
                     pathIdx++;
@@ -157,6 +162,24 @@ public class Unit : MonoBehaviour
             }
         }
     }
+
+    protected void CheckCameraMovement()
+    {
+        print("666 checking camera movement...");
+        if (Input.GetKey(KeyCode.RightArrow)){
+            print("666 and right arrow was pressed...");
+            transform.Rotate(new Vector3(0f, 30f * Time.deltaTime, 0f));
+            // if (GetComponent<Camera>() != null){
+            //     GetComponent<Camera>().transform.Rotate(new Vector3(0f, 30f * Time.deltaTime, 0f));
+            // }
+        } else if (Input.GetKey(KeyCode.LeftArrow)){
+            print("666 and left arrow was pressed...");
+            transform.Rotate(new Vector3(0f, -30f * Time.deltaTime, 0f));
+            // if (GetComponent<Camera>() != null){
+            //     GetComponent<Camera>().transform.Rotate(new Vector3(0f, -30f * Time.deltaTime, 0f));
+            // }
+        }
+    }
     
     //wasnt sure I wanted to mess with your use in Combat Loop
     public void MoveTo(int x, int y)
@@ -168,15 +191,16 @@ public class Unit : MonoBehaviour
     // if the target destination is already selected, then the character will start moving, if not then once a target is selected they will move.
     public void EnterMoveMode()
     {
-        print("!!! entering MOVE mode");
+        print("!!! entering MOVE mode, character: " + gameObject.name);
         _moveMode = true;
         _rotating = true;
         _gotPhi = false;
+
     }
 
     public void EnterMeleeMode()
     {
-        print("!!! entering Melee Attack mode");
+        print("!!! entering Melee Attack mode, character: " + gameObject.name);
         _attackModeMelee = true;
         _rotating = true;
         _gotPhi = false;
@@ -204,12 +228,14 @@ public class Unit : MonoBehaviour
         } 
 
         print("Opponent's ac is: " + targetUnit.ac);
-        if (roll >= 0){ //opponentUnit.ac + 10){
+        if (roll >= targetUnit.ac){
             print("$$$ Attack hit!");
+            cl.SetTurnResultText("Attack Hit!");
             SetMeleeBool();
             StartOpponentGettingHit(meleeDamage + damageBonus);
         } else {
             print("$$$ Attack missed...");
+            cl.SetTurnResultText("Attack Missed");
         }
 
         // delay while the animation is going and then call Next()
@@ -254,6 +280,7 @@ public class Unit : MonoBehaviour
 
     public void TakePotion()
     {
+        cl.SetTurnResultText("Potion taken");
         if (healingPotionCount > 0){
             healingPotionCount--;
             hp += 5;
@@ -376,43 +403,15 @@ public class Unit : MonoBehaviour
         print("Click detected on: " + gameObject.name);
 
         GameObject clickingObject = cl.GetCurrentObject();
-        string clickingName = cl.GetCurrentName();
+        Unit clickingUnit = cl.GetCurrentUnit();
+        clickingUnit.path = new List<Vector3>();
+        clickingUnit.path.Add(transform.position);
 
-        print("And the character who is clicking is: " + clickingName);
+        clickingUnit.target = gameObject;
+        clickingUnit.targetUnit = this;
+        cl.SetTargetText(gameObject.name);
 
-        if (clickingName == "Bruno"){
-            clickingObject.GetComponent<Bruno>().target = gameObject;
-            clickingObject.GetComponent<Bruno>().targetUnit = this;
-        } else if (clickingName == "Erika"){
-            clickingObject.GetComponent<Erika>().target = gameObject;
-            clickingObject.GetComponent<Erika>().targetUnit = this;
-        } else if (clickingName == "Maria"){
-            clickingObject.GetComponent<Maria>().target = gameObject;
-            clickingObject.GetComponent<Maria>().targetUnit = this;
-        }else if (clickingName == "Panos") {
-            clickingObject.GetComponent<Panos>().target = gameObject;
-            clickingObject.GetComponent<Panos>().targetUnit = this;
-        } else if (clickingName == "Ganfaul"){
-            clickingObject.GetComponent<Ganfaul>().target = gameObject;
-            clickingObject.GetComponent<Ganfaul>().targetUnit = this;
-        } else if (clickingName == "Nightshade"){
-            clickingObject.GetComponent<Nightshade>().target = gameObject;
-            clickingObject.GetComponent<Nightshade>().targetUnit = this;
-        } else if (clickingName == "Warrok"){
-            clickingObject.GetComponent<Warrok>().target = gameObject;
-            clickingObject.GetComponent<Warrok>().targetUnit = this;
-        } else if (clickingName == "Mulok"){
-            clickingObject.GetComponent<Mulok>().target = gameObject;
-            clickingObject.GetComponent<Mulok>().targetUnit = this;
-        } else if (clickingName == "Vurius"){
-            clickingObject.GetComponent<Vurius>().target = gameObject;
-            clickingObject.GetComponent<Vurius>().targetUnit = this;
-        } else if (clickingName == "Zontog"){
-            clickingObject.GetComponent<Zontog>().target = gameObject;
-            clickingObject.GetComponent<Zontog>().targetUnit = this;
-        } else {
-            print("Whattt, none of these characters was clicking???");
-        }
+        print("And the character who is clicking is: " + clickingObject.name);
     }
 
     protected void ResetValuesAndNext()

@@ -19,16 +19,9 @@ public class Ganfaul : Unit
         speed = 8;
         reaction = 18;
         hp = 22;
-        ac = 2;
+        ac = 12;
 
-        meleeDamage = 4;
-
-        // cunning;
-        // perception;
-        // reaction;
-        // speed;
-        // strength;
-        // will;
+        meleeDamage = 5;
     }
 
 }

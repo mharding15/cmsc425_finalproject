@@ -18,14 +18,15 @@ public class Erika : Unit
         _isDelaying = false;
         SetStats();
         longRange = 12f;
+        isEnemy = false;
     }
 
     void SetStats()
     {
-        speed = 13;
-        reaction = 21;
-        hp = 18;
-        ac = 3;
+        speed = 10;
+        reaction = 29;
+        hp = 14;
+        ac = 10;
 
         meleeDamage = 3;
         rangedDamage = 2;
@@ -34,19 +35,21 @@ public class Erika : Unit
     // Update is called once per frame
     void Update()
     {
+        _animator.SetBool("isRanged", false);
         if (!_moving){
             SetAnimBools(IDLE);
         }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
+            CheckCameraMovement();
             print("In Update and name is: " + gameObject.name);
             // if M is pressed then the character should start moving (or at least we know that moving is what the character wants to do)
                 // maybe there should be a message that says you are in walk mode, and if you click M again it removes it.
             if(Input.GetKey(KeyCode.M)){
                 print("*** And M was pressed");
                 EnterMoveMode();
-            } else if (Input.GetKey(KeyCode.A)){
-                print("*** AND A was pressed");
+            } else if (Input.GetKey(KeyCode.Z)){
+                print("*** AND Z was pressed");
                 EnterMeleeMode();
             } else if(Input.GetKey(KeyCode.R)){
                 print("*** AND R was pressed");
@@ -54,8 +57,9 @@ public class Erika : Unit
             }
 
             // if in melee mode, then need to make the goal equal to the target's position
-            if (_attackModeMelee && target != null){
+            if ((_attackModeMelee || _attackModeRanged) && target != null){
                 goal = target.transform.position;
+                _goalSet = true;
             }
 
             // if getting the first part of the path
@@ -79,6 +83,7 @@ public class Erika : Unit
                         _rotating = false;
                         if (_moveMode){
                             _moving = true;
+                            startPos = transform.position;
                             SetAnimBools(WALK);
                         } else if (_attackModeMelee){
                             print("@@@ and calling MeleeAttack");
@@ -97,9 +102,10 @@ public class Erika : Unit
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .5f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                if (Distance(transform.position, goal) < 1f){
+                float distTraveled = Distance(startPos, transform.position);
+                float distToGoal = Distance(transform.position, goal);
+                if (distTraveled >= (float)speed || distToGoal < 10f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
-                    // Maybe I should have a Reset() method that does all of this.
                     pathIdx++;
                     if (pathIdx < path.Count){
                         goal = path[pathIdx];
@@ -121,6 +127,7 @@ public class Erika : Unit
         _attackModeRanged = true;
         _rotating = true;
         _gotPhi = false;
+        _goalSet = false;
     }
 
     public void RangedAttack()
@@ -187,6 +194,12 @@ public class Erika : Unit
         _animator.SetBool("isRanged", _isRanged);
     }
 
+    new void SetAllToFalse()
+    {
+        base.SetAllToFalse();
+        _isRanged = false;
+    }
+
     void ShootArrow()
     {
         if (!_isDelaying){
@@ -203,7 +216,7 @@ public class Erika : Unit
         Rigidbody arrow_rb = arrow.GetComponent<Rigidbody>();
         //yield again for .5 seconds because the archer pauses before actually shooting the arrow
         yield return new WaitForSeconds(.5f);
-        arrow_rb.velocity = transform.forward * 10f;
+        arrow_rb.velocity = transform.forward * 15f;
         _isDelaying = false;
     }
 
