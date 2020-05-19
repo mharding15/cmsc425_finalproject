@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
-public class TileMap : MonoBehaviour, tileClicksble
+public class TileMap : MonoBehaviour
 {
 
     public int mapSizeX = 25;
