@@ -137,10 +137,10 @@ public class RangedUnit : Unit
         } 
 
         print("Opponent's ac is: " + targetUnit.ac);
-        if (roll >= 0){ //opponentUnit.ac + 10){
+        if (roll >= targetUnit.ac){
             cl.SetTurnResultText("Attack Hit!");
             SetAnimBools(RANGED_ATTACK, pos);
-            StartOpponentGettingHit(meleeDamage + damageBonus);
+            StartOpponentGettingHit(rangedDamage + damageBonus);
         } else {
             cl.SetTurnResultText("Attack Missed");
         }

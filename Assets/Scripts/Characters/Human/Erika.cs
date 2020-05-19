@@ -23,10 +23,10 @@ public class Erika : Unit
 
     void SetStats()
     {
-        speed = 21;
+        speed = 15;
         reaction = 29;
-        hp = 14;
-        ac = 10;
+        hp = 13;
+        ac = 8;
 
         meleeDamage = 3;
         rangedDamage = 2;
@@ -124,6 +124,7 @@ public class Erika : Unit
     new public void EnterRangedMode()
     {
         print("!!! entering Ranged Attack mode");
+        cl.SetModeText("Ranged Attack");
         _attackModeRanged = true;
         _rotating = true;
         _gotPhi = false;
@@ -144,11 +145,13 @@ public class Erika : Unit
         } 
 
         print("Opponent's ac is: " + targetUnit.ac);
-        if (roll >= 0){ //opponentUnit.ac + 10){
+        if (roll >= targetUnit.ac){
             print("$$$ Attack hit!");
             SetAnimBools(RANGED_ATTACK);
+            cl.SetTurnResultText("Attack Hit!");
+            StartOpponentGettingHit(rangedDamage + damageBonus, 4.5f);
         } else {
-            print("$$$ Attack missed...");
+            cl.SetTurnResultText("Attack Missed");
         }
 
         // delay while the animation is going and then call Next()

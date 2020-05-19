@@ -16,11 +16,11 @@ public class Zontog : Unit
 
     void SetStats()
     {
-        speed = 13;
+        speed = 21;
         reaction = 18;
 
-        hp = 16;
-        ac = 6;
+        hp = 14;
+        ac = 5;
 
         meleeDamage = 6;
     }

@@ -16,10 +16,10 @@ public class Bruno : Unit
 
     void SetStats()
     {
-        speed = 15;
+        speed = 23;
         reaction = 18;
-        hp = 25;
-        ac = 8;
+        hp = 20;
+        ac = 6;
 
         meleeDamage = 6;
     }
