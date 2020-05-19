@@ -10,6 +10,10 @@ public class TileClickable : MonoBehaviour
     public TileMap map;
     public int cost;
 
+    public TileClickable(TileMap mapIn){
+
+    }
+
 
     void OnMouseDown(){
             Debug.Log("(" + tileX + " , " + tileY + ")");

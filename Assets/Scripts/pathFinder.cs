@@ -203,7 +203,7 @@ public class pathFinder
 
             target = end;
             pos = currPos;
-            costToEnter = map.tileTypes[map.tiles[ (int)currPos.x, (int)currPos.y]].cost();
+            costToEnter = 1; //map.tileTypes[map.tiles[ (int)currPos.x, (int)currPos.y]].cost();
             
             if (costToEnter < 0) {
                 hCost = hCostCalc(target);

@@ -8,10 +8,9 @@ public class TileTerrain
 
     public enum material : short
     {
-        GRASS, DIRT, WATER
+        GRASS, WATER, OBJ
     };
 
-    public material terrType;
     public int moveCost;
     public GameObject visualPrefab;
     public bool occupied = false;

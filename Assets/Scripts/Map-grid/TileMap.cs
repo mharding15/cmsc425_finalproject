@@ -2,53 +2,74 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileMap : MonoBehaviour
+[RequireComponent(typeof(MeshFilter))]
+public class TileMap : MonoBehaviour, tileClicksble
 {
 
-    public int mapSizeX = 10;
-    public int mapSizeY = 10;
-    public int[,] tiles;
+    public int mapSizeX = 25;
+    public int mapSizeY = 25;
+    Mesh grid;
+    public MeshFilter filter;
+    public Vector3 offset;
 
-    public TileTerrain[] tileTypes;
-    public Unit selectedUnit;
+    Vector3[] verts;
+    int[] triangles;
 
 
     void Start()
     {
+        grid = new Mesh();
+        GetComponent<MeshFilter>().mesh = grid;
+        offset = new Vector3(2, 2, 2); //(GameObject.FindWithTag("Canvas").transform.position/5); //I meant terrain, not canvas; its on the terrain.
+
         generateMap();
+        UpdateMap();
     }
 
     void generateMap()
     {
-        //allocate tiles
-        tiles = new int[mapSizeX, mapSizeY];
-
-        //initialize tiles
-        for (int x = 0; x < mapSizeX; x++)
+        verts = new Vector3[mapSizeX + 1 * mapSizeY + 1];
+        for (int i =0, y = 0; y <= mapSizeY; y++)
         {
-            for (int y = 0; y < mapSizeY; y++)
+            for (int x = 0; x <= mapSizeY; x++)
             {
-                //hard codng map tiles
-                int terrain = 0; 
-
-                if ( (x == 7) && ( y > 2 && y < 6) ) {
-                    terrain = 1;
-                } else if( y == 2){
-                    terrain = 2;
-                }
-
-                //let the map know your type
-                tiles[x, y] = terrain;
-                GameObject thisTile = (GameObject) Instantiate(tileTypes[terrain].visualPrefab, new Vector3(x,0,y), Quaternion.identity);
-
-                //gnothi seaton
-                TileClickable clickPos = thisTile.GetComponent<TileClickable>();
-                clickPos.tileX = x;
-                clickPos.tileY = y;
-                clickPos.map = this;
-                clickPos.cost = tileTypes[terrain].moveCost;
+                verts[i] = new Vector3(x, 0, y) + offset;
+                i++;
             }
+        }
+
+        int vertCount = 0;
+        int triCount = 0;
+
+        for (int y = 0; y <= mapSizeY; y++)
+        {
+            for (int x = 0; x <= mapSizeY; x++)
+            {
+                triangles = new int[6];
+                triangles[0] = vertCount + 0;
+                triangles[1] = vertCount + + 1;
+                triangles[2] = vertCount + 1;
+                triangles[3] = vertCount + 1;
+                triangles[4] = vertCount + mapSizeX + 1;
+                triangles[5] = vertCount + mapSizeX + 2;
+
+                vertCount++;
+                triCount += 6;
+            }
+            vertCount++; //next tile
         }
     }
 
+
+
+    void UpdateMap()
+    {
+        grid.Clear();
+
+        grid.vertices = verts;
+        grid.triangles = triangles;
+
+        grid.RecalculateNormals();
+    }
+       
 }
