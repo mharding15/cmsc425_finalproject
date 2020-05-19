@@ -15,6 +15,10 @@ public class Manager : MonoBehaviour
     public GameObject tileSelectionIndicator;
     public LayerMask tileMask;
 
+    public List<Vector3> currentPath = null;
+    private List<Vector3> lastPath = null;
+
+
     private GameObject currentTile;
 
     private Vector3 garbagePosition = new Vector3(0, 100, 0);
@@ -49,6 +53,17 @@ public class Manager : MonoBehaviour
             currentTile = null;
             // Move the tile indicator to our desired space
             tileSelectionIndicator.transform.position = garbagePosition;
+        }
+    }
+
+    private void LateUpdate()
+    {
+
+        if (currentPath != null) { 
+            for (int i = 0; i < currentPath.Count - 1; i++)
+            {
+                Debug.DrawRay(currentPath[i] + Vector3.up, currentPath[i+1] - currentPath[i]);
+            }
         }
     }
 }
