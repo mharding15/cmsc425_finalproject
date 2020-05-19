@@ -16,8 +16,13 @@ public class Warrok : Unit
 
     void SetStats()
     {
-        speed = 10;
+        speed = 14;
         reaction = 18;
+
+        hp = 25;
+        ac = 13;
+
+        meleeDamage = 6;
     }
 
 }
