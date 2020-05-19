@@ -20,13 +20,18 @@ public class TileMap : MonoBehaviour
     {
         grid = new Mesh();
         GetComponent<MeshFilter>().mesh = grid;
-        offset = new Vector3(2, 2, 2); //(GameObject.FindWithTag("Terrain").transform.position/5); 
+        offset = ((GameObject.FindWithTag("Terrain").transform.position / 5) - new Vector3(0,0.1f,0));
+        mapSizeX = (int) Mathf.Abs(offset.x * 4);
+        mapSizeY = (int) Mathf.Abs(offset.z * 4);
         generateMap();
+        UpdateMap();
     }
 
     void Update()
     {
-        UpdateMap();
+        void OnMouseOver(){
+            print("Detected");
+        }
     }
 
     void generateMap()
