@@ -28,6 +28,9 @@ public class CombatLoop : MonoBehaviour
     private List<Unit> units;
 	private int current, countdown;
 
+    public GameObject mainCamera;
+    private CameraController cameraController;
+
     // for testing
     private int count;
 
@@ -40,7 +43,9 @@ public class CombatLoop : MonoBehaviour
         count = 0;
         countdown = 3;
 
-    	GameObject[] chars = GameObject.FindGameObjectsWithTag("Character");
+        cameraController = mainCamera.GetComponent<CameraController>();
+
+        GameObject[] chars = GameObject.FindGameObjectsWithTag("Character");
         foreach (GameObject obj in chars){
             GetCharacter(obj);
         }
@@ -190,11 +195,11 @@ public class CombatLoop : MonoBehaviour
             // if the current character is down (but not dead, or they would be deleted from the lists)
             if (units[current].hp <= 0){
                 Next(.01f);
-            } 
+            }
 
-             // switch cameras
-            objects[current].transform.Find("Camera").gameObject.SetActive(true);
-            DeactivateCameras();
+            // switch cameras
+
+            cameraController.setCameraLockableObject(objects[current]);
 
             count++;
             // just don't want to get caught in an infinte loop or something.
