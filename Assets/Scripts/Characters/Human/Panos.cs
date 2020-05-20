@@ -16,10 +16,10 @@ public class Panos : RangedUnit
 
     void SetStats()
     {
-        speed = 10;
+        speed = 12;
         reaction = 21;
-        hp = 18;
-        ac = 3;
+        hp = 13;
+        ac = 10;
 
         meleeDamage = 3;
         rangedDamage = 2;

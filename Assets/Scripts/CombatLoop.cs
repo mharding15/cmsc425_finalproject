@@ -1,16 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatLoop : MonoBehaviour
 {
+    public Text humanTurnText;
+    public Text humanHPText; 
+    public Text humanModeText;
+    public Text humanTargetText;
+
+    public Text aiTurnText;
+    public Text aiHPText;
+
+    public Text turnResultText;
+    public Text gameResultText;
+
+    public GameObject humanPanel;
+    public GameObject aiPanel;
+    public GameObject turnResultPanel;
+
     // this list contains instances of the inner class "Person" I made below to keep track of things for that character
 	private List<Person> characters;
     // this list contains the actual GameObjects associated with the characters, so can use it to call their methods and stuff
     private List<GameObject> objects;
     // this int keeps track of whose turn it is (the index of the character in the above lists)
     private List<Unit> units;
-	private int current;
+	private int current, countdown;
 
     // for testing
     private int count;
@@ -22,14 +38,23 @@ public class CombatLoop : MonoBehaviour
         units = new List<Unit>();
     	current = -1;
         count = 0;
+        countdown = 3;
 
     	GameObject[] chars = GameObject.FindGameObjectsWithTag("Character");
         foreach (GameObject obj in chars){
             GetCharacter(obj);
         }
+
+        DeactivatePanels();
     	
-        // can add some kind of delay here if we want so it doesn't just immediately start combat, could be kind of confusing
-        Next();
+        Countdown();
+    }
+
+    void DeactivatePanels()
+    {
+        humanPanel.SetActive(false);
+        aiPanel.SetActive(false);
+        turnResultPanel.SetActive(false);
     }
 
     // I wasn't sure how to differentiate between the characters after getting them by the "Character" tag, so I do it by seeing what script is attached
@@ -39,25 +64,26 @@ public class CombatLoop : MonoBehaviour
         if (obj.GetComponent<Bruno>()){
             print("This is Bruno");
             p.name = "Bruno";
-            //p.initiative = UnityEngine.Random.Range(1, 20) + Bruno.speed + Bruno.reaction; 
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Bruno>().speed + obj.GetComponent<Bruno>().reaction; 
             p.initiative = obj.GetComponent<Bruno>().speed;
             p.isEnemy = obj.GetComponent<Bruno>().isEnemy;
         } else if (obj.GetComponent<Erika>()){
             print("This is Erika");
             p.name = "Erika";
-            //p.initiative = UnityEngine.Random.Range(1, 20) + Erika.speed + Erika.reaction;
+            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Erika>().speed + obj.GetComponent<Erika>().reaction;
             p.initiative = obj.GetComponent<Erika>().speed;
-            p.isEnemy = obj.GetComponent<Erika>().isEnemy;
+            //p.isEnemy = obj.GetComponent<Erika>().isEnemy;
         } else if (obj.GetComponent<Maria>()){
             print("This is Maria");
             p.name = "Maria";
-            //p.initiative = UnityEngine.Random.Range(1, 20) + Maria.speed + Maria.reaction; 
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Maria>().speed + obj.GetComponent<Maria>().reaction; 
             p.initiative = obj.GetComponent<Maria>().speed;
             p.isEnemy = obj.GetComponent<Maria>().isEnemy;
         } else if (obj.GetComponent<Panos>()){
             print("This is Panos");
             p.name = "Panos";
-            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Panos>().speed + obj.GetComponent<Panos>().reaction;
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Panos>().speed + obj.GetComponent<Panos>().reaction;
+            p.initiative = obj.GetComponent<Panos>().speed;
             p.isEnemy = obj.GetComponent<Panos>().isEnemy;
         } else if (obj.GetComponent<Ganfaul>()){
             print("This is Ganfaul");
@@ -68,31 +94,34 @@ public class CombatLoop : MonoBehaviour
         } else if (obj.GetComponent<Nightshade>()){
             print("This is Nightshade");
             p.name = "Nightshade";
-            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Nightshade>().speed + obj.GetComponent<Nightshade>().reaction;
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Nightshade>().speed + obj.GetComponent<Nightshade>().reaction;
+            p.initiative = obj.GetComponent<Nightshade>().speed;
             p.isEnemy = obj.GetComponent<Nightshade>().isEnemy;
         } else if (obj.GetComponent<Warrok>()){
             print("This is Warrok");
             p.name = "Warrok";
-            p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Warrok>().speed + obj.GetComponent<Warrok>().reaction; 
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Warrok>().speed + obj.GetComponent<Warrok>().reaction; 
+            p.initiative = obj.GetComponent<Warrok>().speed;
             p.isEnemy = obj.GetComponent<Warrok>().isEnemy;
 
         } else if (obj.GetComponent<Mulok>()){
             print("This is Mulok");
             p.name = "Mulok";
-            //p.initiative = UnityEngine.Random.Range(1, 20) + Mulok.speed + Mulok.reaction; 
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Mulok>().speed + obj.GetComponent<Mulok>().reaction; 
             p.initiative = obj.GetComponent<Mulok>().speed;
             p.isEnemy = obj.GetComponent<Mulok>().isEnemy;
 
         } else if (obj.GetComponent<Vurius>()){
             print("This is Vurius");
             p.name = "Vurius";
-            //p.initiative = UnityEngine.Random.Range(1, 20) + Vurius.speed + Vurius.reaction; 
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Vurius>().speed + obj.GetComponent<Vurius>().reaction; 
             p.initiative = obj.GetComponent<Vurius>().speed;
             p.isEnemy = obj.GetComponent<Vurius>().isEnemy;
         } else if (obj.GetComponent<Zontog>()){
             print("This is Zontog");
             p.name = "Zontog";
-            //p.initiative = UnityEngine.Random.Range(1, 20) + Zontog.speed + Zontog.reaction; 
+            //p.initiative = UnityEngine.Random.Range(1, 20) + obj.GetComponent<Zontog>().speed + obj.GetComponent<Zontog>().reaction; 
+            p.initiative = obj.GetComponent<Zontog>().speed;
             p.isEnemy = obj.GetComponent<Zontog>().isEnemy;
         } else {
             print("It's none of them???");
@@ -114,67 +143,109 @@ public class CombatLoop : MonoBehaviour
         units.Insert(i, GetUnit(o));
     }
 
+    void Countdown()
+    {
+        print("999 In countdown and value is: " + countdown);
+        if (countdown == 0){
+            gameResultText.text = "";
+            Next(.25f);
+        } else {
+            gameResultText.text = "" + countdown;
+            countdown--;
+            StartCoroutine(DelayCountdown(1f));
+        }
+    }
+
     public void Next()
     {
-        StartCoroutine(Delay(2f));
+        StartCoroutine(Delay(4f));
+    }
+
+    public void Next(float delay)
+    {
+        print("888 should be called when character is dead");
+        StartCoroutine(Delay(delay));
     }
 
     // this method should be called whenever a character is done with their turn (so last action has been taken). It will then move to the next character's turn.
     public void NextContinued()
     {
 
-        // for testing with a single character (otherwise it would think the game was over)
-        // if (!GameOverCheck()){
-        if (true){
+        // If the game is not over, go to the next player
+        if (!GameOverCheck()){
 
-            // TODO: check to see if the actions are used up for this character.
+            // need to reset the target that it says in the ui
+            SetTargetText("None");
 
             int previous = current;
-            current = (current + 1) % characters.Count;
+            current = (current + 1) % units.Count;
+            print("1111 current is: " + current);
 
             // need to unset the character who was current last time in their GameObject's script
             if (previous > -1){
-                print("Setting current to false for number: " + previous);
-                // TO_DELETE: SetCurrent(previous, false);
                 units[previous].isCurrent = false;
             }
-            // TODO: replace this with setting a text element in the UI
-            print("Setting current to true for number: " + current);
             units[current].isCurrent = true;
-        }
-        
 
-        // if the current character is down (but not dead, or they would be deleted from the lists)
-        if (units[current].hp <= 0){
-            // TODO: will need to do a will check to see if the character lives
-            // would also need an animation for getting up, which I can get later
-                // if the character doesn't get revived, just call Next() from here 
-        } 
-
-
-        count++;
-        if (count < 20){
-            // this is an AI character, need to make it's decisions for it
-            if (characters[current].isEnemy){
-                print("In Next...and current was an enemy, character: " + objects[current].name);
-                MakeDecision();
+            // if the current character is down (but not dead, or they would be deleted from the lists)
+            if (units[current].hp <= 0){
+                Next(.01f);
             } 
-            // I guess I don't really have to do anything else if it's a human controlled character
+
+             // switch cameras
+            objects[current].transform.Find("Camera").gameObject.SetActive(true);
+            DeactivateCameras();
+
+            count++;
+            // just don't want to get caught in an infinte loop or something.
+            if (count < 200){
+                // this is an AI character, need to make it's decisions for it
+                print("101010101 Combat Loop line 203 :: The current # is : " + current);
+                if (characters[current].isEnemy){
+                    print("444 In Next...and current was an enemy, character: " + objects[current].name);
+                    aiTurnText.text = characters[current].name + "'s Turn";
+                    aiHPText.text = "HP: " + units[current].hp;
+                    print("555 WHY is it now setting this panel to active???");
+                    aiPanel.SetActive(true);
+                    humanPanel.SetActive(false);
+                    AttackingDecisions();
+                } else {
+                    humanTurnText.text = characters[current].name + "'s Turn";
+                    humanHPText.text = "HP: " + units[current].hp;
+                    humanModeText.text = "Mode: None";
+
+                    aiPanel.SetActive(false);
+                    humanPanel.SetActive(true);
+                }
+            }
+        } 
+        
+    }
+
+    void DeactivateCameras()
+    {
+        for (int i = 0; i < objects.Count; i++){
+            if (objects[i].transform.Find("Camera") != null){
+                GameObject cam = objects[i].transform.Find("Camera").gameObject;
+                if (cam != null && i != current){
+                    cam.SetActive(false);
+                }
+            }
         }
     }
 
     // *** The Decision "Tree" (not like any tree I've seen before, but close enough) *** //
 
-    void MakeDecision()
-    {
-        // if this character is about to die and has healing potions, then take one
-        if (units[current].hp <= 5 && units[current].healingPotionCount > 0){
-            print("The character: " + objects[current].name + " decides to take a healing potion");
-            units[current].TakePotion();
-        } else {
-            AttackingDecisions();
-        }
-    }
+    // void MakeDecision()
+    // {
+    //     // if this character is about to die and has healing potions, then take one
+    //     if (units[current].hp <= 5 && units[current].healingPotionCount > 0){
+    //         print("The character: " + objects[current].name + " decides to take a healing potion");
+    //         units[current].TakePotion();
+    //     } else {
+    //         AttackingDecisions();
+    //     }
+    // }
 
     void AttackingDecisions()
     {
@@ -188,6 +259,7 @@ public class CombatLoop : MonoBehaviour
             print("&&& so gonna hit them with a Melee attack");
             units[current].target = objects[closestOpponentIdx];
             units[current].targetUnit = units[closestOpponentIdx];
+
             units[current].EnterMeleeMode();
         } else if (units[current].longRange > 0f && closestEnemyDist < units[current].longRange){
             print("&&& so gonna hit them with a long range");
@@ -200,10 +272,11 @@ public class CombatLoop : MonoBehaviour
                 objects[current].GetComponent<Erika>().EnterRangedMode();
             }
         } else {
-            print("&&& so gonna hit move closer to that enemy");
-            // move towards the closest character
+            print("&&& so gonna move closer to that enemy");
             units[current].target = objects[closestOpponentIdx];
             units[current].targetUnit = units[closestOpponentIdx];
+            units[current].path = new List<Vector3>();
+            units[current].path.Add(objects[closestOpponentIdx].transform.position);
             units[current].EnterMoveMode();
         }
     }
@@ -217,7 +290,8 @@ public class CombatLoop : MonoBehaviour
         int minIdx = -1;
         Unit currentUnit = units[current];
         for (int i = 0; i < characters.Count; i++){
-            if (i != current && units[current].isEnemy != units[i].isEnemy){
+            // need to make sure the enemy is not already dead
+            if (i != current && units[i].hp > 0 && (units[current].isEnemy != units[i].isEnemy)){
                 float dist = Distance(objects[current].transform.position, objects[i].transform.position);
                 if (dist < minDist){
                     minDist = dist;
@@ -235,7 +309,7 @@ public class CombatLoop : MonoBehaviour
         int minIdx = -1;
         Unit currentUnit = units[current];
         for (int i = 0; i < characters.Count; i++){
-            if (i != current && units[current].isEnemy == units[i].isEnemy){
+            if (i != current && units[i].hp > 0 && units[current].isEnemy == units[i].isEnemy){
                 float dist = Distance(objects[current].transform.position, objects[i].transform.position);
                 if (dist < minDist){
                     minDist = dist;
@@ -269,16 +343,13 @@ public class CombatLoop : MonoBehaviour
             }
         }
         if (friendsRemaining == 0){
-            // TODO: you have lost (should probably make a Text component to display this)
-            print("*** In GameOverCheck and friendsRemaining was 0???");
+            SetGameResultText("You Lose!");
             return true;
         } else if (enemiesRemaining == 0){
-            // TODO: you have won 
-            print("*** In GameOverCheck and enemiesRemaining was 0???");
+            SetGameResultText("You Win!");
             return true;
         }
 
-        print("*** In GameOverCheck and returning false.");
         return false;
     }
 
@@ -324,37 +395,6 @@ public class CombatLoop : MonoBehaviour
         } 
 
         return runit;
-    }
-
-    // pretty sure I can change this to just work with the units list
-    void SetCurrent(int idx, bool value)
-    {
-        string name = characters[idx].name;
-        GameObject obj = objects[idx];
-
-        if (name == "Bruno"){
-            obj.GetComponent<Bruno>().isCurrent = value;
-        } else if (name == "Erika"){
-            obj.GetComponent<Erika>().isCurrent = value;
-        } else if (name == "Maria"){
-            obj.GetComponent<Maria>().isCurrent = value;
-        }else if (name == "Panos") {
-            obj.GetComponent<Panos>().isCurrent = value;
-        } else if (name == "Ganfaul"){
-            obj.GetComponent<Ganfaul>().isCurrent = value;
-        } else if (name == "Nightshade"){
-            obj.GetComponent<Nightshade>().isCurrent = value;
-        } else if (name == "Warrok"){
-            obj.GetComponent<Warrok>().isCurrent = value;
-        } else if (name == "Mulok"){
-            obj.GetComponent<Mulok>().isCurrent = value;
-        } else if (name == "Vurius"){
-            obj.GetComponent<Vurius>().isCurrent = value;
-        } else if (name == "Zontog"){
-            obj.GetComponent<Zontog>().isCurrent = value;
-        } else {
-            print("Whattt, none of these characters was clicking???");
-        }
     }
 
     public GameObject GetCurrentObject()
@@ -414,9 +454,45 @@ public class CombatLoop : MonoBehaviour
         public int closestFriend {set; get;}
     }
 
+    public void SetGameResultText(string text)
+    {
+        gameResultText.text = text;
+        aiPanel.SetActive(false);
+        turnResultPanel.SetActive(false);
+    }
+
+    public void SetModeText(string text)
+    {
+        humanModeText.text = "Mode: " + text;
+    }
+
+    public void SetTurnResultText(string text)
+    {
+        turnResultPanel.SetActive(true);
+        turnResultText.text = text;
+        StartCoroutine(DelayForResultText(2f));
+    }
+
+    public void SetTargetText(string text)
+    {
+        humanTargetText.text = "Target: " + text;
+    }
+
     IEnumerator Delay(float time)
     {
         yield return new WaitForSeconds(time);
         NextContinued();
+    }
+
+    IEnumerator DelayForResultText(float time)
+    {
+        yield return new WaitForSeconds(time);
+        turnResultPanel.SetActive(false);
+    }
+
+    IEnumerator DelayCountdown(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Countdown();
     }
 }

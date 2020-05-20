@@ -16,19 +16,12 @@ public class Ganfaul : Unit
 
     void SetStats()
     {
-        speed = 8;
+        speed = 22;
         reaction = 18;
-        hp = 22;
-        ac = 2;
+        hp = 18;
+        ac = 7;
 
-        meleeDamage = 4;
-
-        // cunning;
-        // perception;
-        // reaction;
-        // speed;
-        // strength;
-        // will;
+        meleeDamage = 5;
     }
 
 }

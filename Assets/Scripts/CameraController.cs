@@ -5,8 +5,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-    public Transform target;
-    public Transform focus;
+    private Transform target;
+    private Transform focus;
+    private GameObject targetObject, focusObject;
+
+
     public Vector3 zoomVector;
     public Vector3 offset;
     public float zoomSpeed = 4f;
@@ -44,9 +47,19 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         tileMap = map.GetComponent<TileMap>();
+        targetObject = new GameObject();
+        target = targetObject.transform;
+        targetObject.name = "Free Camera Target";
+
+        focusObject = new GameObject();
+        focus = focusObject.transform;
+        focusObject.name = "Free Camera Focus";
+
         startLerpPos = target.transform.position;
         lastZoom = currentZoom;
         startLerpZoom = currentZoom;
+
+        
     }
 
     public void EnableFreeCam()

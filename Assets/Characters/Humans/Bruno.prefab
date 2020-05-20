@@ -1544,7 +1544,7 @@ Transform:
   m_GameObject: {fileID: 4930209945078222685}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 825533399356301870}
   - {fileID: 1786966404303856429}
@@ -1592,6 +1592,10 @@ MonoBehaviour:
   will: 0
   isEnemy: 0
   healingPotionCount: 0
+  meleeDamage: 0
+  meleeRange: 0
+  longRange: 0
+  modeText: {fileID: 0}
 --- !u!136 &-5145482722197083465
 CapsuleCollider:
   m_ObjectHideFlags: 0

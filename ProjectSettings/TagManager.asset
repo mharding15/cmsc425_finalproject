@@ -7,6 +7,10 @@ TagManager:
   - Manager
   - Character
   - Arrow
+  - HumanPanel
+  - AIPanel
+  - Unit
+  - Map
   layers:
   - Default
   - TransparentFX
