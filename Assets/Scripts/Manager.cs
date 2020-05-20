@@ -16,7 +16,7 @@ public class Manager : MonoBehaviour
     public LayerMask tileMask;
     public GameObject movableTileIndicatorPrefab;
 
-    private TileMap map;
+    public TileMap map;
 
     public List<Vector3> currentPath = null;
 
@@ -30,6 +30,7 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
+
         map = GameObject.FindWithTag("Map").GetComponent<TileMap>();
     }
 
@@ -46,7 +47,7 @@ public class Manager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
     void Update()
     {
 
@@ -63,6 +64,8 @@ public class Manager : MonoBehaviour
 
         if (currentHoveredTile != lastHoveredTile) // If hovered tile changed.
         {
+            lastHoveredTile = currentHoveredTile;
+
             for (int i = 0; i < movableTiles.Count; i++)
                 Destroy(movableTiles[i]);
             movableTiles.Clear();
@@ -72,8 +75,9 @@ public class Manager : MonoBehaviour
                 tileSelectionIndicator.transform.position = currentHoveredTile.transform.position;
                 
 
-                List<Vector3> movableLocations = (new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 40)).solve();
-
+                 
+                MovableTileFinder mov = new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 40);
+                List<Vector3> movableLocations = mov.solve();
                 for (int i = 0; i < movableLocations.Count; i++)
                     movableTiles.Add(Instantiate(movableTileIndicatorPrefab, movableLocations[i], Quaternion.identity) as GameObject);
             }
@@ -82,7 +86,7 @@ public class Manager : MonoBehaviour
                 tileSelectionIndicator.transform.position = garbagePosition;
             }
 
-            lastHoveredTile = currentHoveredTile;
+            
         }
     }
 

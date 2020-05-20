@@ -40,7 +40,9 @@ public class CameraController : MonoBehaviour
     private float cameraLerpTime = 0.7f;
     private float zoomLerpTime = 0.3f;
 
-    private bool freeCam = true;
+    private bool freeCam = false;
+    private bool effectiveFreeCam;
+    private bool awaitingTarget = true;
 
     private Transform lockTarget = null;
 
@@ -67,14 +69,25 @@ public class CameraController : MonoBehaviour
         freeCam = true;
     }
 
+    public void RemoveCameraLock()
+    {
+        lockTarget = null;
+        awaitingTarget = true;
+    }
+
     // LERPs to a transform. Camera follows that transform until freecam is enabled
     public void LerpToTransformAndLock(Transform transf)
     {
-        startLerpPos = focus.position;
-        target.position = transf.position;
-        lockTarget = transf;
-        lerpStartTime = Time.time;
-        freeCam = false;
+        if (transf != null)
+        {
+            startLerpPos = focus.position;
+            target.position = transf.position;
+            lockTarget = transf;
+            lerpStartTime = Time.time;
+            freeCam = false;
+            awaitingTarget = false;
+        }
+        
     }
 
     public void LerpToObjectAndLock(GameObject obj)
@@ -90,11 +103,53 @@ public class CameraController : MonoBehaviour
         lerpStartTime = Time.time;
         freeCam = true;
     }
+
+    public void setCameraLockable(Transform target)
+    {
+        if (freeCam)
+        {
+            lockTarget = target;
+        }
+        else
+        {
+            LerpToTransformAndLock(target);
+        }
+    }
+
+    public void setCameraLockableObject(GameObject target)
+    {
+        setCameraLockable(target.transform);
+    }
+
     void Update()
     {
         focus.transform.position = Vector3.Lerp(startLerpPos, target.position, 
             Mathf.Pow(Time.time - lerpStartTime, 0.4f)/ cameraLerpTime );
 
+        // 
+        if (Input.GetMouseButtonDown(2))
+        {
+            if (freeCam)
+            {
+                if (lockTarget != null)
+                {
+                    LerpToTransformAndLock(lockTarget);
+                }
+            }
+            else
+            {
+                EnableFreeCam();
+            }
+        }
+
+        if (awaitingTarget && !freeCam)
+        {
+            effectiveFreeCam = true;
+        }
+        else
+        {
+            effectiveFreeCam = freeCam;
+        }
 
         // Emergency Enable free cam
         if (Input.GetKeyDown(KeyCode.L))
@@ -102,7 +157,7 @@ public class CameraController : MonoBehaviour
             EnableFreeCam();
         }
 
-            currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+        currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
 
 
@@ -126,7 +181,7 @@ public class CameraController : MonoBehaviour
         
         Debug.DrawRay(target.position, camDir * Vector3.forward);
 
-        if (freeCam)
+        if (effectiveFreeCam)
         {
             target.Translate(camDir * Vector3.forward * deltaVertical + camDir * Vector3.right * deltaHorizontal);
             Vector3 targetPos = target.transform.position;
@@ -140,7 +195,6 @@ public class CameraController : MonoBehaviour
         {
             target.position = lockTarget.position;
         }
-        
         
         
         if (currentZoom != lastZoom)
