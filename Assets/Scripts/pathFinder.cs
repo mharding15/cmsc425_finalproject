@@ -5,18 +5,16 @@ using UnityEngine;
 public class pathFinder
 {
     TileMap map;
-    public TileClickable target;
 
     Vector3 initPos, targetPos;
     Node start;
 
-    public pathFinder(TileMap mapIn, int startX, int startY, TileClickable target)
+    public pathFinder(TileMap mapIn, int startX, int startY, int destX, int destY)
     {
-        this.target = target;
         this.map = mapIn;
 
         initPos = new Vector3(startX, 0, startY);
-        targetPos = new Vector3(target.tileX, 0 , target.tileY);
+        targetPos = new Vector3(destX, 0 , destY);
         start = new Node(this.map, initPos, null, 0, false, true);
        
     }
