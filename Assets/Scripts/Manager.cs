@@ -63,12 +63,14 @@ public class Manager : MonoBehaviour
 
         if (currentHoveredTile != lastHoveredTile) // If hovered tile changed.
         {
+            for (int i = 0; i < movableTiles.Count; i++)
+                Destroy(movableTiles[i]);
+            movableTiles.Clear();
+
             if (currentHoveredTile != null)
             {
                 tileSelectionIndicator.transform.position = currentHoveredTile.transform.position;
-                for (int i = 0; i < movableTiles.Count; i++)
-                    Destroy(movableTiles[i]);
-
+                
 
                 List<Vector3> movableLocations = (new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 40)).solve();
 
