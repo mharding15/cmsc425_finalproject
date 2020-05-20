@@ -13,7 +13,9 @@ public class Manager : MonoBehaviour
     public Camera mainCamera;
     public GameObject tileSelectionIndicator;
     public LayerMask tileMask;
-    public GameObject movableTileIndicatorPrefab;
+    public GameObject movableTileIndicatorPrefab, selectedUnitIndicator, enemyUnitIndicator, friendlyUnitIndicator;
+    public GameObject attackableTilePrefab, attackableTileGhostPrefab;
+    public LineRenderer unitPath;
 
     public TileMap map;
 
@@ -21,7 +23,7 @@ public class Manager : MonoBehaviour
 
     private GameObject lastHoveredTile = null;
 
-    private List<GameObject> movableTiles = new List<GameObject>();
+    private List<GameObject> movableTiles = new List<GameObject>(), attackableTiles = new List<GameObject>();
 
     private GameObject currentHoveredTile;
 
@@ -65,28 +67,101 @@ public class Manager : MonoBehaviour
         {
             lastHoveredTile = currentHoveredTile;
 
-            for (int i = 0; i < movableTiles.Count; i++)
+            /*for (int i = 0; i < movableTiles.Count; i++)
                 Destroy(movableTiles[i]);
             movableTiles.Clear();
+            */
+
 
             if (currentHoveredTile != null)
             {
                 tileSelectionIndicator.transform.position = currentHoveredTile.transform.position;
+                if (GetComponent<CombatLoop>().GetUnits().Count > 0 && GetComponent<CombatLoop>().getCurrentInt() >= 0)
+                {
+                    Unit curUnit = GetComponent<CombatLoop>().GetCurrentUnit();
+                    if (curUnit != null)
+                    {
+                        if (!curUnit.GetHasActed())
+                        {
+                            if (curUnit.movableTiles.Contains(currentHoveredTile.transform.position) )
+                            {
+                            
+                                List<Vector3> path = (new pathFinder(map, Mathf.RoundToInt(curUnit.transform.position.x), Mathf.RoundToInt(curUnit.transform.position.z),
+                                    (int)currentHoveredTile.transform.position.x, (int)currentHoveredTile.transform.position.z)).solve();
+                                List<Vector3> newPath = new List<Vector3>();
+                                for (int i = 0; i < path.Count; i++)
+                                    newPath.Add(path[i] + Vector3.up);
+
+                                unitPath.positionCount = newPath.Count;
+                                unitPath.SetPositions(newPath.ToArray());
+                            }
+                            else
+                            {
+                                unitPath.positionCount = 0;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        unitPath.positionCount = 0;
+                    }
+                }
+                else
+                {
+                    unitPath.positionCount = 0;
+                }
                 
 
-                 
-                MovableTileFinder mov = new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 23);
-                List<Vector3> movableLocations = mov.solve();
-                for (int i = 0; i < movableLocations.Count; i++)
-                    movableTiles.Add(Instantiate(movableTileIndicatorPrefab, movableLocations[i], Quaternion.identity) as GameObject);
+                //MovableTileFinder mov = new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 23);
+                //List<Vector3> movableLocations = mov.solve();
+                //SetMovableTilePreview(movableLocations);
             }
             else
             {
+
+                unitPath.positionCount = 0;
                 tileSelectionIndicator.transform.position = garbagePosition;
             }
 
             
         }
+    }
+
+    public void SetAttackableTilePreview(Unit unit)
+    {
+        for (int i = 0; i < attackableTiles.Count; i++)
+            Destroy(attackableTiles[i]);
+        attackableTiles.Clear();
+
+        foreach (Unit u in Manager.Instance.GetComponent<CombatLoop>().GetUnits())
+        {
+            if (unit.isEnemy != u.isEnemy && u.hp > 0)
+            {
+                if (Vector3.Distance(unit.transform.position, u.transform.position) <= unit.meleeRange)
+                    attackableTiles.Add(Instantiate(attackableTilePrefab, u.transform.position, Quaternion.identity) as GameObject);
+                else if (Vector3.Distance(unit.transform.position, u.transform.position) <= unit.longRange)
+                    attackableTiles.Add(Instantiate(attackableTileGhostPrefab, u.transform.position, Quaternion.identity) as GameObject);
+            }
+        }
+    }
+
+    public void SetMovableTilePreview(List<Vector3> tiles)
+    {
+        for (int i = 0; i < movableTiles.Count; i++)
+            Destroy(movableTiles[i]);
+        movableTiles.Clear();
+
+        if (tiles != null)
+        {
+            for (int i = 0; i < tiles.Count; i++)
+                movableTiles.Add(Instantiate(movableTileIndicatorPrefab, tiles[i], Quaternion.identity) as GameObject);
+        }
+    }
+
+    public void SetSelectedUnitIndicator(Transform transf)
+    {
+        selectedUnitIndicator.transform.position = transf.position;
+        selectedUnitIndicator.transform.parent = transf;
     }
 
     private void LateUpdate()

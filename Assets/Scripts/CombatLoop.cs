@@ -55,6 +55,11 @@ public class CombatLoop : MonoBehaviour
         Countdown();
     }
 
+    public int getCurrentInt()
+    {
+        return current;
+    }
+
     void DeactivatePanels()
     {
         humanPanel.SetActive(false);
@@ -151,7 +156,20 @@ public class CombatLoop : MonoBehaviour
     void Countdown()
     {
         if (countdown == 0){
-            gameResultText.text = "";
+            // Setup some things
+            foreach (Unit unit in units)
+            {
+                GameObject indicator;
+
+                if (unit.isEnemy)
+                    indicator = Manager.Instance.enemyUnitIndicator;
+                else
+                    indicator = Manager.Instance.friendlyUnitIndicator;
+
+                GameObject inicatorObject = Instantiate(indicator, unit.transform.position, Quaternion.identity, unit.transform) as GameObject;
+            }
+
+                gameResultText.text = "";
             Next(.25f);
         } else {
             gameResultText.text = "" + countdown;
@@ -162,7 +180,7 @@ public class CombatLoop : MonoBehaviour
 
     public void Next()
     {
-        StartCoroutine(Delay(4f));
+        StartCoroutine(Delay(0.5f));
     }
 
     public void Next(float delay)
@@ -199,6 +217,13 @@ public class CombatLoop : MonoBehaviour
             // switch cameras
 
             cameraController.setCameraLockableObject(objects[current]);
+            units[current].path = null;
+            units[current].movableTiles = new MovableTileFinder(Manager.Instance.map, (int)(objects[current].transform.position.x),
+                (int)(objects[current].transform.position.z),
+                units[current].speed).solve();
+            Manager.Instance.SetMovableTilePreview(units[current].movableTiles);
+            Manager.Instance.SetAttackableTilePreview(units[current]);
+            Manager.Instance.SetSelectedUnitIndicator(objects[current].transform);
 
             count++;
             // just don't want to get caught in an infinte loop or something.
@@ -504,5 +529,10 @@ public class CombatLoop : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Countdown();
+    }
+
+    public List<Unit> GetUnits()
+    {
+        return units;
     }
 }

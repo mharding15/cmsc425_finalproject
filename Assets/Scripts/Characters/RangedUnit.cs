@@ -27,17 +27,35 @@ public class RangedUnit : Unit
         }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
-            print("In Update and name is: " + gameObject.name);
-            if(Input.GetKey(KeyCode.M)){
-                print("*** And M was pressed");
-                EnterMoveMode();
-            } else if (Input.GetKey(KeyCode.Z)){
-                print("*** AND A was pressed");
-                EnterMeleeMode();
-            }else if(Input.GetKey(KeyCode.R)){
-                print("*** AND R was pressed");
-                EnterRangedMode();
-                cl.SetModeText("Ranged Attack");
+            //print("In Update and name is: " + gameObject.name);
+
+            if (!hasActed)
+            {
+                if (Input.GetKey(KeyCode.M))
+                {
+                    /*print("*** And M was pressed");
+                    EnterMoveMode();
+                    */
+                }
+                else if (Input.GetKey(KeyCode.Z))
+                {
+                    print("*** AND Z was pressed");
+                    //EnterMeleeMode();
+                    if (Vector3.Distance(target.transform.position, transform.position) <= meleeRange)
+                        EnterMeleeMode();
+                }
+                else if (Input.GetKey(KeyCode.R))
+                {
+                    print("*** AND R was pressed");
+                    if (Vector3.Distance(target.transform.position, transform.position) <= longRange)
+                        EnterRangedMode();
+                    //EnterRangedMode();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Backspace))
+                {
+                    SkipTurn();
+                }
             }
 
             // if in melee mode, then need to make the goal equal to the target's position
@@ -46,16 +64,29 @@ public class RangedUnit : Unit
                 _goalSet = true;
             }
 
-            // if getting the first part of the path
-            if (!_goalSet && path.Count != 0){
-                print("111 Setting the goal, character: " + gameObject.name);
-                goal = path[0];
-                _goalSet = true;
+            if (path != null)
+            {
+                // if getting the first part of the path
+                if (!_goalSet && path.Count != 0)
+                {
+                    // adding this to test if it will make it more smooth??
+                    // not sure if this actually helped...
+                    if (path.Count > 1)
+                    {
+                        pathIdx++;
+                        goal = path[pathIdx];
+                        // goal = path[0];
+
+                        lerpStartPos = transform.position;
+                        lerpStartTime = Time.time;
+                    }
+                    _goalSet = true;
+                }
             }
 
             // rotate towards the goal (if there is a goal)
             if (_rotating && _goalSet){
-                print("222 Rotating and GoalSet, character: " + gameObject.name);
+                //print("222 Rotating and GoalSet, character: " + gameObject.name);
                 // if have not gotten the rotation angle, get it
                 if (!_gotPhi){
                     GetRotationAngle(goal);
@@ -63,7 +94,7 @@ public class RangedUnit : Unit
                     // rotate a little bit towards the target
                     transform.Rotate(new Vector3(0f, phi, 0f));
                     // finished rotating, now can either move or attack or whatever
-                    print("@@@ Done rotating");
+                    //print("@@@ Done rotating");
                     _rotating = false;
                     if (_moveMode){
                         _moving = true;
@@ -82,8 +113,30 @@ public class RangedUnit : Unit
             }
 
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
-            if (!_rotating && _moving && goal != null){
-                // move a little bit towards the target
+            if ( _moving && goal != null){
+                float lerpVal = (Time.time - lerpStartTime) * speed / 5;
+                transform.position = Vector3.Lerp(lerpStartPos, goal, lerpVal);
+
+                if (lerpVal >= 1)
+                {
+                    pathIdx++;
+                    if (pathIdx < path.Count)
+                    {
+                        goal = path[pathIdx];
+                        _moving = false;
+                        _rotating = true;
+                        _gotPhi = false;
+                        sumRotationTime = 0f;
+                        lerpStartPos = transform.position;
+                        lerpStartTime = Time.time;
+                    }
+                    else
+                    {
+                        ResetValuesAndNext();
+                    }
+                }
+                /*
+                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .25f * Time.deltaTime);
 
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
@@ -102,6 +155,7 @@ public class RangedUnit : Unit
                         ResetValuesAndNext();
                     }
                 }
+                */
             }
         }
     }
@@ -113,6 +167,7 @@ public class RangedUnit : Unit
         _rotating = true;
         _gotPhi = false;
         _goalSet = false;
+        hasActed = true;
     }
 
     new void SetMeleeBool()
@@ -122,6 +177,8 @@ public class RangedUnit : Unit
 
     public void RangedAttack(Vector3 pos)
     {
+        cl.SetModeText("Ranged Attack");
+        hasActed = true;
         print("$$$ Name: " + gameObject.name + " is in RangedAttack.");
         //Unit opponentUnit = GetOpponentUnit();
         int damageBonus = 0;
@@ -194,8 +251,27 @@ public class RangedUnit : Unit
         _attackModeRanged = false;
         target = null;
         SetAnimBools(IDLE);
+        hasActed = false;
+        path = null;
+        pathIdx = 0;
         cl.Next();
     }
+
+    protected void SkipTurn()
+    {
+        print("$$$ In resetValues and Next");
+        _moving = false;
+        _moveMode = false;
+        _attackModeMelee = false;
+        _attackModeRanged = false;
+        target = null;
+        SetAnimBools(IDLE);
+        hasActed = false;
+        path = null;
+        pathIdx = 0;
+        cl.Next(0.05f);
+    }
+
 
     new void SetAllToFalse()
     {

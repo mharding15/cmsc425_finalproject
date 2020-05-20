@@ -41,19 +41,36 @@ public class Erika : Unit
         }
         // if this is the GameObject of the character whose turn it is
         if (isCurrent){
-            CheckCameraMovement();
-            print("In Update and name is: " + gameObject.name);
-            // if M is pressed then the character should start moving (or at least we know that moving is what the character wants to do)
-                // maybe there should be a message that says you are in walk mode, and if you click M again it removes it.
-            if(Input.GetKey(KeyCode.M)){
-                print("*** And M was pressed");
-                EnterMoveMode();
-            } else if (Input.GetKey(KeyCode.Z)){
-                print("*** AND Z was pressed");
-                EnterMeleeMode();
-            } else if(Input.GetKey(KeyCode.R)){
-                print("*** AND R was pressed");
-                EnterRangedMode();
+            //print("In Update and name is: " + gameObject.name);
+
+            if (!hasActed)
+            {
+                if (Input.GetKey(KeyCode.M))
+                {
+                    /*print("*** And M was pressed");
+                    EnterMoveMode();
+                    */
+                }
+                else if (Input.GetKey(KeyCode.Z))
+                {
+                    print("*** AND Z was pressed");
+                    //EnterMeleeMode();
+                    if (Vector3.Distance(target.transform.position, transform.position) <= meleeRange)
+                        EnterMeleeMode();
+                }
+                else if (Input.GetKey(KeyCode.R))
+                {
+                    print("*** AND R was pressed");
+                    //EnterRangedMode();
+
+                    if (Vector3.Distance(target.transform.position, transform.position) <= longRange)
+                        EnterRangedMode();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Backspace))
+                {
+                    SkipTurn();
+                }
             }
 
             // if in melee mode, then need to make the goal equal to the target's position
@@ -62,10 +79,24 @@ public class Erika : Unit
                 _goalSet = true;
             }
 
-            // if getting the first part of the path
-            if (!_goalSet && path.Count != 0){
-                goal = path[0];
-                _goalSet = true;
+            if (path != null)
+            {
+                // if getting the first part of the path
+                if (!_goalSet && path.Count != 0)
+                {
+                    // adding this to test if it will make it more smooth??
+                    // not sure if this actually helped...
+                    if (path.Count > 1)
+                    {
+                        pathIdx++;
+                        goal = path[pathIdx];
+                        // goal = path[0];
+
+                        lerpStartPos = transform.position;
+                        lerpStartTime = Time.time;
+                    }
+                    _goalSet = true;
+                }
             }
 
             // rotate towards the goal (if there is a goal)
@@ -77,7 +108,7 @@ public class Erika : Unit
                     // rotate a little bit towards the target
                     transform.Rotate(new Vector3(0f, phi, 0f));
                     // finished rotating, now can either move or attack or whatever
-                    print("@@@ Done rotating");
+                    //print("@@@ Done rotating");
                     _rotating = false;
                     if (_moveMode){
                         _moving = true;
@@ -95,21 +126,25 @@ public class Erika : Unit
             }
 
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
-            if (!_rotating && _moving && goal != null){
-                // move a little bit towards the target
-                transform.Translate(Vector3.forward * speed * .25f * Time.deltaTime);
-                // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                float distToGoal = Distance(transform.position, goal);
-                if (distToGoal < .1f){
-                    // or if the distance travelled is greater than or equal to this character's speed, should also stop
+            if (_moving && goal != null){
+                float lerpVal = (Time.time - lerpStartTime) * speed / 5;
+                transform.position = Vector3.Lerp(lerpStartPos, goal, lerpVal);
+
+                if (lerpVal >= 1)
+                {
                     pathIdx++;
-                    if (pathIdx < path.Count){
+                    if (pathIdx < path.Count)
+                    {
                         goal = path[pathIdx];
                         _moving = false;
                         _rotating = true;
                         _gotPhi = false;
                         sumRotationTime = 0f;
-                    } else {
+                        lerpStartPos = transform.position;
+                        lerpStartTime = Time.time;
+                    }
+                    else
+                    {
                         ResetValuesAndNext();
                     }
                 }
@@ -125,10 +160,13 @@ public class Erika : Unit
         _rotating = true;
         _gotPhi = false;
         _goalSet = false;
+        hasActed = true;
     }
 
     public void RangedAttack()
     {
+        cl.SetModeText("Ranged Attack");
+        hasActed = true;
         print("$$$ Name: " + gameObject.name + " is in RangedAttack.");
         //Unit opponentUnit = GetOpponentUnit();
         int damageBonus = 0;
@@ -191,6 +229,36 @@ public class Erika : Unit
         _animator.SetBool("isDying", _isDying);
         _animator.SetBool("isHit", _isHit);
         _animator.SetBool("isRanged", _isRanged);
+    }
+
+    new protected void ResetValuesAndNext()
+    {
+        print("$$$ In resetValues and Next");
+        _moving = false;
+        _moveMode = false;
+        _attackModeMelee = false;
+        _attackModeRanged = false;
+        target = null;
+        SetAnimBools(IDLE);
+        hasActed = false;
+        path = null;
+        pathIdx = 0;
+        cl.Next();
+    }
+
+    protected void SkipTurn()
+    {
+        print("$$$ In resetValues and Next");
+        _moving = false;
+        _moveMode = false;
+        _attackModeMelee = false;
+        _attackModeRanged = false;
+        target = null;
+        SetAnimBools(IDLE);
+        hasActed = false;
+        path = null;
+        pathIdx = 0;
+        cl.Next(0.05f);
     }
 
     new void SetAllToFalse()
