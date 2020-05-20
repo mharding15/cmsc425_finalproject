@@ -85,7 +85,7 @@ public class MovableTileFinder
                     Vector3 newPos;
 
 
-                if (currPos.z < Manager.Instance.mapSizeY - 1)
+                if (currPos.z < map.mapSizeY - 1)
                 {
                     //b
                     shift = new Vector3(0, 0, 1);
@@ -106,7 +106,7 @@ public class MovableTileFinder
                         peep(newPos, currNode, false);
                     }
                 }
-                if (currPos.x < Manager.Instance.mapSizeX - 1)
+                if (currPos.x < map.mapSizeX - 1)
                     { //if there's a possible right neighbor
 
                         //e
@@ -120,7 +120,7 @@ public class MovableTileFinder
 
 
 
-                        if (currPos.z < Manager.Instance.mapSizeY - 1)
+                        if (currPos.z < map.mapSizeY - 1)
                         {
                             //c
                             shift = new Vector3(1, 0, 1);
@@ -173,7 +173,7 @@ public class MovableTileFinder
                             }
                         }
 
-                        if (currPos.z < Manager.Instance.mapSizeY - 1)
+                        if (currPos.z < map.mapSizeY - 1)
                         {
                             //a
                             shift = new Vector3(-1, 0, 1);

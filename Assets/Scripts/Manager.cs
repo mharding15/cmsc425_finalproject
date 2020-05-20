@@ -9,8 +9,7 @@ public class Manager : MonoBehaviour
     
     public static Manager Instance { get; private set; }
 
-    public int mapSizeX = 10;
-    public int mapSizeY = 10;
+    
     public Camera mainCamera;
     public GameObject tileSelectionIndicator;
     public LayerMask tileMask;

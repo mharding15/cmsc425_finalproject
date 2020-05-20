@@ -897,8 +897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4deb4f55f864a3347a87694433bce18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSizeX: 10
-  mapSizeY: 10
   mainCamera: {fileID: 1682345676}
   tileSelectionIndicator: {fileID: 1358644253}
   tileMask:
