@@ -13,7 +13,7 @@ public class TileClickable : MonoBehaviour
 
     void OnMouseDown(){
             Debug.Log("(" + tileX + " , " + tileY + ")");
-            GameObject.FindWithTag("Manager").GetComponent<Manager>().currentPath = (new pathFinder(map, 3, 3, this)).solve();
+            GameObject.FindWithTag("Manager").GetComponent<Manager>().currentPath = (new pathFinder(map, 3, 3, tileX, tileY)).solve();
     }
 
     void OnMouseOver()
@@ -22,7 +22,7 @@ public class TileClickable : MonoBehaviour
         {
             print("right click-----------------------------------------------------------------------------------------------------------");
             CombatLoop cl = GameObject.FindWithTag("Manager").GetComponent<CombatLoop>();
-            cl.GetCurrentUnit().path = (new pathFinder(map, 3, 3, this)).solve();
+            cl.GetCurrentUnit().path = (new pathFinder(map, 3, 3, tileX, tileY)).solve();
             print("unit given path: "+cl.GetCurrentUnit().path);
             cl.GetCurrentUnit().EnterMoveMode();
         }
