@@ -2,28 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class pathFinder
+public class MovableTileFinder
 {
     TileMap map;
-    public TileClickable target;
 
     Vector3 initPos, targetPos;
     Node start;
+    List<Vector3> movable = new List<Vector3>();
+    int maxCost;
 
-    public pathFinder(TileMap mapIn, int startX, int startY, TileClickable target)
+    public MovableTileFinder(TileMap mapIn, int startX, int startY, int maxCost)
     {
-        this.target = target;
         this.map = mapIn;
-
+        this.maxCost = maxCost;
         initPos = new Vector3(startX, 0, startY);
-        targetPos = new Vector3(target.tileX, 0 , target.tileY);
-        start = new Node(this.map, initPos, null, 0, false, true);
-       
+        start = new Node(this.map, initPos, 0, false, true);
     }
 
     public List<Vector3> solve()
     {
-        return new trailBlazer(start, targetPos).solve();
+        return new trailBlazer(start, maxCost).solve();
     }
 
     class trailBlazer
@@ -33,15 +31,16 @@ public class pathFinder
         Node StartPoint;
         Vector3 targetPos;
         TileMap map;
+        int maxCost;
 
-        public trailBlazer(Node curr, Vector3 target)
+        public trailBlazer(Node curr, int maxCost)
         {
             StartPoint = curr;
             openList = new SortedList<int, List<Node>>();
             closedList = new List<Vector3>();
             map = curr.map;
-            targetPos = target;
-            
+            this.maxCost = maxCost;
+
         }
 
         public List<Vector3> solve()
@@ -51,29 +50,23 @@ public class pathFinder
             return solveAux(new Queue<Vector3>());
         }
 
-        private List<Vector3> tracePath(Node node)
+        private List<Vector3> getMovableTiles()
         {
-            List<Vector3> path = new List<Vector3>();
-            while (node != StartPoint)
-            {
-                path.Insert(0, node.pos);
-                node = node.parentNode;
-            }
-            path.Insert(0, StartPoint.pos);
-            return path;
+            return closedList;
         }
+
 
         private List<Vector3> solveAux(Queue<Vector3> retVal) //should be FIFO
         {
             int ap = 0;
             Node currNode;
-            while (openList.Count > 0)
+            while (openList.Count > 0 && ap < 100)
             {
                 //Recurse
                 int firstKey = openList.Keys[0];
                 List<Node> nextSmallest = openList[firstKey];
-                Queue<Vector3> retValBranch = new Queue<Vector3>(retVal);
-                retValBranch.Enqueue(nextSmallest[0].pos);
+                //Queue<Vector3> retValBranch = new Queue<Vector3>(retVal);
+                //retValBranch.Enqueue(nextSmallest[0].pos);
                 currNode = nextSmallest[0];
                 nextSmallest.Remove(currNode);
                 if (nextSmallest.Count == 0) openList.Remove(firstKey);
@@ -83,65 +76,49 @@ public class pathFinder
                 Vector3 shift;
                 closedList.Add(currPos);
 
-                if (currPos == targetPos)                                       //  | a | b | c |
-                {//target found                                                 //  | d | - | e |
-                    return tracePath(currNode);                                 //  | f | g | h |
-                }
-                else
-                {
-
+                                               //  | a | b | c |
+                                               //  | d | - | e |
+                                               //  | f | g | h |
+                
                     // take nearest next tile
                     //add neighbors to openList
                     Vector3 newPos;
 
-                    if (currPos.z < Manager.Instance.mapSizeY - 1)
+
+                if (currPos.z < Manager.Instance.mapSizeY - 1)
+                {
+                    //b
+                    shift = new Vector3(0, 0, 1);
+                    newPos = currPos + shift;
+                    if (!closedList.Contains(newPos))
                     {
-                        //b
-                        shift = new Vector3(0, 0, 1);
-                        newPos = currPos + shift;
-                        if (!closedList.Contains(newPos))
-                        {
-                            peep(newPos, currNode, false);
-                            if (newPos == targetPos)
-                            {//target found      
-                                return tracePath(openListFind(newPos));
-                            }
-                        }
+                        peep(newPos, currNode, false);
                     }
+                }
 
-
-                    if (currPos.z > 0)
+                if (currPos.z > 0)
+                {
+                    //g
+                    shift = new Vector3(0, 0, -1);
+                    newPos = currPos + shift;
+                    if (!closedList.Contains(newPos))
                     {
-                        //g
-                        shift = new Vector3(0, 0, -1);
-                        newPos = currPos + shift;
-                        if (!closedList.Contains(newPos))
-                        {
-                            peep(newPos, currNode, false);
-                            if (newPos == targetPos)
-                            {//target found      
-                                return tracePath(openListFind(newPos));
-                            }
-                        }
+                        peep(newPos, currNode, false);
                     }
-
-                    if (currPos.x < Manager.Instance.mapSizeX - 1)
+                }
+                if (currPos.x < Manager.Instance.mapSizeX - 1)
                     { //if there's a possible right neighbor
 
                         //e
                         shift = new Vector3(1, 0, 0);
                         newPos = currPos + shift;
-                        
+
                         if (!closedList.Contains(newPos))
                         {
                             peep(newPos, currNode, false);
-                            if (newPos == targetPos)
-                            {//target found      
-                                return tracePath(openListFind(newPos));
-                            }
                         }
 
-                        
+
 
                         if (currPos.z < Manager.Instance.mapSizeY - 1)
                         {
@@ -151,10 +128,6 @@ public class pathFinder
                             if (!closedList.Contains(newPos))
                             {
                                 peep(newPos, currNode, true);
-                                if (newPos == targetPos)
-                                {//target found      
-                                    return tracePath(openListFind(newPos));
-                                }
                             }
                         }
 
@@ -166,10 +139,13 @@ public class pathFinder
                             if (!closedList.Contains(newPos))
                             {
                                 peep(newPos, currNode, true);
-                                if (newPos == targetPos)
-                                {//target found      
-                                    return tracePath(openListFind(newPos));
-                                }
+                            }
+                            //g
+                            shift = new Vector3(0, 0, -1);
+                            newPos = currPos + shift;
+                            if (!closedList.Contains(newPos))
+                            {
+                                peep(newPos, currNode, false);
                             }
                         }
 
@@ -184,10 +160,6 @@ public class pathFinder
                         if (!closedList.Contains(newPos))
                         {
                             peep(newPos, currNode, false);
-                            if (newPos == targetPos)
-                            {//target found      
-                                return tracePath(openListFind(newPos));
-                            }
                         }
 
                         if (currPos.z > 0)
@@ -198,10 +170,6 @@ public class pathFinder
                             if (!closedList.Contains(newPos))
                             {
                                 peep(newPos, currNode, true);
-                                if (newPos == targetPos)
-                                {//target found      
-                                    return tracePath(openListFind(newPos));
-                                }
                             }
                         }
 
@@ -213,23 +181,19 @@ public class pathFinder
                             if (!closedList.Contains(newPos))
                             {
                                 peep(newPos, currNode, true);
-                                if (newPos == targetPos)
-                                {//target found      
-                                    return tracePath(openListFind(newPos));
-                                }
                             }
                         }
-                    }
-
-                   
                     
+
+
+
                     //return solveAux(temp, gAcc, retVal);
                 }
 
             }
 
 
-            return new List<Vector3>(retVal);
+            return getMovableTiles();
 
 
         }
@@ -238,16 +202,31 @@ public class pathFinder
         void peep(Vector3 pos, Node sourceNode, bool diag)
         {   //adds to open list if not visited already
             Node neighbor;
-            neighbor = new Node(this.map, pos, sourceNode, sourceNode.getGCost(), diag, false);
-
-            
-
-            Node foundInstance = openListFind(pos);
-            if (foundInstance != null)
+            neighbor = new Node(this.map, pos, sourceNode.getGCost(), diag, false);
+            if (neighbor.cost() <= maxCost)
             {
-                if (foundInstance.cost() > neighbor.cost())
+                
+
+                Node foundInstance = openListFind(pos);
+                if (foundInstance != null)
                 {
-                    openListRemove(foundInstance);
+                    if (foundInstance.cost() > neighbor.cost())
+                    {
+                        openListRemove(foundInstance);
+
+                        try
+                        {
+                            List<Node> lst = openList[neighbor.cost()];
+                        }
+                        catch (KeyNotFoundException e)
+                        {
+                            openList.Add(neighbor.cost(), new List<Node>());
+                        }
+                        openList[neighbor.cost()].Add(neighbor);
+                    }
+                }
+                else
+                {
                     try
                     {
                         List<Node> lst = openList[neighbor.cost()];
@@ -258,18 +237,6 @@ public class pathFinder
                     }
                     openList[neighbor.cost()].Add(neighbor);
                 }
-            }
-            else
-            {
-                try
-                {
-                    List<Node> lst = openList[neighbor.cost()];
-                }
-                catch (KeyNotFoundException e)
-                {
-                    openList.Add(neighbor.cost(), new List<Node>());
-                }
-                openList[neighbor.cost()].Add(neighbor);
             }
             //closedList.Add(neighbor.pos);
 
@@ -315,7 +282,7 @@ public class pathFinder
     {
         public Vector3 pos;
 
-        public Node parentNode;
+        //public Node parentNode;
         int costToEnter;
 
         protected int hCost { get; private set; }
@@ -330,15 +297,16 @@ public class pathFinder
 
 
 
-        public Node(TileMap mapIn, Vector3 currPos, Node source, int gCostAcc, bool wasDiag, bool isStart)
+        public Node(TileMap mapIn, Vector3 currPos, int gCostAcc, bool wasDiag, bool isStart)
         {
             map = mapIn;
 
-            parentNode = source;
+            //parentNode = source;
             pos = currPos;
-            costToEnter = map.tileTypes[map.tiles[ (int)currPos.x, (int)currPos.z]].cost();
+            costToEnter = map.tileTypes[map.tiles[(int)currPos.x, (int)currPos.z]].cost();
             //costToEnter = 1;
-            if (!isStart) {
+            if (!isStart)
+            {
                 /*if (costToEnter < 0) {
                     hCost = hCostCalc(parent);
                 } else
@@ -350,13 +318,14 @@ public class pathFinder
                 int scale = (wasDiag) ? diagScale : horizScale;
                 gCost = gCostAcc + (costToEnter * scale);
                 fCost = hCost + gCost;
-            } else
+            }
+            else
             {
                 hCost = 0;
                 gCost = 0;
                 fCost = 0;
             }
-            
+
         }
 
 
@@ -372,8 +341,8 @@ public class pathFinder
         public int cost()
         {
             return gCost;
-        } 
-        
+        }
+
         public int getGCost()
         {
             return gCost;
@@ -381,7 +350,7 @@ public class pathFinder
 
         public bool Equals(Node other)
         {
-            if(other.pos.Equals(pos))
+            if (other.pos.Equals(pos))
             {
                 return true;
             }
@@ -403,6 +372,6 @@ public class pathFinder
             }
         }
     }
-  
+
 
 }
