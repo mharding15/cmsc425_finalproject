@@ -497,9 +497,14 @@ public class Unit : MonoBehaviour
         */
         if (!clickingUnit.hasActed)
         {
-            clickingUnit.target = gameObject;
-            clickingUnit.targetUnit = this;
-            cl.SetTargetText(gameObject.name);
+            float distance = Vector3.Distance(clickingUnit.transform.position, transform.position);
+            if (clickingUnit.isEnemy != isEnemy && (distance <= clickingUnit.meleeRange || distance <= clickingUnit.longRange))
+            {
+                clickingUnit.target = gameObject;
+                clickingUnit.targetUnit = this;
+                cl.SetTargetText(gameObject.name);
+                Manager.Instance.SetTargetIndicator(transform.position);
+            }
         }
 
         print("And the character who is clicking is: " + clickingObject.name);

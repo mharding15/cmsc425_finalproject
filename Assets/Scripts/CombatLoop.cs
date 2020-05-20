@@ -224,6 +224,7 @@ public class CombatLoop : MonoBehaviour
             Manager.Instance.SetMovableTilePreview(units[current].movableTiles);
             Manager.Instance.SetAttackableTilePreview(units[current]);
             Manager.Instance.SetSelectedUnitIndicator(objects[current].transform);
+            Manager.Instance.ResetTargetIndicator();
 
             count++;
             // just don't want to get caught in an infinte loop or something.

@@ -13,7 +13,7 @@ public class Manager : MonoBehaviour
     public Camera mainCamera;
     public GameObject tileSelectionIndicator;
     public LayerMask tileMask;
-    public GameObject movableTileIndicatorPrefab, selectedUnitIndicator, enemyUnitIndicator, friendlyUnitIndicator;
+    public GameObject movableTileIndicatorPrefab, selectedUnitIndicator, seletedTargetIndicator, enemyUnitIndicator, friendlyUnitIndicator;
     public GameObject attackableTilePrefab, attackableTileGhostPrefab;
     public LineRenderer unitPath;
 
@@ -125,6 +125,16 @@ public class Manager : MonoBehaviour
 
             
         }
+    }
+
+    public void ResetTargetIndicator()
+    {
+        seletedTargetIndicator.transform.position = garbagePosition;
+    }
+
+    public void SetTargetIndicator(Vector3 pos)
+    {
+        seletedTargetIndicator.transform.position = pos;
     }
 
     public void SetAttackableTilePreview(Unit unit)
