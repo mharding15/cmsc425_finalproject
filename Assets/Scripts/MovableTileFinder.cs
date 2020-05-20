@@ -59,9 +59,8 @@ public class MovableTileFinder
 
         private List<Vector3> solveAux(Queue<Vector3> retVal) //should be FIFO
         {
-            int ap = 0;
             Node currNode;
-            while (openList.Count > 0 && ap < 100)
+            while (openList.Count > 0)
             {
                 //Recurse
                 int firstKey = openList.Keys[0];
@@ -72,7 +71,7 @@ public class MovableTileFinder
                 nextSmallest.Remove(currNode);
                 if (nextSmallest.Count == 0) openList.Remove(firstKey);
 
-                ap++;
+                
                 Vector3 currPos = currNode.pos;
                 Vector3 shift;
                 closedList.Add(currPos);

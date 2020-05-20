@@ -158,6 +158,8 @@ MonoBehaviour:
   tileMask:
     serializedVersion: 2
     m_Bits: 256
+  movableTileIndicatorPrefab: {fileID: 4826113104230247361, guid: 89f5e6af7c797274cadbd55c34e64846,
+    type: 3}
   currentPath: []
 --- !u!4 &191488889
 Transform:
@@ -470,7 +472,7 @@ GameObject:
   - component: {fileID: 1503379232}
   m_Layer: 0
   m_Name: Map
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
