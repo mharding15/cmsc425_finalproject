@@ -150,7 +150,6 @@ public class CombatLoop : MonoBehaviour
 
     void Countdown()
     {
-        print("999 In countdown and value is: " + countdown);
         if (countdown == 0){
             gameResultText.text = "";
             Next(.25f);
