@@ -28,14 +28,14 @@ public class MovableTileFinder
     {
         SortedList<int, List<Node>> openList;
         List<Vector3> closedList;
-        Node StartPoint;
+        Node startPoint;
         Vector3 targetPos;
         TileMap map;
         int maxCost;
 
         public trailBlazer(Node curr, int maxCost)
         {
-            StartPoint = curr;
+            startPoint = curr;
             openList = new SortedList<int, List<Node>>();
             closedList = new List<Vector3>();
             map = curr.map;
@@ -45,13 +45,14 @@ public class MovableTileFinder
 
         public List<Vector3> solve()
         {
-            openList.Add(StartPoint.cost(), new List<Node>());
-            openList[StartPoint.cost()].Add(StartPoint);
+            openList.Add(startPoint.cost(), new List<Node>());
+            openList[startPoint.cost()].Add(startPoint);
             return solveAux(new Queue<Vector3>());
         }
 
         private List<Vector3> getMovableTiles()
         {
+            closedList.Remove(startPoint.pos);
             return closedList;
         }
 
