@@ -340,15 +340,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f565aa328cd94c438db001a2fba3e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 551007992}
+  zoomVector: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: -1, z: 1}
   zoomSpeed: 4
   minZoom: 1
   maxZoom: 5
-  tileMap: {fileID: 0}
+  map: {fileID: 1503379231}
   pitch: 0.1
   yawSpeed: 100
   moveSpeed: 10
+  tileMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1503379231
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +364,7 @@ GameObject:
   - component: {fileID: 1503379232}
   m_Layer: 0
   m_Name: Map
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -572,6 +575,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e1a4e53e67e3a746ac96f178799c42c, type: 3}
+--- !u!1 &1775220627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5747219813320297795, guid: 1e1a4e53e67e3a746ac96f178799c42c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1704059398}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1778196661
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,11 +612,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSizeX: 10
   mapSizeY: 10
-  mainCamera: {fileID: 0}
-  tileSelectionIndicator: {fileID: 0}
+  mainCamera: {fileID: 1404804903}
+  tileSelectionIndicator: {fileID: 1775220627}
   tileMask:
     serializedVersion: 2
     m_Bits: 0
+  movableTileIndicatorPrefab: {fileID: 0}
+  currentPath: []
 --- !u!4 &1778196663
 Transform:
   m_ObjectHideFlags: 0
