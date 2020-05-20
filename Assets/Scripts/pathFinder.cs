@@ -409,7 +409,7 @@ public class pathFinder
         {
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Character"))
             {
-                Vector3 characterPos = new Vector3(obj.transform.position.x, 0, obj.transform.position.y);
+                Vector3 characterPos = new Vector3(obj.transform.position.x, 0, obj.transform.position.z);
                 if ((characterPos - pos).magnitude < 0.5)
                     return true;
             }

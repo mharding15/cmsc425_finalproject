@@ -241,7 +241,6 @@ public class MovableTileFinder
                 }
             }
             //closedList.Add(neighbor.pos);
-
         }
 
         Node openListFind(Vector3 pos)
@@ -378,7 +377,7 @@ public class MovableTileFinder
         {
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Character"))
             {
-                Vector3 characterPos = new Vector3(obj.transform.position.x, 0, obj.transform.position.y);
+                Vector3 characterPos = new Vector3(obj.transform.position.x, 0, obj.transform.position.z);
                 if ((characterPos - pos).magnitude < 0.5)
                     return true;
             }
