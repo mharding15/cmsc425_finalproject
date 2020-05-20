@@ -14,10 +14,24 @@ public class Manager : MonoBehaviour
     public Camera mainCamera;
     public GameObject tileSelectionIndicator;
     public LayerMask tileMask;
+    public GameObject movableTileIndicatorPrefab;
 
-    private GameObject currentTile;
+    private TileMap map;
+
+    public List<Vector3> currentPath = null;
+
+    private GameObject lastHoveredTile = null;
+
+    private List<GameObject> movableTiles = new List<GameObject>();
+
+    private GameObject currentHoveredTile;
 
     private Vector3 garbagePosition = new Vector3(0, 100, 0);
+
+    private void Start()
+    {
+        map = GameObject.FindWithTag("Map").GetComponent<TileMap>();
+    }
 
     //makes sure there is only one Manager instance at any time 
     private void Awake()
@@ -41,14 +55,45 @@ public class Manager : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 200, tileMask)) // If mouse is over a tile...
         {
-            currentTile = hit.collider.gameObject;
-            // Move the tile indicator to our desired space
-            tileSelectionIndicator.transform.position = currentTile.transform.position;
+            currentHoveredTile = hit.collider.gameObject;
         } else
         {
-            currentTile = null;
-            // Move the tile indicator to our desired space
-            tileSelectionIndicator.transform.position = garbagePosition;
+            currentHoveredTile = null;
         }
+
+        if (currentHoveredTile != lastHoveredTile) // If hovered tile changed.
+        {
+            if (currentHoveredTile != null)
+            {
+                tileSelectionIndicator.transform.position = currentHoveredTile.transform.position;
+                for (int i = 0; i < movableTiles.Count; i++)
+                    Destroy(movableTiles[i]);
+
+
+                List<Vector3> movableLocations = (new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 40)).solve();
+
+                for (int i = 0; i < movableLocations.Count; i++)
+                    movableTiles.Add(Instantiate(movableTileIndicatorPrefab, movableLocations[i], Quaternion.identity) as GameObject);
+            }
+            else
+            {
+                tileSelectionIndicator.transform.position = garbagePosition;
+            }
+
+            lastHoveredTile = currentHoveredTile;
+        }
+    }
+
+    private void LateUpdate()
+    {
+
+        if (currentPath != null) { 
+            for (int i = 0; i < currentPath.Count - 1; i++)
+            {
+                Debug.DrawRay(currentPath[i] + Vector3.up, currentPath[i+1] - currentPath[i]);
+            }
+        }
+
+
     }
 }

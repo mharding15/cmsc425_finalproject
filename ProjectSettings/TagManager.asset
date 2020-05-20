@@ -9,6 +9,8 @@ TagManager:
   - Arrow
   - HumanPanel
   - AIPanel
+  - Unit
+  - Map
   layers:
   - Default
   - TransparentFX

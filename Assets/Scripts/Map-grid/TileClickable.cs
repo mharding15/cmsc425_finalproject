@@ -13,6 +13,7 @@ public class TileClickable : MonoBehaviour
 
     void OnMouseDown(){
             Debug.Log("(" + tileX + " , " + tileY + ")");
+            GameObject.FindWithTag("Manager").GetComponent<Manager>().currentPath = (new pathFinder(map, 3, 3, this)).solve();
     }
 
     void OnMouseOver()
