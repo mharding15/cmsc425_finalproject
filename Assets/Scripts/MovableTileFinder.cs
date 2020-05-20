@@ -203,17 +203,31 @@ public class MovableTileFinder
         {   //adds to open list if not visited already
             Node neighbor;
             neighbor = new Node(this.map, pos, sourceNode.getGCost(), diag, false);
-            if (neighbor.cost() <= maxCost)
+
+            if (!neighbor.isOccupied())
             {
-                
-
-                Node foundInstance = openListFind(pos);
-                if (foundInstance != null)
+                if (neighbor.cost() <= maxCost)
                 {
-                    if (foundInstance.cost() > neighbor.cost())
+                    Node foundInstance = openListFind(pos);
+                    if (foundInstance != null)
                     {
-                        openListRemove(foundInstance);
+                        if (foundInstance.cost() > neighbor.cost())
+                        {
+                            openListRemove(foundInstance);
 
+                            try
+                            {
+                                List<Node> lst = openList[neighbor.cost()];
+                            }
+                            catch (KeyNotFoundException e)
+                            {
+                                openList.Add(neighbor.cost(), new List<Node>());
+                            }
+                            openList[neighbor.cost()].Add(neighbor);
+                        }
+                    }
+                    else
+                    {
                         try
                         {
                             List<Node> lst = openList[neighbor.cost()];
@@ -224,18 +238,6 @@ public class MovableTileFinder
                         }
                         openList[neighbor.cost()].Add(neighbor);
                     }
-                }
-                else
-                {
-                    try
-                    {
-                        List<Node> lst = openList[neighbor.cost()];
-                    }
-                    catch (KeyNotFoundException e)
-                    {
-                        openList.Add(neighbor.cost(), new List<Node>());
-                    }
-                    openList[neighbor.cost()].Add(neighbor);
                 }
             }
             //closedList.Add(neighbor.pos);
@@ -370,6 +372,18 @@ public class MovableTileFinder
             {
                 return false;
             }
+        }
+
+        public bool isOccupied()
+        {
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Character"))
+            {
+                Vector3 characterPos = new Vector3(obj.transform.position.x, 0, obj.transform.position.y);
+                if ((characterPos - pos).magnitude < 0.5)
+                    return true;
+            }
+
+            return false;
         }
     }
 
