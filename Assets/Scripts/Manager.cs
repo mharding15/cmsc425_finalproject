@@ -75,7 +75,7 @@ public class Manager : MonoBehaviour
                 
 
                  
-                MovableTileFinder mov = new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 40);
+                MovableTileFinder mov = new MovableTileFinder(map, (int)(currentHoveredTile.transform.position.x), (int)(currentHoveredTile.transform.position.z), 23);
                 List<Vector3> movableLocations = mov.solve();
                 for (int i = 0; i < movableLocations.Count; i++)
                     movableTiles.Add(Instantiate(movableTileIndicatorPrefab, movableLocations[i], Quaternion.identity) as GameObject);

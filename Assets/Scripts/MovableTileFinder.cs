@@ -290,8 +290,8 @@ public class MovableTileFinder
         protected int gCost { get; private set; }
         protected int fCost { get; private set; }
 
-        public int horizScale = 10;
-        public int diagScale = 14;
+        public int horizScale = 5;
+        public int diagScale = 8;
 
         public TileMap map;
 
