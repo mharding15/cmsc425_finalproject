@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 5544986868663156062, guid: f937b29af30686243a00e683152a2253,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.577343
+      value: -11.75
       objectReference: {fileID: 0}
     - target: {fileID: 5544986868663156062, guid: f937b29af30686243a00e683152a2253,
         type: 3}
@@ -141,7 +141,7 @@ PrefabInstance:
     - target: {fileID: 5544986868663156062, guid: f937b29af30686243a00e683152a2253,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.740494
+      value: -6.58
       objectReference: {fileID: 0}
     - target: {fileID: 5544986868663156062, guid: f937b29af30686243a00e683152a2253,
         type: 3}
@@ -997,7 +997,7 @@ PrefabInstance:
     - target: {fileID: 8689535403065695030, guid: 1541223d83edf154eaaba43c21cd5eda,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -18.050495
+      value: -9.15
       objectReference: {fileID: 0}
     - target: {fileID: 8689535403065695030, guid: 1541223d83edf154eaaba43c21cd5eda,
         type: 3}
@@ -1061,7 +1061,7 @@ PrefabInstance:
     - target: {fileID: 4928201783539115748, guid: d7410afba8b2f644daba429588b9bbf3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.450495
+      value: -8.68
       objectReference: {fileID: 0}
     - target: {fileID: 4928201783539115748, guid: d7410afba8b2f644daba429588b9bbf3,
         type: 3}
@@ -1465,7 +1465,7 @@ PrefabInstance:
     - target: {fileID: 8228294266328890702, guid: df8b93b88049db74fabc1f281d942a69,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.250494
+      value: -8.13
       objectReference: {fileID: 0}
     - target: {fileID: 8228294266328890702, guid: df8b93b88049db74fabc1f281d942a69,
         type: 3}
@@ -1928,7 +1928,7 @@ MonoBehaviour:
     m_Bits: 256
   movableTileIndicatorPrefab: {fileID: 4826113104230247361, guid: 89f5e6af7c797274cadbd55c34e64846,
     type: 3}
-  map: {fileID: 0}
+  map: {fileID: 773339412}
   currentPath: []
 --- !u!114 &1802305417
 MonoBehaviour:
