@@ -11,7 +11,7 @@ public class Erika : Unit
     protected int RANGED_ATTACK = 6;
     public int rangedDamage;
 
-    void Awake()
+    void Start()
     {
         base.Start();
         SetAnimBools(IDLE);
