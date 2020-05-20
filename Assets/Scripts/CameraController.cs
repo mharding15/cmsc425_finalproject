@@ -14,12 +14,12 @@ public class CameraController : MonoBehaviour
     public Vector3 offset;
     public float zoomSpeed = 4f;
     public float minZoom = 1f;
-    public float maxZoom = 7f;
+    public float maxZoom = 4f;
 
     public GameObject map;
     private TileMap tileMap;
 
-    public float pitch = 0.2f;
+    public float pitch = 3f;
 
     public float yawSpeed = 100f;
     public float moveSpeed = 10f;
@@ -160,16 +160,22 @@ public class CameraController : MonoBehaviour
         currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
 
+        float multiplier;
+        if (Input.GetKey(KeyCode.LeftShift))
+            multiplier = 2;
+        else
+            multiplier = 1;
 
         if (Input.GetKey(KeyCode.Q))
-            currentYaw -= yawSpeed * Time.deltaTime;
+            currentYaw -= yawSpeed * Time.deltaTime * multiplier;
 
         if (Input.GetKey(KeyCode.E))
-            currentYaw += yawSpeed * Time.deltaTime;
+            currentYaw += yawSpeed * Time.deltaTime * multiplier;
 
         
-        deltaHorizontal = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        deltaVertical = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        
+        deltaHorizontal = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime * multiplier;
+        deltaVertical = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime * multiplier;
 
         
     }

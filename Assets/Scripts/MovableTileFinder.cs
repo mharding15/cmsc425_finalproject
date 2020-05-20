@@ -290,8 +290,8 @@ public class MovableTileFinder
         protected int gCost { get; private set; }
         protected int fCost { get; private set; }
 
-        public int horizScale = 5;
-        public int diagScale = 8;
+        public int horizScale = 3;
+        public int diagScale = 5;
 
         public TileMap map;
 
@@ -375,10 +375,10 @@ public class MovableTileFinder
 
         public bool isOccupied()
         {
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Character"))
+            foreach (Unit unit in Manager.Instance.GetComponent<CombatLoop>().GetUnits())
             {
-                Vector3 characterPos = new Vector3(obj.transform.position.x, 0, obj.transform.position.z);
-                if ((characterPos - pos).magnitude < 0.5)
+                Vector3 characterPos = new Vector3(unit.transform.position.x, 0, unit.transform.position.z);
+                if ((characterPos - pos).magnitude < 0.4 && unit.hp > 0)
                     return true;
             }
 
