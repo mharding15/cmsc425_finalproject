@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Erika : Unit
 {
-	public GameObject arrow_prefab;
+    public GameObject arrow_prefab;
     private bool _isDelaying;
 
     protected bool _isRanged, _attackModeRanged;
@@ -75,25 +75,22 @@ public class Erika : Unit
                     GetRotationAngle(goal);
                 } else {
                     // rotate a little bit towards the target
-                    transform.Rotate(new Vector3(0f, phi, 0f) * Time.deltaTime);
-                    sumRotationTime += Time.deltaTime;
+                    transform.Rotate(new Vector3(0f, phi, 0f));
                     // finished rotating, now can either move or attack or whatever
-                    if(sumRotationTime >= 1f){
-                        print("@@@ Done rotating");
-                        _rotating = false;
-                        if (_moveMode){
-                            _moving = true;
-                            startPos = transform.position;
-                            SetAnimBools(WALK);
-                        } else if (_attackModeMelee){
-                            print("@@@ and calling MeleeAttack");
-                            MeleeAttack();
-                        } else if (_attackModeRanged){
-                            print("@@@ and calling RangedAttack");
-                            RangedAttack();
-                        }
-                        sumRotationTime = 0f;
+                    print("@@@ Done rotating");
+                    _rotating = false;
+                    if (_moveMode){
+                        _moving = true;
+                        startPos = transform.position;
+                        SetAnimBools(WALK);
+                    } else if (_attackModeMelee){
+                        print("@@@ and calling MeleeAttack");
+                        MeleeAttack();
+                    } else if (_attackModeRanged){
+                        print("@@@ and calling RangedAttack");
+                        RangedAttack();
                     }
+                    sumRotationTime = 0f;
                 }
             }
 
@@ -102,9 +99,8 @@ public class Erika : Unit
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .25f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                float distTraveled = Distance(startPos, transform.position);
                 float distToGoal = Distance(transform.position, goal);
-                if (distTraveled >= (float)speed || distToGoal < 10f){
+                if (distToGoal < .1f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     pathIdx++;
                     if (pathIdx < path.Count){

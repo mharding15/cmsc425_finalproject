@@ -108,7 +108,13 @@ public class Unit : MonoBehaviour
 
             // if getting the first part of the path
             if (!_goalSet && path.Count != 0){
-                goal = path[0];
+                // adding this to test if it will make it more smooth??
+                    // not sure if this actually helped...
+                if (path.Count > 1){
+                    pathIdx++;
+                    goal = path[pathIdx];
+                    // goal = path[0];
+                }
                 _goalSet = true;
             }
 
@@ -119,33 +125,29 @@ public class Unit : MonoBehaviour
                     GetRotationAngle(goal);
                 } else {
                     // rotate a little bit towards the target
-                    transform.Rotate(new Vector3(0f, phi, 0f) * Time.deltaTime);
-                    sumRotationTime += Time.deltaTime;
-                    // finished rotating, now can either move or attack or whatever
-                    if(sumRotationTime >= 1f){
-                        print("@@@ Done rotating");
-                        _rotating = false;
-                        if (_moveMode){
-                            _moving = true;
-                            startPos = transform.position;
-                            SetAnimBools(WALK);
-                        } else if (_attackModeMelee){
-                            print("@@@ and calling MeleeAttack");
-                            MeleeAttack();
-                        } 
-                        sumRotationTime = 0f;
-                    }
+                    transform.Rotate(new Vector3(0f, phi, 0f));
+                    
+                    print("@@@ Done rotating");
+                    _rotating = false;
+                    if (_moveMode){
+                        _moving = true;
+                        startPos = transform.position;
+                        SetAnimBools(WALK);
+                    } else if (_attackModeMelee){
+                        print("@@@ and calling MeleeAttack");
+                        MeleeAttack();
+                    } 
+                    sumRotationTime = 0f;
                 }
             }
 
             // if the user has indicated that they want to move (pressed M) and a target has not been established, then don't know where to go.
-            if (!_rotating && _moving && goal != null){
+            if (_moving && goal != null){
                 // move a little bit towards the target
                 transform.Translate(Vector3.forward * speed * .25f * Time.deltaTime);
                 // if within a distance of 2 of the target, stop moving and go to the next character's turn.
-                float distTraveled = Distance(startPos, transform.position);
                 float distToGoal = Distance(transform.position, goal);
-                if (distTraveled >= (float)speed || distToGoal < 2f){
+                if (distToGoal < .1f){
                     // or if the distance travelled is greater than or equal to this character's speed, should also stop
                     pathIdx++;
                     if (pathIdx < path.Count){

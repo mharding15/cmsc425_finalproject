@@ -22,6 +22,7 @@ public class TileClickable : MonoBehaviour
         {
             print("right click-----------------------------------------------------------------------------------------------------------");
             CombatLoop cl = GameObject.FindWithTag("Manager").GetComponent<CombatLoop>();
+            cl.SetModeText("Move");
             GameObject obj = cl.GetCurrentObject();
             cl.GetCurrentUnit().path = (new pathFinder(map, (int)obj.transform.position.x, (int)obj.transform.position.z, tileX, tileY)).solve();
             print("unit given path: "+cl.GetCurrentUnit().path);

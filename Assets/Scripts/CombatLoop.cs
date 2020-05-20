@@ -205,22 +205,28 @@ public class CombatLoop : MonoBehaviour
             if (count < 200){
                 // this is an AI character, need to make it's decisions for it
                 print("101010101 Combat Loop line 203 :: The current # is : " + current);
-                if (characters[current].isEnemy){
-                    print("444 In Next...and current was an enemy, character: " + objects[current].name);
-                    aiTurnText.text = characters[current].name + "'s Turn";
-                    aiHPText.text = "HP: " + units[current].hp;
-                    print("555 WHY is it now setting this panel to active???");
-                    aiPanel.SetActive(true);
-                    humanPanel.SetActive(false);
-                    AttackingDecisions();
-                } else {
-                    humanTurnText.text = characters[current].name + "'s Turn";
-                    humanHPText.text = "HP: " + units[current].hp;
-                    humanModeText.text = "Mode: None";
+                // if (characters[current].isEnemy){
+                //     print("444 In Next...and current was an enemy, character: " + objects[current].name);
+                //     aiTurnText.text = characters[current].name + "'s Turn";
+                //     aiHPText.text = "HP: " + units[current].hp;
+                //     print("555 WHY is it now setting this panel to active???");
+                //     aiPanel.SetActive(true);
+                //     humanPanel.SetActive(false);
+                //     AttackingDecisions();
+                // } else {
+                //     humanTurnText.text = characters[current].name + "'s Turn";
+                //     humanHPText.text = "HP: " + units[current].hp;
+                //     humanModeText.text = "Mode: None";
 
-                    aiPanel.SetActive(false);
-                    humanPanel.SetActive(true);
-                }
+                //     aiPanel.SetActive(false);
+                //     humanPanel.SetActive(true);
+                // }
+                humanTurnText.text = characters[current].name + "'s Turn";
+                humanHPText.text = "HP: " + units[current].hp;
+                humanModeText.text = "Mode: None";
+
+                aiPanel.SetActive(false);
+                humanPanel.SetActive(true);
             }
         } 
         
